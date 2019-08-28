@@ -17,7 +17,7 @@
 
 	 
 
-        <div style="padding:1px 60px" class="row" id="loginform" >
+        <div [ngClass]="{'d-none': businessProfileForm}" style="padding:1px 60px" class="row" id="personalProfileForm" >
 
 
 
@@ -28,7 +28,7 @@
 										<div class="row form-group">
 											
 											<div class="col-md-12">
-											<h3><strong>Personal Details</strong></h3>
+												<h4 class="float-left"><strong>Personal Details  </strong></h4> <label class="float-right step uk-icon-step-forward">   step 1 of 3</label>
 											</div>
 										</div>
 										
@@ -78,12 +78,104 @@
 											</div>
 										</div>
 
-<br>
+
 										<div class="row form-group">
 											
 											<div class="col-md-12">
 												
-												<a href="/"  class="btn btn-lg btn-primary float-right text-white rounded mb-0"><img src="assets/classyads/images/Next_Button.png"  class="img-fluid rounded img-responsive"> Next</a>
+												<a (click)="toggleFormView()" href="javascript:void(0)"  class="btn btn-primary py-2 px-4 text-white float-right"> Next </a>
+												
+												<input type="submit" value="Cancel" class="btn btn-light float-right py-2 px-4">
+											</div>
+										</div>
+
+						
+									</form>
+								
+			</div>
+        </div>
+        
+
+
+		<div [ngClass]="{'d-block': businessProfileForm}" style="padding:1px 60px ; display:none" class="row" id="businessProfileForm" >
+
+
+
+           <div class="col-md-12" data-aos="fade-right" data-aos-delay="400" >
+
+ 				
+									<form action="#" class="p-5 form-horizontal bg-white">
+										<div class="row form-group">
+											
+											<div class="col-md-12">
+												<h4 class="float-left"><strong>Business Details</strong></h4> <label class="float-right step uk-icon-step-forward">   step 2 of 3</label>
+											</div>
+										</div>
+										
+										<div class="row form-group">
+											<div class="col-md-12">
+												<label class="text-dark" for="businessName">Business Name</label> 
+												<input type="text" id="businessName" class="form-control">
+											</div>
+										</div>
+
+										<div class="row form-group">
+											<div class="col-md-6">
+												<label class="text-dark" for="businessCategory">Business Category</label> 
+												<select id="businessCategory"  class="form-control">
+												</select>
+											</div>
+											<div class="col-md-6">
+												<label class="text-dark" for="phoneNumber">Product Category</label> 
+												<select id="businessCategory"  class="form-control">
+												</select>
+											</div>
+										</div>
+
+										<div class="row form-group">
+											<div class="col-md-12">
+												<label class="text-black" for="businessAddress">Business Address</label> 
+												<textarea class="form-control" name="businessAddress" id="businessAddress" rows="3"></textarea>
+											</div>
+										</div>
+
+										<div class="row form-group">
+											<div class="col-md-6">
+												<label class="text-dark" for="city">City</label> 
+												<select id="city"  class="form-control">
+												</select>
+											</div>
+											<div class="col-md-6">
+												<label class="text-dark" for="state">State</label> 
+												<select id="state"  class="form-control">
+												</select>
+											</div>
+										</div>
+										<div class="row form-group">
+											<div class="col-md-12">
+												<label class="text-dark" for="marketName">Market Name</label> 
+												<input type="text" id="marketName" class="form-control">
+											</div>
+										</div>
+
+										<div class="row form-group">
+											<div class="col-lg-6 col-md-12">
+												<label class="text-black" for="password">Phone Number 1</label> 
+												<input type="password" id="password" class="form-control">
+											</div>
+											<div class="col-lg-6 col-md-12">
+												<label class="text-black" for="confirmPassword">Phone Number 2</label> 
+												<input type="password" id="confirmPassword" class="form-control">
+											</div>
+										</div>
+
+
+										<div class="row form-group">
+											
+											<div class="col-md-12">
+												<input type="submit" value="Finish" class="btn btn-primary py-2 px-4 text-white float-right">
+												<a (click)="toggleFormView()" href="javascript:void(0)" class="btn btn-info py-2 px-4 btn-light float-right">Back</a>
+												
 												
 											</div>
 										</div>
@@ -94,6 +186,7 @@
 			</div>
         </div>
         
+		
     
 	 </div>
 

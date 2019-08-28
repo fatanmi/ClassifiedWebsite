@@ -56,17 +56,21 @@ a:hover {
     height: 100%;
     color: white;
    
-    opacity: .8;
-    
         
 }
 
 .Market_BG_2 {
 
-    background-color: #222222;
-    z-index: -2;
+   
         
 }
+
+.btn {
+    margin: 2px;
+    min-width: 100px;
+}
+
+.step { margin: 5px}
 
 
 

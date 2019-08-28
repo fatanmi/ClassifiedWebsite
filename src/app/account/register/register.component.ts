@@ -7,9 +7,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor() { }
+  personalProfileForm = true;
+  businessProfileForm = false;
+
+  constructor() {
+
+    this.personalProfileForm = true;
+    this.businessProfileForm = false;
+    
+   }
+
+  
+
+  toggleFormView() {
+    this.personalProfileForm = !this.personalProfileForm;
+    this.businessProfileForm = !this.businessProfileForm;
+  }
 
   ngOnInit() {
+
+    this.personalProfileForm = true;
+    this.businessProfileForm = false;
   }
 
 }
