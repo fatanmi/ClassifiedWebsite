@@ -10,11 +10,7 @@ import { Business } from 'src/app/models/business';
 const httpOptions = {
 
   headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Allow-Methods': 'GET,POST',
-    'Access-Control-Allow-Headers': 'X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, Cache-Control, Pragma'
+    'Content-Type': 'application/json'
   })
 
 };
