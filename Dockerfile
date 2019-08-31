@@ -1,12 +1,12 @@
 ### STAGE 1: Build ###
-FROM node:8.11.1-alpine as builder
+FROM mhart/alpine-node:12 as builder
 # Preparing working environment.
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Installing dependencies.
 COPY package*.json /usr/src/app/
-RUN npm install
+RUN npm install --prod
 # Copy app source into image.
 COPY . /usr/src/app
 # Building app.
