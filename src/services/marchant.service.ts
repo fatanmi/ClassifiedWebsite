@@ -30,44 +30,44 @@ export class MerchantService {
 
   // Get all market locatiins
   getAllMarkets (): Observable<Market[]> { 
-    return this.http.get<Market[]>('api/v1/markets', httpOptions); 
+    return this.http.get<Market[]>(Settings.base_url +'api/v1/markets', httpOptions); 
   }
 
   // Get all Business Categories
   getAllBusinessCategories (): Observable<BusinessCategory[]> { 
-    return this.http.get<BusinessCategory[]>('api/v1/businesses/categories/all', httpOptions); 
+    return this.http.get<BusinessCategory[]>(Settings.base_url +'api/v1/businesses/categories/all', httpOptions); 
   }
 
    // Get all businesses
    getAllBusinesses ( page: number, size: number): Observable<Business[]> { 
-    return this.http.get<Business[]>('api/v1/businesses/all?page='+page+'&size='+size, httpOptions); 
+    return this.http.get<Business[]>(Settings.base_url +'api/v1/businesses/all?page='+page+'&size='+size, httpOptions); 
   }
 
    // Get businesseses by category
    getBusinessesByCategory (category: string, page: number, size: number): Observable<Business[]> { 
     console.log("This the real deal "+ category);
-    return this.http.get<Business[]>('api/v1/businesses?category='+category+'&page='+page+'&size='+size, httpOptions); 
+    return this.http.get<Business[]>(Settings.base_url+'api/v1/businesses?category='+category+'&page='+page+'&size='+size, httpOptions); 
   }
 
     // Get businesses in a marketplace
     getBusinessesInAMarket (marketCode: string,page: number, size: number): Observable<Business[]> { 
       console.log("This the real deal "+ marketCode);
-      return this.http.get<Business[]>('api/v1/businesses/'+marketCode+'?page='+page+'&size='+size, httpOptions); 
+      return this.http.get<Business[]>(Settings.base_url +'api/v1/businesses/'+marketCode+'?page='+page+'&size='+size, httpOptions); 
     }
 
     // Get all merchant businesses by id
     getMerchantBusinesses (merchantId: number): Observable<Business[]> { 
-      return this.http.get<Business[]>('api/v1/businesses', httpOptions); 
+      return this.http.get<Business[]>(Settings.base_url +'api/v1/businesses', httpOptions); 
     }
 
     // Get all businesses by merchant phone 
     getBusinessesByPhone (businessName: string): Observable<Business[]> { 
-      return this.http.get<Business[]>('api/v1/businesses', httpOptions); 
+      return this.http.get<Business[]>(Settings.base_url +'api/v1/businesses', httpOptions); 
     }
 
     // Get all businesses by merchant phone 
     getBusinessesByProductTag (tag: string): Observable<Business[]> { 
-      return this.http.get<Business[]>('api/v1/businesses', httpOptions); 
+      return this.http.get<Business[]>(Settings.base_url +'api/v1/businesses', httpOptions); 
     }
 
 
