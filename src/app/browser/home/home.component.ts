@@ -25,17 +25,31 @@ export class HomeComponent implements OnInit {
 
   //event handler for the select element's change event
   selectMarketHandler ($event, selectedMarket) {
-    //update the ui
-    this.selectedMarket = selectedMarket;
-    console.log(this.selectedMarket + ' '+JSON.stringify($event));
-    this.getAllBusinessesByMarket($event.marketName,1,1500);
+   
+    this.selectedMarket = $event.marketName;
+
+    if(this.selectedMarket == "All Markets")
+    {
+      this.selectedMarket = "";
+    }
+
+
+    console.log(this.selectedMarket);
+    this.getAllBusinessesByMarket(this.selectedMarket,1,15000);
   }
 
   //event handler for the select element's change event
   selectCategoryHandler ($event) {
-    //update the ui
+    
     this.selectedCategory = $event.name;
-    console.log(this.selectedCategory + ' '+JSON.stringify($event));
+
+    if(this.selectedCategory == "All Categories")
+    {
+      this.selectedCategory = "";
+    }
+
+    console.log(this.selectedCategory);
+
     this.getAllBusinessesByCategory(this.selectedCategory,1,1500);
   }
 

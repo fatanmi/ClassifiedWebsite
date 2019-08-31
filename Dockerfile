@@ -1,14 +1,14 @@
 ### STAGE 1: Build ###
 FROM mhart/alpine-node:12 as builder
 # Preparing working environment.
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+# RUN mkdir -p /usr/src/app
+WORKDIR /app
 
 # Installing dependencies.
-COPY package*.json /usr/src/app/
+COPY . .
 RUN npm install
 # Copy app source into image.
-COPY . /usr/src/app
+#COPY . /app
 # Building app.
 RUN npm run-script build
 
@@ -21,7 +21,7 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY /nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Copying openhome-panel source into web server root.
-COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html
 # Exposing ports.
 EXPOSE 80
 # Starting server.
