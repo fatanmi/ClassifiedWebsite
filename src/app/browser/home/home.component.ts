@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Market } from 'src/app/models/market';
+import { HttpResp} from 'src/app/models/http-resp'
+import { BusinessCategory } from 'src/app/models/business-category';
+import { Business } from 'src/app/models/business';
+import { MerchantService } from 'src/services/marchant.service';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -7,9 +13,143 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  markets: Market[];
+  resp: any;
+  title: String;
+  fault: String;
+  categories: BusinessCategory[];
+  bussinesses: Business[];
+
+  selectedMarket: string = '';
+  selectedCategory: string = '';
+
+  //event handler for the select element's change event
+  selectMarketHandler ($event, selectedMarket) {
+    //update the ui
+    this.selectedMarket = selectedMarket;
+    console.log(this.selectedMarket + ' '+JSON.stringify($event));
+    this.getAllBusinessesByMarket($event.marketName,1,1500);
+  }
+
+  //event handler for the select element's change event
+  selectCategoryHandler ($event) {
+    //update the ui
+    this.selectedCategory = $event.name;
+    console.log(this.selectedCategory + ' '+JSON.stringify($event));
+    this.getAllBusinessesByCategory(this.selectedCategory,1,1500);
+  }
+
+  constructor(private marketService: MerchantService ) { } 
 
   ngOnInit() {
+    this.getMarkets();
+    this.getCategories();
+    this.getAllBusinesses(1,5000);
+    
+  }
+
+  getMarkets() {
+
+    this.marketService.getAllMarkets()
+    .subscribe(resp => {
+
+      console.log(resp);
+      this.resp = resp;
+      this.markets = this.resp.data;
+      console.log(this.markets)
+     
+     },
+     error => {
+      this.fault = error ; // error path
+      console.log(JSON.stringify(this.fault));
+     }
+
+    );
+    
+  }
+
+  getCategories() {
+
+    this.marketService.getAllBusinessCategories()
+    .subscribe(resp => {
+
+      console.log(resp);
+      this.resp = resp;
+      this.categories = this.resp.data;
+      console.log(this.categories)
+     
+     },
+     error => {
+      this.fault = error ; // error path
+      console.log(JSON.stringify(this.fault));
+     }
+
+    );
+    
+
+  }
+
+  getAllBusinesses( page: number, size: number) {
+
+    this.marketService.getAllBusinesses(page, size)
+    .subscribe(resp => {
+
+      console.log(resp);
+      this.resp = resp;
+      this.bussinesses = this.resp.data;
+      console.log(this.bussinesses)
+     
+     },
+     error => {
+      this.fault = error ; // error path
+      console.log(JSON.stringify(this.fault));
+     }
+
+    );
+    
+
+  }
+
+
+  getAllBusinessesByCategory(category: string, page: number, size: number) {
+
+    this.marketService.getBusinessesByCategory(category,page, size)
+    .subscribe(resp => {
+
+      console.log(resp);
+      this.resp = resp;
+      this.bussinesses = this.resp.data;
+      console.log(this.bussinesses)
+     
+     },
+     error => {
+      this.fault = error ; // error path
+      console.log(JSON.stringify(this.fault));
+     }
+
+    );
+
+  }
+
+
+  getAllBusinessesByMarket(market: string, page: number, size: number) {
+
+    this.marketService.getBusinessesInAMarket(market,page, size)
+    .subscribe(resp => {
+
+      console.log(resp);
+      this.resp = resp;
+      this.bussinesses = this.resp.data;
+      
+     
+     },
+     error => {
+      this.fault = error ; // error path
+      console.log(JSON.stringify(this.fault));
+     }
+
+    );
+
   }
 
 
