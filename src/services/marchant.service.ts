@@ -11,7 +11,7 @@ const httpOptions = {
 
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': 'http://localhost:4040',
+    'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Credentials': 'true',
     'Access-Control-Allow-Methods': 'GET,POST',
     'Access-Control-Allow-Headers': 'X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, Cache-Control, Pragma'
