@@ -1,8 +1,8 @@
 {  
     "/api/v1/*": {  
-       "target": "https://merchant-service.test.rensource.energy",  
+       "target": "https://merchant-service.test.rensource.energy/",  
        "secure": false,  
        "logLevel": "debug" ,
-       "changeOrigin": false 
+       "changeOrigin": true 
     }  
  } 
