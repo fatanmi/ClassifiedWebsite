@@ -44,7 +44,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.getMarkets();
     this.getCategories();
-    this.getAllBusinesses(1,5000);
+    this.getAllBusinesses(1,50000);
     
   }
 
