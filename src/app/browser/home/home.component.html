@@ -71,11 +71,11 @@
                   <div class="col-lg-12 mb-4 mb-xl-0 col-xl-3">
                      <div class="select-wrap">
                       <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
-                      <select [(ngModel)]="selectedMarket" (ngModelChange)="selectMarketHandler($event,market.marketName)" class="form-control rounded" #market name="market" id="market">
-                         <option value="">All Markets</option>
-
+                      <select [(ngModel)]="selectedMarket" (ngModelChange)="selectMarketHandler($event,market.marketName)" class="form-control rounded" name="market" #market>
+                         <option value="" >All Markets</option>
                         <option *ngFor="let market of markets" [ngValue]="market"> {{market.marketName}}</option>
                        
+
                       </select>
                     </div>
                     
@@ -252,7 +252,7 @@
                   <span class="category">{{business.businessTypeName}}</span>
                   <a href="#" class="bookmark"><span class="icon-heart"></span></a>
                   <h3><a href="listings-single.html">{{business.name}}</a></h3>
-                  <address>Don St, Brooklyn, New York</address>
+                  <address>{{business.branches[0].marketCode}} {{business.branches[0].state}}</address>
                   <p class="mb-0">
                     <span class="icon-star text-warning"></span>
                     <span class="icon-star text-warning"></span>

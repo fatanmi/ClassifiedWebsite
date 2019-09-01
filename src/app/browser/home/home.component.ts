@@ -59,6 +59,8 @@ export class HomeComponent implements OnInit {
     this.getMarkets();
     this.getCategories();
     this.getAllBusinesses(1,50000);
+
+    
     
   }
 
