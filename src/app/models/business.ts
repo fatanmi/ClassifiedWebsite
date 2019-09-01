@@ -1,4 +1,4 @@
-import { ShopLocation } from './shop-location';
+import { Shop } from './shop';
 import { BusinessCategory } from './business-category';
 
 export class Business {
@@ -9,7 +9,7 @@ export class Business {
     description?: any;
     email?: any;
     website?: any;
-    branches: ShopLocation[];
+    branches: Shop[];
     businessTypeId: number;
     businessTypeName: string;
     productCategories: string[];

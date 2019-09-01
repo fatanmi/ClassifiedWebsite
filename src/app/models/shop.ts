@@ -1,6 +1,6 @@
 import { Address } from './address';
 
-export class ShopLocation {
+export class Shop {
 
     name?: any;
     address?: any;
