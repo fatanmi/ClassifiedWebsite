@@ -5,6 +5,7 @@ import { environment } from '../environments/environment';
 export class Settings {
 
     public static base_url = environment['base_api'];
+    public static _url = environment['url'];
 
     public static http_options = { headers: new HttpHeaders({'Content-Type': 'application/json'})};
 

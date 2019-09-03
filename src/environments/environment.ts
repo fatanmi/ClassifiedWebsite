@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  base_api: 'https://merchant-service.test.rensource.energy/'
+  base_api: 'https://merchant-service.test.rensource.energy/',
+  url: 'https://merchant-service.test.rensource.energy/api/v1'
 };
 
 /*

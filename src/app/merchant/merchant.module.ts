@@ -1,13 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MerchantProfileComponent } from './merchant-profile/merchant-profile.component';
+
+import { RouterModule } from '@angular/router';
+import { MerchantRoutes } from './merchant.routing';
+import { ProfileComponent } from './profile/profile.component';
 
 
 
 @NgModule({
-  declarations: [MerchantProfileComponent],
+  declarations: [ProfileComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule.forChild(MerchantRoutes),
   ]
 })
 export class MerchantModule { }

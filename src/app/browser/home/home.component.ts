@@ -4,7 +4,9 @@ import { Market } from 'src/app/models/market';
 import { HttpResp} from 'src/app/models/http-resp'
 import { BusinessCategory } from 'src/app/models/business-category';
 import { Business } from 'src/app/models/business';
-import { MerchantService } from 'src/services/marchant.service';
+import { MerchantService } from 'src/app/services/marchant.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
   selector: 'app-home',
@@ -22,6 +24,7 @@ export class HomeComponent implements OnInit {
 
   selectedMarket: string = '';
   selectedCategory: string = '';
+  isLoading: boolean = false;
 
   //event handler for the select element's change event
   selectMarketHandler ($event, selectedMarket) {
@@ -53,14 +56,27 @@ export class HomeComponent implements OnInit {
     this.getAllBusinessesByCategory(this.selectedCategory,1,1500);
   }
 
-  constructor(private marketService: MerchantService ) { } 
+  constructor(private marketService: MerchantService, 
+    private spinnerService: Ng4LoadingSpinnerService ) { } 
 
   ngOnInit() {
     this.getMarkets();
     this.getCategories();
     this.getAllBusinesses(1,50000);
-
     
+  }
+
+  showLoader()
+  {
+    this.spinnerService.show();
+    this.isLoading = true;
+    
+  }
+
+  hideLoader(){
+   
+    this.isLoading = false;
+    setTimeout(()=>this.spinnerService.hide(),3000)
     
   }
 
@@ -78,6 +94,7 @@ export class HomeComponent implements OnInit {
      error => {
       this.fault = error ; // error path
       console.log(JSON.stringify(this.fault));
+      this.hideLoader();
      }
 
     );
@@ -107,18 +124,24 @@ export class HomeComponent implements OnInit {
 
   getAllBusinesses( page: number, size: number) {
 
+
+    this.showLoader();
     this.marketService.getAllBusinesses(page, size)
     .subscribe(resp => {
 
+      this.hideLoader();
       console.log(resp);
       this.resp = resp;
       this.bussinesses = this.resp.data;
       console.log(this.bussinesses)
+      
      
      },
      error => {
+      this.hideLoader();
       this.fault = error ; // error path
       console.log(JSON.stringify(this.fault));
+     
      }
 
     );

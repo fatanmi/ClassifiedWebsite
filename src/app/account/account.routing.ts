@@ -40,4 +40,21 @@ export const AccountRoutes: Routes = [
     ]
   },
 
+  {
+    path: '',
+    children: [
+      {
+        path: '',
+        component: LoginComponent,
+        data: {
+          title: 'Login',
+          urls: [
+            { title: 'Login', url: '/login' },
+            { title: 'Login' }
+          ]
+        }
+      }
+    ]
+  }
+
 ];
