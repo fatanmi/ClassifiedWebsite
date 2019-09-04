@@ -51,8 +51,6 @@ export class HomeComponent implements OnInit {
       this.selectedCategory = "";
     }
 
-    console.log(this.selectedCategory);
-
     this.getAllBusinessesByCategory(this.selectedCategory,1,1500);
   }
 
@@ -62,7 +60,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.getMarkets();
     this.getCategories();
-    this.getAllBusinesses(1,50000);
+    this.getAllBusinesses(1,500);
     
   }
 
@@ -94,7 +92,7 @@ export class HomeComponent implements OnInit {
      error => {
       this.fault = error ; // error path
       console.log(JSON.stringify(this.fault));
-      this.hideLoader();
+      
      }
 
     );
@@ -125,7 +123,6 @@ export class HomeComponent implements OnInit {
   getAllBusinesses( page: number, size: number) {
 
 
-    this.showLoader();
     this.marketService.getAllBusinesses(page, size)
     .subscribe(resp => {
 
@@ -138,7 +135,7 @@ export class HomeComponent implements OnInit {
      
      },
      error => {
-      this.hideLoader();
+    
       this.fault = error ; // error path
       console.log(JSON.stringify(this.fault));
      

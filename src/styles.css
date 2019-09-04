@@ -40,7 +40,7 @@ a:hover {
 
     background-image: url('./assets/classyads/images/Market_BG.png');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover cover;
 }
 
 .Market_BG_2::before{
@@ -61,7 +61,7 @@ a:hover {
 
 .Market_BG_2 {
 
-   
+    
         
 }
 
