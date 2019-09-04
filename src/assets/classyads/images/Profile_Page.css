@@ -1,0 +1,1644 @@
+.mediaViewInfo {
+	--web-view-name: Profile Page;
+	--web-view-id: Profile_Page;
+	--web-scale-to-fit: true;
+	--web-scale-to-fit-type: width;
+	--web-scale-on-resize: true;
+	--web-enable-deep-linking: true;
+}
+:root {
+	--web-view-ids: Profile_Page;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+.Profile_Page_Class {
+	position: absolute;
+	box-sizing: border-box;
+	background: #E5E5E5;
+	width: 1920px;
+	height: 2816px;
+	background-color: rgba(255,255,255,1);
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	--web-view-name: Profile Page;
+	--web-view-id: Profile_Page;
+	--web-scale-to-fit: true;
+	--web-scale-to-fit-type: width;
+	--web-scale-on-resize: true;
+	--web-enable-deep-linking: true;
+}
+.BG_Class {
+	position: absolute;
+	width: 1922px;
+	height: 2417px;
+	left: 0px;
+	top: 106px;
+	overflow: visible;
+}
+.BG_A5_Rectangle_1 {
+	position: absolute;
+	overflow: visible;
+	width: 1922px;
+	height: 2417px;
+	left: 0px;
+	top: 0px;
+}
+.Rectangle_140 {
+	position: absolute;
+	overflow: visible;
+	width: 1957px;
+	height: 363px;
+	left: -36px;
+	top: -152px;
+}
+.Component_7_Class {
+	position: absolute;
+	width: 1920px;
+	height: 364px;
+	left: 0px;
+	top: 2463px;
+	overflow: visible;
+}
+.Footer_BG_Blue {
+	position: absolute;
+	overflow: visible;
+	width: 1920px;
+	height: 364px;
+	left: 0px;
+	top: 0px;
+}
+.About_us__Company_Vision_Team__Class {
+	position: absolute;
+	left: 207px;
+	top: 58px;
+	overflow: visible;
+	width: 97px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: lighter;
+	font-size: 21px;
+	color: rgba(255,147,0,1);
+}
+.How_it_works__Registration_Upl_Class {
+	position: absolute;
+	left: 481px;
+	top: 58px;
+	overflow: visible;
+	width: 117px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: lighter;
+	font-size: 21px;
+	color: rgba(255,147,0,1);
+}
+.Legal__Term_of_Use_Content_Pol_Class {
+	position: absolute;
+	left: 755px;
+	top: 58px;
+	overflow: visible;
+	width: 195px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: lighter;
+	font-size: 21px;
+	color: rgba(255,147,0,1);
+}
+.Payment___Class {
+	position: absolute;
+	left: 1089px;
+	top: 58px;
+	overflow: visible;
+	width: 79px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: lighter;
+	font-size: 21px;
+	color: rgba(255,147,0,1);
+}
+.Bank__Transfer_Class {
+	position: absolute;
+	left: 1289px;
+	top: 178px;
+	overflow: visible;
+	width: 62px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: lighter;
+	font-size: 18px;
+	color: rgba(255,255,255,1);
+}
+.Support__support_spaces_com_Ac_Class {
+	position: absolute;
+	left: 1528px;
+	top: 58px;
+	overflow: visible;
+	width: 195px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: lighter;
+	font-size: 21px;
+	color: rgba(255,147,0,1);
+}
+.Mastercard_Logo {
+	position: absolute;
+	overflow: visible;
+	width: 77px;
+	height: 63px;
+	left: 1078px;
+	top: 106px;
+}
+.Visa_Logo {
+	position: absolute;
+	overflow: visible;
+	width: 68px;
+	height: 67px;
+	left: 1082px;
+	top: 172px;
+}
+.Verver_Logo {
+	position: absolute;
+	overflow: visible;
+	width: 85px;
+	height: 33px;
+	left: 1230px;
+	top: 122px;
+}
+.Bank_Transfer_Logo_Class {
+	position: absolute;
+	width: 52.201px;
+	height: 34.382px;
+	left: 1227.758px;
+	top: 183.689px;
+	overflow: visible;
+}
+.Group_176_Class {
+	position: absolute;
+	width: 9.856px;
+	height: 8.163px;
+	left: 20.948px;
+	top: 13.109px;
+	overflow: visible;
+}
+.Path_55 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 1.267px;
+	width: 7.662px;
+	height: 8.163px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Rectangle_134 {
+	position: absolute;
+	overflow: visible;
+	width: 9.855px;
+	height: 1.421px;
+	left: 0px;
+	top: 2.023px;
+}
+.Rectangle_135 {
+	position: absolute;
+	overflow: visible;
+	width: 9.855px;
+	height: 1.421px;
+	left: 0px;
+	top: 4.552px;
+}
+.Group_177_Class {
+	position: absolute;
+	width: 52.201px;
+	height: 34.382px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Path_56 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 32.178px;
+	width: 20.023px;
+	height: 20.718px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Path_57 {
+	overflow: visible;
+	position: absolute;
+	top: 13.664px;
+	left: 0px;
+	width: 20.024px;
+	height: 20.718px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Path_58 {
+	overflow: visible;
+	position: absolute;
+	top: 6.244px;
+	left: 15.154px;
+	width: 21.894px;
+	height: 21.894px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Merch_Logo_Class {
+	position: absolute;
+	width: 191.01px;
+	height: 88.231px;
+	left: 121.697px;
+	top: 73px;
+	overflow: visible;
+}
+.Path_38 {
+	overflow: visible;
+	position: absolute;
+	top: 23.245px;
+	left: 0.652px;
+	width: 52.604px;
+	height: 40.776px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Path_39 {
+	overflow: visible;
+	position: absolute;
+	top: 23.245px;
+	left: 57.004px;
+	width: 32.842px;
+	height: 41.584px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Path_40 {
+	overflow: visible;
+	position: absolute;
+	top: 23.245px;
+	left: 93.15px;
+	width: 23.952px;
+	height: 40.776px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Path_41 {
+	overflow: visible;
+	position: absolute;
+	top: 23.245px;
+	left: 118.202px;
+	width: 32.801px;
+	height: 41.584px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Path_42 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 191.011px;
+	height: 88.231px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Tailoring_______Fashion________Class {
+	position: absolute;
+	left: 485px;
+	top: 74px;
+	overflow: visible;
+	width: 731px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(255,255,255,1);
+}
+.Line {
+	overflow: visible;
+	position: absolute;
+	top: 1482.5px;
+	left: 182.5px;
+	width: 1545px;
+	height: 2px;
+}
+.Categories_Class {
+	position: absolute;
+	width: 175px;
+	height: 27px;
+	left: 1293px;
+	top: 76px;
+	overflow: visible;
+}
+.My_business_Profile_Class {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 176px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(255,147,0,1);
+}
+.Profile_Name_Class {
+	position: absolute;
+	width: 113px;
+	height: 60px;
+	left: 1618px;
+	top: 75px;
+	overflow: visible;
+}
+.Hi_Ronke___Class {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 114px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 25px;
+	color: rgba(255,147,0,1);
+}
+.Log_Out_Class {
+	position: absolute;
+	left: 56px;
+	top: 40px;
+	overflow: visible;
+	width: 56px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 15px;
+	color: rgba(255,255,255,1);
+}
+.Profile_Class {
+	position: absolute;
+	width: 74px;
+	height: 74px;
+	left: 1753px;
+	top: 70px;
+	overflow: visible;
+}
+.Profile_A5_Ellipse_1 {
+	position: absolute;
+	overflow: visible;
+	width: 74px;
+	height: 74px;
+	left: 0px;
+	top: 0px;
+}
+.Edit_Icon_Class {
+	position: absolute;
+	width: 27.587px;
+	height: 20.538px;
+	left: 1481.1px;
+	top: 80.921px;
+	overflow: visible;
+}
+.Path_59 {
+	overflow: visible;
+	position: absolute;
+	top: 19.26px;
+	left: 0px;
+	width: 27.313px;
+	height: 1.279px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Edit_icon {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 8.369px;
+	width: 19.219px;
+	height: 19.26px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Shop_Image_Class {
+	filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.161));
+}
+.Shop_Image {
+	position: absolute;
+	overflow: visible;
+	width: 314px;
+	height: 277px;
+	left: 186px;
+	top: 458px;
+}
+.Map_Class {
+	position: absolute;
+	width: 298px;
+	height: 533px;
+	left: 186px;
+	top: 838px;
+	overflow: visible;
+}
+.Map_A5_Rectangle_14 {
+	position: absolute;
+	overflow: visible;
+	width: 298px;
+	height: 533px;
+	left: 0px;
+	top: 0px;
+}
+.Business_Profile_Class {
+	position: absolute;
+	left: 182px;
+	top: 315px;
+	overflow: visible;
+	width: 255px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: lighter;
+	font-size: 40px;
+	color: rgba(255,147,0,1);
+}
+.Tunde_Ghadofi_Store_Class {
+	position: absolute;
+	left: 187px;
+	top: 407px;
+	overflow: visible;
+	width: 229px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 25px;
+	color: rgba(0,0,0,1);
+}
+.SIgn_In_Box_Class {
+	position: absolute;
+	width: 302px;
+	height: 61px;
+	left: 182px;
+	top: 738px;
+	overflow: visible;
+}
+.Sign_box {
+	position: absolute;
+	overflow: visible;
+	width: 302px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+}
+.UPLOAD_IMAGE_Class {
+	position: absolute;
+	left: 73px;
+	top: 16px;
+	overflow: visible;
+	width: 158px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 21px;
+	color: rgba(255,255,255,1);
+}
+.Text_Box_Class {
+	position: absolute;
+	width: 593px;
+	height: 61px;
+	left: 1013px;
+	top: 824px;
+	overflow: visible;
+}
+.Phone_Number_Tab {
+	position: absolute;
+	overflow: visible;
+	width: 593px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+}
+.Component_112___1_Class {
+	position: absolute;
+	width: 200px;
+	height: 27px;
+	left: 21px;
+	top: 17px;
+	overflow: visible;
+}
+.Shoes_____Watches_____Shirts___Class {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 330px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(0,0,0,1);
+}
+.Text_Box_A5_SymbolInstance_11_Class {
+	position: absolute;
+	width: 593px;
+	height: 61px;
+	left: 1013px;
+	top: 905px;
+	overflow: visible;
+}
+.Phone_Number_Tab_A5_Rectangle_18 {
+	position: absolute;
+	overflow: visible;
+	width: 593px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+}
+.Component_112___1_A5_SymbolInstance_12_Class {
+	position: absolute;
+	width: 200px;
+	height: 27px;
+	left: 21px;
+	top: 17px;
+	overflow: visible;
+}
+._234_806_7894_6789_Class {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 182px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(0,0,0,1);
+}
+.Text_Box_A5_SymbolInstance_13_Class {
+	position: absolute;
+	width: 593px;
+	height: 61px;
+	left: 1013px;
+	top: 986px;
+	overflow: visible;
+}
+.Phone_Number_Tab_A5_Rectangle_19 {
+	position: absolute;
+	overflow: visible;
+	width: 593px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+}
+.Component_112___1_A5_SymbolInstance_14_Class {
+	position: absolute;
+	width: 200px;
+	height: 27px;
+	left: 21px;
+	top: 17px;
+	overflow: visible;
+}
+._234_806_7894_6789_A5_Text_16_Class {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 182px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(0,0,0,1);
+}
+.Text_Box_A5_SymbolInstance_15_Class {
+	position: absolute;
+	width: 593px;
+	height: 61px;
+	left: 1013px;
+	top: 1067px;
+	overflow: visible;
+}
+.Phone_Number_Tab_A5_Rectangle_20 {
+	position: absolute;
+	overflow: visible;
+	width: 593px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+}
+.Component_112___1_A5_SymbolInstance_16_Class {
+	position: absolute;
+	width: 200px;
+	height: 27px;
+	left: 21px;
+	top: 17px;
+	overflow: visible;
+}
+.Fashion_Class {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 68px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(0,0,0,1);
+}
+.Text_Box_A5_SymbolInstance_17_Class {
+	position: absolute;
+	width: 593px;
+	height: 61px;
+	left: 1013px;
+	top: 1148px;
+	overflow: visible;
+}
+.Phone_Number_Tab_A5_Rectangle_21 {
+	position: absolute;
+	overflow: visible;
+	width: 593px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+}
+.Component_112___1_A5_SymbolInstance_18_Class {
+	position: absolute;
+	width: 200px;
+	height: 27px;
+	left: 21px;
+	top: 17px;
+	overflow: visible;
+}
+.Payment_on_delivery_Class {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 180px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(0,0,0,1);
+}
+.Text_Box_A5_SymbolInstance_19_Class {
+	position: absolute;
+	width: 593px;
+	height: 61px;
+	left: 1013px;
+	top: 1229px;
+	overflow: visible;
+}
+.Phone_Number_Tab_A5_Rectangle_22 {
+	position: absolute;
+	overflow: visible;
+	width: 593px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+}
+.Component_112___1_A5_SymbolInstance_20_Class {
+	position: absolute;
+	width: 200px;
+	height: 27px;
+	left: 21px;
+	top: 17px;
+	overflow: visible;
+}
+.Shop_007__Ikeja_Class {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 135px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(0,0,0,1);
+}
+.Text_Box_A5_SymbolInstance_21_Class {
+	position: absolute;
+	width: 593px;
+	height: 61px;
+	left: 1013px;
+	top: 1310px;
+	overflow: visible;
+}
+.Phone_Number_Tab_A5_Rectangle_23 {
+	position: absolute;
+	overflow: visible;
+	width: 593px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+}
+.Component_112___1_A5_SymbolInstance_22_Class {
+	position: absolute;
+	width: 200px;
+	height: 27px;
+	left: 21px;
+	top: 17px;
+	overflow: visible;
+}
+.www_tundeghadfishop_com_Class {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 242px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(0,0,0,1);
+}
+.Line_A5_Line_2 {
+	overflow: visible;
+	position: absolute;
+	top: 433.5px;
+	left: 573.5px;
+	width: 5px;
+	height: 1049.006px;
+}
+.Business_Detail_Bar_Class {
+	opacity: 0.45;
+}
+.Business_Detail_Bar {
+	position: absolute;
+	overflow: visible;
+	width: 1024px;
+	height: 162px;
+	left: 707px;
+	top: 451px;
+}
+.Edit_Icon_A5_SymbolInstance_23_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 932.469px;
+	top: 413.921px;
+	overflow: visible;
+}
+.Edit_Icon_A5_Path_12 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 19.219px;
+	height: 19.26px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Repeat_Grid_7_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 532.26px;
+	left: 1642.469px;
+	top: 848.921px;
+	overflow: hidden;
+}
+.Repeat_Grid_7_0_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Edit_Icon_A5_SymbolInstance_24_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Edit_Icon_A5_Path_13 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 19.219px;
+	height: 19.26px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Repeat_Grid_7_1_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 81px;
+	overflow: visible;
+}
+.Edit_Icon_A5_SymbolInstance_25_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Edit_Icon_A5_Path_14 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 19.219px;
+	height: 19.26px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Repeat_Grid_7_2_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 162px;
+	overflow: visible;
+}
+.Edit_Icon_A5_SymbolInstance_26_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Edit_Icon_A5_Path_15 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 19.219px;
+	height: 19.26px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Repeat_Grid_7_3_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 243px;
+	overflow: visible;
+}
+.Edit_Icon_A5_SymbolInstance_27_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Edit_Icon_A5_Path_16 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 19.219px;
+	height: 19.26px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Repeat_Grid_7_4_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 324px;
+	overflow: visible;
+}
+.Edit_Icon_A5_SymbolInstance_28_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Edit_Icon_A5_Path_17 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 19.219px;
+	height: 19.26px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Repeat_Grid_7_5_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 405px;
+	overflow: visible;
+}
+.Edit_Icon_A5_SymbolInstance_29_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Edit_Icon_A5_Path_18 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 19.219px;
+	height: 19.26px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Repeat_Grid_7_6_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 486px;
+	overflow: visible;
+}
+.Edit_Icon_A5_SymbolInstance_30_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Edit_Icon_A5_Path_19 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 19.219px;
+	height: 19.26px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Edit_Icon_A5_SymbolInstance_31_Class {
+	position: absolute;
+	width: 19.219px;
+	height: 19.26px;
+	left: 932.469px;
+	top: 656.921px;
+	overflow: visible;
+}
+.Edit_Icon_A5_Path_20 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 19.219px;
+	height: 19.26px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.Business_Details_Class {
+	opacity: 0.585;
+	position: absolute;
+	left: 737px;
+	top: 407px;
+	overflow: visible;
+	width: 176px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 25px;
+	color: rgba(0,0,0,1);
+}
+.Working_Hours_Class {
+	opacity: 0.585;
+	position: absolute;
+	left: 737px;
+	top: 650px;
+	overflow: visible;
+	width: 167px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 25px;
+	color: rgba(0,0,0,1);
+}
+.Lorem_ipsum_dolor_sit_amet__co_Class {
+	position: absolute;
+	left: 737px;
+	top: 476px;
+	overflow: hidden;
+	width: 962px;
+	height: 181px;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(0,0,0,1);
+}
+.Component_99___3_Class {
+	position: absolute;
+	width: 609px;
+	height: 61px;
+	left: 707px;
+	top: 705px;
+	overflow: visible;
+}
+.Repeat_Grid_1_Class {
+	position: absolute;
+	width: 609px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+	overflow: hidden;
+}
+.Repeat_Grid_1_0_Class {
+	position: absolute;
+	width: 285px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Text_Box_A5_SymbolInstance_33_Class {
+	position: absolute;
+	width: 285px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Phone_Number_Tab_A5_Rectangle_25 {
+	position: absolute;
+	overflow: visible;
+	width: 285px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+}
+.Component_112___1_A5_SymbolInstance_34_Class {
+	position: absolute;
+	width: 200px;
+	height: 27px;
+	left: 21px;
+	top: 17px;
+	overflow: visible;
+}
+.ID9_00am_Class {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 65px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(0,0,0,1);
+}
+.Repeat_Grid_1_1_Class {
+	position: absolute;
+	width: 285px;
+	height: 61px;
+	left: 309px;
+	top: 0px;
+	overflow: visible;
+}
+.Text_Box_A5_SymbolInstance_35_Class {
+	position: absolute;
+	width: 285px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Phone_Number_Tab_A5_Rectangle_26 {
+	position: absolute;
+	overflow: visible;
+	width: 285px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+}
+.Component_112___1_A5_SymbolInstance_36_Class {
+	position: absolute;
+	width: 200px;
+	height: 27px;
+	left: 21px;
+	top: 17px;
+	overflow: visible;
+}
+.ID6_00pm_Class {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 67px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(0,0,0,1);
+}
+.Products__Phone_Number__WhatsA_Class {
+	opacity: 0.585;
+	position: absolute;
+	left: 707px;
+	top: 825px;
+	overflow: visible;
+	width: 214px;
+	white-space: nowrap;
+	line-height: 42px;
+	margin-top: -8.5px;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 25px;
+	color: rgba(0,0,0,1);
+}
+.Gallery_Class {
+	opacity: 0.585;
+	position: absolute;
+	left: 191px;
+	top: 1547px;
+	overflow: visible;
+	width: 77px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 25px;
+	color: rgba(0,0,0,1);
+}
+.Repeat_Grid_8_Class {
+	position: absolute;
+	width: 1565.621px;
+	height: 317.563px;
+	left: 187.5px;
+	top: 1625px;
+	overflow: hidden;
+}
+.Repeat_Grid_8_0_Class {
+	position: absolute;
+	width: 316.621px;
+	height: 287.563px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Component_106___1_Class {
+	position: absolute;
+	width: 316.621px;
+	height: 287.563px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Shop_Image_A5_Rectangle_27_Class {
+	filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.161));
+}
+.Shop_Image_A5_Rectangle_27 {
+	position: absolute;
+	overflow: visible;
+	width: 331.621px;
+	height: 302.563px;
+	left: 0px;
+	top: 0px;
+}
+.Delete_Icon_Class {
+	position: absolute;
+	width: 23.729px;
+	height: 24.534px;
+	left: 280.281px;
+	top: 10.109px;
+	overflow: visible;
+}
+.Search_Bar {
+	position: absolute;
+	overflow: visible;
+	width: 23.729px;
+	height: 24.534px;
+	left: 0px;
+	top: 0px;
+}
+.Path_37 {
+	overflow: visible;
+	position: absolute;
+	top: 1.871px;
+	left: 1.239px;
+	width: 21.076px;
+	height: 21.076px;
+	transform: rotate(45deg);
+}
+.Repeat_Grid_8_1_Class {
+	position: absolute;
+	width: 316.621px;
+	height: 287.563px;
+	left: 403px;
+	top: 0px;
+	overflow: visible;
+}
+.Component_106___1_A5_SymbolInstance_38_Class {
+	position: absolute;
+	width: 316.621px;
+	height: 287.563px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Shop_Image_A5_Rectangle_30_Class {
+	filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.161));
+}
+.Shop_Image_A5_Rectangle_30 {
+	position: absolute;
+	overflow: visible;
+	width: 331.621px;
+	height: 302.563px;
+	left: 0px;
+	top: 0px;
+}
+.Delete_Icon_A5_Group_17_Class {
+	position: absolute;
+	width: 23.729px;
+	height: 24.534px;
+	left: 280.281px;
+	top: 10.109px;
+	overflow: visible;
+}
+.Search_Bar_A5_Rectangle_32 {
+	position: absolute;
+	overflow: visible;
+	width: 23.729px;
+	height: 24.534px;
+	left: 0px;
+	top: 0px;
+}
+.Path_37_A5_Path_22 {
+	overflow: visible;
+	position: absolute;
+	top: 1.871px;
+	left: 1.239px;
+	width: 21.076px;
+	height: 21.076px;
+	transform: rotate(45deg);
+}
+.Repeat_Grid_8_2_Class {
+	position: absolute;
+	width: 316.621px;
+	height: 287.563px;
+	left: 806px;
+	top: 0px;
+	overflow: visible;
+}
+.Component_106___1_A5_SymbolInstance_39_Class {
+	position: absolute;
+	width: 316.621px;
+	height: 287.563px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Shop_Image_A5_Rectangle_33_Class {
+	filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.161));
+}
+.Shop_Image_A5_Rectangle_33 {
+	position: absolute;
+	overflow: visible;
+	width: 331.621px;
+	height: 302.563px;
+	left: 0px;
+	top: 0px;
+}
+.Delete_Icon_A5_Group_19_Class {
+	position: absolute;
+	width: 23.729px;
+	height: 24.534px;
+	left: 280.281px;
+	top: 10.109px;
+	overflow: visible;
+}
+.Search_Bar_A5_Rectangle_35 {
+	position: absolute;
+	overflow: visible;
+	width: 23.729px;
+	height: 24.534px;
+	left: 0px;
+	top: 0px;
+}
+.Path_37_A5_Path_23 {
+	overflow: visible;
+	position: absolute;
+	top: 1.871px;
+	left: 1.239px;
+	width: 21.076px;
+	height: 21.076px;
+	transform: rotate(45deg);
+}
+.Repeat_Grid_8_3_Class {
+	position: absolute;
+	width: 316.621px;
+	height: 287.563px;
+	left: 1209px;
+	top: 0px;
+	overflow: visible;
+}
+.Component_106___1_A5_SymbolInstance_40_Class {
+	position: absolute;
+	width: 316.621px;
+	height: 287.563px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Shop_Image_A5_Rectangle_36_Class {
+	filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.161));
+}
+.Shop_Image_A5_Rectangle_36 {
+	position: absolute;
+	overflow: visible;
+	width: 331.621px;
+	height: 302.563px;
+	left: 0px;
+	top: 0px;
+}
+.Delete_Icon_A5_Group_21_Class {
+	position: absolute;
+	width: 23.729px;
+	height: 24.534px;
+	left: 280.281px;
+	top: 10.109px;
+	overflow: visible;
+}
+.Search_Bar_A5_Rectangle_38 {
+	position: absolute;
+	overflow: visible;
+	width: 23.729px;
+	height: 24.534px;
+	left: 0px;
+	top: 0px;
+}
+.Path_37_A5_Path_24 {
+	overflow: visible;
+	position: absolute;
+	top: 1.871px;
+	left: 1.239px;
+	width: 21.076px;
+	height: 21.076px;
+	transform: rotate(45deg);
+}
+.SIgn_In_Box_A5_SymbolInstance_41_Class {
+	position: absolute;
+	width: 247px;
+	height: 61px;
+	left: 1465px;
+	top: 2336px;
+	overflow: visible;
+}
+.Sign_box_A5_Rectangle_39 {
+	position: absolute;
+	overflow: visible;
+	width: 247px;
+	height: 61px;
+	left: 0px;
+	top: 0px;
+}
+.Save___UPLOAD_Class {
+	position: absolute;
+	left: 42px;
+	top: 16px;
+	overflow: visible;
+	width: 165px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 21px;
+	color: rgba(255,255,255,1);
+}
+.Repeat_Grid_9_Class {
+	position: absolute;
+	width: 1540px;
+	height: 288px;
+	left: 187px;
+	top: 1998px;
+	overflow: hidden;
+}
+.Repeat_Grid_9_0_Class {
+	position: absolute;
+	width: 317px;
+	height: 288px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Component_107___1_Class {
+	position: absolute;
+	width: 317px;
+	height: 288px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Add_Image_box {
+	position: absolute;
+	overflow: visible;
+	width: 317px;
+	height: 288px;
+	left: 0px;
+	top: 0px;
+}
+.Addition_Icon {
+	overflow: visible;
+	position: absolute;
+	top: 102.066px;
+	left: 116.574px;
+	width: 84.436px;
+	height: 84.435px;
+	transform: rotate(90deg);
+}
+.Add_Image_Class {
+	position: absolute;
+	left: 102px;
+	top: 231px;
+	overflow: visible;
+	width: 109px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 21px;
+	color: rgba(0,0,0,1);
+}
+.Repeat_Grid_9_1_Class {
+	position: absolute;
+	width: 317px;
+	height: 288px;
+	left: 403px;
+	top: 0px;
+	overflow: visible;
+}
+.Component_107___1_A5_SymbolInstance_43_Class {
+	position: absolute;
+	width: 317px;
+	height: 288px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Add_Image_box_A5_Rectangle_41 {
+	position: absolute;
+	overflow: visible;
+	width: 317px;
+	height: 288px;
+	left: 0px;
+	top: 0px;
+}
+.Addition_Icon_A5_Path_26 {
+	overflow: visible;
+	position: absolute;
+	top: 102.066px;
+	left: 116.574px;
+	width: 84.436px;
+	height: 84.435px;
+	transform: rotate(90deg);
+}
+.Add_Image_A5_Text_30_Class {
+	position: absolute;
+	left: 102px;
+	top: 231px;
+	overflow: visible;
+	width: 109px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 21px;
+	color: rgba(0,0,0,1);
+}
+.Repeat_Grid_9_2_Class {
+	position: absolute;
+	width: 317px;
+	height: 288px;
+	left: 806px;
+	top: 0px;
+	overflow: visible;
+}
+.Component_107___1_A5_SymbolInstance_44_Class {
+	position: absolute;
+	width: 317px;
+	height: 288px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Add_Image_box_A5_Rectangle_42 {
+	position: absolute;
+	overflow: visible;
+	width: 317px;
+	height: 288px;
+	left: 0px;
+	top: 0px;
+}
+.Addition_Icon_A5_Path_27 {
+	overflow: visible;
+	position: absolute;
+	top: 102.066px;
+	left: 116.574px;
+	width: 84.436px;
+	height: 84.435px;
+	transform: rotate(90deg);
+}
+.Add_Image_A5_Text_31_Class {
+	position: absolute;
+	left: 102px;
+	top: 231px;
+	overflow: visible;
+	width: 109px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 21px;
+	color: rgba(0,0,0,1);
+}
+.Repeat_Grid_9_3_Class {
+	position: absolute;
+	width: 317px;
+	height: 288px;
+	left: 1209px;
+	top: 0px;
+	overflow: visible;
+}
+.Component_107___1_A5_SymbolInstance_45_Class {
+	position: absolute;
+	width: 317px;
+	height: 288px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Add_Image_box_A5_Rectangle_43 {
+	position: absolute;
+	overflow: visible;
+	width: 317px;
+	height: 288px;
+	left: 0px;
+	top: 0px;
+}
+.Addition_Icon_A5_Path_28 {
+	overflow: visible;
+	position: absolute;
+	top: 102.066px;
+	left: 116.574px;
+	width: 84.435px;
+	height: 84.435px;
+	transform: rotate(90deg);
+}
+.Add_Image_A5_Text_32_Class {
+	position: absolute;
+	left: 102px;
+	top: 231px;
+	overflow: visible;
+	width: 109px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Segoe UI;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 21px;
+	color: rgba(0,0,0,1);
+}

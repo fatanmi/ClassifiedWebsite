@@ -1,50 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800');
-
-
 .bg-primary, .btn-primary {background-color:#e3a909!important}
 .btn-primary {
     background-color:#e3a909!important;
     border-color: #e3a909
 }
-
 .mb-4 {
     color: #e3a909
 }
-
 .h2 {
     color: #e3a909
 }
-
 a {
- 
     color: #e3a909;
-  
 }
-
 a:hover {
-
     color: #a37d12
 }
-
 .site-navigation  {
     color: #fff
 }
-
 .cta {
     margin: 10px;
     padding: 5px 10px;
 }
-
 .Market_BG {
-
     background-image: url('./assets/classyads/images/Market_BG.png');
     background-repeat: no-repeat;
     background-size: cover cover;
 }
-
 .Market_BG_2::before{
-
     background-image: url('./assets/classyads/images/Market_BG_A1_Rectangle_3_pattern@2x.png');
     background-size: cover;
     content: "";
@@ -55,25 +40,14 @@ a:hover {
     width: 55%;
     height: 100%;
     color: white;
-   
-        
 }
-
 .Market_BG_2 {
-
-    
-        
 }
-
 .btn {
     margin: 2px;
     min-width: 100px;
 }
-
 .step { margin: 5px}
-
-
-
 .logo{
     text-align: center;
 }
@@ -83,10 +57,7 @@ a:hover {
     width: 50%;
     margin: 10% 0;
     overflow: auto;
-   
 }
-
-
 .on-sidebar{
     top:0px;
     right: 0px;
@@ -94,12 +65,9 @@ a:hover {
     margin: 0px;
     position: absolute;
 }
-
 #recoverform{
     display: none;
 }
-
-
 .auth-sidebar{
     position: fixed;
     height: 100%;
@@ -108,14 +76,10 @@ a:hover {
     margin: 0px;
     top: 0px;
 }
-
 .auth-wrapper {
     min-height: 100vh;
     position: relative;
-
-    
 }
-
 .has-overlay {
     content: "";
     display: block;
@@ -127,10 +91,72 @@ a:hover {
     right: 30;
     float: right;
     z-index: 10;
-    
 }
+.topBg {
+    padding-top:80px;
+    padding-bottom:50px;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-left:100px;
+}
+.pgTitle {
+    font-family: Segoe UI;
+    font-style: normal;
+    font-weight: lighter;
+    font-size: 40px;
+}
+.pageContent {
+    padding:100px;
+    padding-top:120px;
+}
+.contentGroup {
+    padding-top:50px;
+}
+.orangeText {
+    color:rgba(255,147,0,1);;
+}
+.greyText{
+    color:rgba(0,0,0,1);
+}
+.blackText {
+    color:#000;
+}
+.orangeBackg {
+    background:rgba(255,147,0,1);;
+}
+.groupImgeBtn {
+    width: 80%;
+}
+.storeName{
 
-
+}
+.infoTextArea{
+    padding:20px;
+    border-radius:10px;
+    text-align: justify;
+}
+.flexVert {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.infoInput {
+    padding:30px !important;
+    //margin-right:20px;
+    border-radius:10px;
+}
+.prfInfos{
+    padding-top:10px;
+    padding-bottom:10px;
+}
+.dark {
+    background:rgba(7,7,7,1); 
+}
+.btn-full {
+    width:100%;
+}
 @media(max-width:767px) {
     .auth-sidebar{
         position: relative;
@@ -142,4 +168,3 @@ a:hover {
         margin-top: 30px;
     }
 }
-
