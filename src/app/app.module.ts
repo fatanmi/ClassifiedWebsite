@@ -14,6 +14,8 @@ import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { LoaderComponent } from './shared/loader/loader.component';
 import { LoaderInterceptor } from './loader.interceptor';
 import { LoaderService } from './services/loader.service';
+import { AgmCoreModule } from '@agm/core';
+import { MerchantModule } from "../app/merchant/merchant.module";
 //import { MainSiteFooterComponent } from './shared/main-site-footer/main-site-footer.component';
 
 export function tokenGetter() {

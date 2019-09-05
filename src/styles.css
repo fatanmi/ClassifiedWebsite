@@ -104,7 +104,15 @@ a:hover {
     flex-direction: row;
     justify-content: flex-start;
     padding-left:100px;
-    align-items: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+.topBg-inner {
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
 }
 .pgTitle {
     font-family: Segoe UI;
@@ -115,12 +123,14 @@ a:hover {
 .pageContent {
     padding:100px;
     padding-top:120px;
+    padding-left:200px;
 }
 .contentGroup {
     padding-top:50px;
+    border-bottom: 1px solid rgba(238,238,238,1);
 }
 .orangeText {
-    color:rgba(255,147,0,1);;
+    color:rgba(255,147,0,1);
 }
 .boldText {
     font-weight: bold;
@@ -130,6 +140,9 @@ a:hover {
 }
 .blackText {
     color:#000;
+}
+.whiteText {
+    color:#fff;
 }
 .orangeBackg {
     background:rgba(255,147,0,1);;
@@ -183,6 +196,7 @@ a:hover {
 }
 .rightBizBox {
     padding-left: 100px;
+    padding-bottom: 100px;
 }
 .leftBoxImg {
     width: 100%;
@@ -190,6 +204,98 @@ a:hover {
 .topGMenu {
     display: flex;
     list-style: none;
+}
+.topGMenu > li > a {
+    color: #fff;
+    font-weight: bold;
+    border-right: 1px soplid #fff;
+    padding-left:5px;
+}
+.topGMenu > li  {
+    color: #fff;
+    font-weight: bold;
+    border-right: 1px soplid #fff;
+}
+.rightProfile {
+    display: flex;
+    flex-direction: row;
+}
+.profRight {
+    margin-left:20px;
+}
+.card-borderless {
+    border:unset;
+}
+.gallery-sect {
+    flex-direction: column;
+}
+.gal-Images {
+    display: flex;
+    flex-direction: row;
+}
+.btnBox {
+    justify-content: flex-end;
+    display: flex;
+    margin-top:50px;
+}
+.padBtn {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+.card-img-overlay {
+    left: unset; 
+    padding: 1.8rem;
+    padding-right:3rem;
+}
+agm-map {
+    height: 500px;
+    border-radius:20px;
+}
+.map-location {
+    margin-top:60px;
+}
+.agm-map-container-inner {
+    border-radius:30px;
+}
+.foot {
+    display: flex;
+    justify-content: center;
+    padding-top:50px;
+    padding-bottom:100px;
+    padding-left:200px;
+    padding-right:200px;
+
+}
+.footBox h5 {
+    color: rgba(255,147,0,1);
+    margin-bottom:20px;
+}
+.footBox h6 {
+    color: #fff;
+}
+.pay-badges {
+    display: flex;
+    flex-direction: column;
+}
+.pay-badge-parent {
+    display: flex;
+    flex-direction: row;
+}
+.give-way-50 {
+    margin-right:50px;
+}
+img {
+    max-width: 100%;
+    width: max-content;
+}
+.streetBg {
+    background: url('assets/classyads/images/Market_BG.png')
+}
+.search-params {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding:100px;
 }
 @media(max-width:767px) {
     .auth-sidebar{
