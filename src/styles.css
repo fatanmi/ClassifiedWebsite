@@ -202,6 +202,19 @@ a:hover {
 .pInfoLay {
     padding-top:50px;
 }
+.reco-text {
+    white-space: nowrap;
+    font-style: normal;
+    font-weight: lighter;
+    text-align: center;
+    font-size: 40px;
+    color: rgba(0,0,0,1);
+    padding-bottom:30px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.reco-store {
+    padding-top:30px;
+}
 .leftBizBox {
     padding-right: 100px;
     border-right: 1px solid rgba(238,238,238,1);
@@ -322,6 +335,49 @@ img {
 }
 .searchBx {
     padding:30px;
+}
+.blue-tab {
+    background:rgb(14, 98, 150);
+    color:#fff;
+    padding:50px;
+}
+.tabLinks .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: rgba(255,147,0,1);
+    background-color: rgb(14, 98, 150);
+    border-color: #185088 #dee2e6 #fff;
+    font-size:30px;
+    padding:70px;
+    padding-top:20px;
+    padding-bottom:20px;
+}
+.tab-bg {
+    background: rgb(8, 73, 113);
+    color:#fff;
+}
+.nav-tabs .nav-link {
+    border: 1px solid transparent;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    font-size:25px;
+    padding-bottom:42px;
+    margin-right: 10px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+.work-time {
+    margin-top:80px;
+}
+.ind-details {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
+    margin-bottom: 30px;
+}
+.ind-details h4 {
+    margin-right:50px;
+    color:rgba(255,255,255,0.5);
 }
 .searchSel {
     -webkit-appearance: none;
