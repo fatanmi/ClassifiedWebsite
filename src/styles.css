@@ -120,9 +120,21 @@ a:hover {
     font-weight: lighter;
     font-size: 40px;
 }
+.site-blocks-coverx.inner-page-cover, .site-blocks-cover.inner-page-cover > .container > .row {
+    min-height: 600px;
+    /* height: calc(30vh); */
+}
 .pageContent {
     padding:100px;
     padding-top:120px;
+    padding-left:200px;
+}
+.elevate-50 {
+    margin-top:-50px;
+}
+.pageContentx {
+    padding:100px;
+    padding-top:0px;
     padding-left:200px;
 }
 .contentGroup {
@@ -251,6 +263,10 @@ agm-map {
     height: 500px;
     border-radius:20px;
 }
+.agm-vert > agm-map {
+    height: 280px;
+    border-radius:20px;
+}
 .map-location {
     margin-top:60px;
 }
@@ -265,6 +281,10 @@ agm-map {
     padding-left:200px;
     padding-right:200px;
 
+}
+.bizdetails-text {
+    padding-top:50px;
+    padding-left:50px;
 }
 .footBox h5 {
     color: rgba(255,147,0,1);
@@ -289,13 +309,25 @@ img {
     width: max-content;
 }
 .streetBg {
-    background: url('assets/classyads/images/Market_BG.png')
+    background: url('assets/classyads/images/Market_BG.png');
+    background-position: center;
+    background-size: cover;
 }
 .search-params {
     display: flex;
     flex-direction: row;
     justify-content: center;
     padding:100px;
+    padding-top:unset;
+}
+.searchBx {
+    padding:30px;
+}
+.searchSel {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+         appearance: none;  
+    padding:30px;
 }
 @media(max-width:767px) {
     .auth-sidebar{
