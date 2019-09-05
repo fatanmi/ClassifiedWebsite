@@ -92,6 +92,11 @@ a:hover {
     float: right;
     z-index: 10;
 }
+.container-fluid {
+    width: 100%;
+    padding-right: 0px; 
+    padding-left: 0px; 
+}
 .topBg {
     padding-top:80px;
     padding-bottom:50px;
@@ -99,6 +104,7 @@ a:hover {
     flex-direction: row;
     justify-content: flex-start;
     padding-left:100px;
+    align-items: center;
 }
 .pgTitle {
     font-family: Segoe UI;
@@ -116,6 +122,9 @@ a:hover {
 .orangeText {
     color:rgba(255,147,0,1);;
 }
+.boldText {
+    font-weight: bold;
+}
 .greyText{
     color:rgba(0,0,0,1);
 }
@@ -126,10 +135,7 @@ a:hover {
     background:rgba(255,147,0,1);;
 }
 .groupImgeBtn {
-    width: 80%;
-}
-.storeName{
-
+    width: 100%;
 }
 .infoTextArea{
     padding:20px;
@@ -144,7 +150,6 @@ a:hover {
 }
 .infoInput {
     padding:30px !important;
-    //margin-right:20px;
     border-radius:10px;
 }
 .prfInfos{
@@ -157,6 +162,35 @@ a:hover {
 .btn-full {
     width:100%;
 }
+.btn-orange {
+    font-size:21px;
+    font-weight: bold;
+    padding-top:18px;
+    padding-bottom:18px;
+    color:#fff;
+    text-transform: uppercase;
+    border-radius:10px;
+}
+.pInfoTxt {
+    color: rgba(0,0,0,.6);
+}
+.pInfoLay {
+    padding-top:50px;
+}
+.leftBizBox {
+    padding-right: 100px;
+    border-right: 1px solid rgba(238,238,238,1);
+}
+.rightBizBox {
+    padding-left: 100px;
+}
+.leftBoxImg {
+    width: 100%;
+}
+.topGMenu {
+    display: flex;
+    list-style: none;
+}
 @media(max-width:767px) {
     .auth-sidebar{
         position: relative;
@@ -166,5 +200,23 @@ a:hover {
     }
     .demo-text{
         margin-top: 30px;
+    }
+    .rightBizBox {
+        padding-left: unset;
+    }
+    .leftBizBox {
+        padding-left: unset;
+    }
+    .pageContent {
+        padding: 20px;
+        padding-top: 50px;
+    }
+    .contentGroup {
+        padding-top: 50px;
+        display: flex;
+        flex-direction: column;
+    }
+    .infoTextArea {
+        width: 100%;
     }
 }
