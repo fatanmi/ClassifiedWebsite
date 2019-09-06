@@ -5,12 +5,14 @@ import { MerchantRoutes } from './merchant.routing';
 import { ProfileComponent } from './profile/profile.component';
 import { FormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [ProfileComponent],
   imports: [
     CommonModule,
     FormsModule,
+    NgMultiSelectDropDownModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey:'AIzaSyCFoqnJWu6UAchNsRTfaQ_E1JCAqVc8Stk',
       libraries:['places']

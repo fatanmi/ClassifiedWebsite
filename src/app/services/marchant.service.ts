@@ -57,12 +57,23 @@ export class MerchantService {
 
     // Get all businesses by merchant phone 
     getBusinessesByPhone (phoneNumber: string): Observable<Business[]> { 
-      return this.http.get<Business[]>(Settings._url +`/merchants/${phoneNumber}`, httpOptions); 
+      return this.http.get<Business[]>(Settings._url +`/merchants/more-details/${phoneNumber}`, httpOptions); 
+    }
+
+    // Get all businesses by merchant Id 
+    getBusinessesById (id: string): Observable<Business[]> { 
+      console.log(id);
+      return this.http.get<Business[]>(Settings._url +`/businesses/id?merchantId=${id}`, httpOptions); 
     }
 
     // Get all businesses by product tag 
     getBusinessesByProductTag (tag: string): Observable<Business[]> { 
       return this.http.get<Business[]>(Settings._url +'/businesses', httpOptions); 
+    }
+
+    // Get business payment method
+    getBusinessesPayMethod (): Observable<Business[]> { 
+      return this.http.get<Business[]>(Settings._url +'/payment_methods', httpOptions); 
     }
 
 

@@ -80,20 +80,24 @@
                     <div class="col-md-8 bizdetails-text">
                         <div class="ver-badge">
                             <h1 class="pgTitle orangeText">
-                                Tunde Ghadofi Store 
+                                {{businessDetails.businessName}}
                             </h1>
                             <img src="assets/classyads/images/Verification Icon.png" alt="verification-badge" srcset="">
                         </div>
                         
                         <h5>
-                            Shop 007, Zone 51, Iponri Market
+                            {{businessDetails.address}}
                         </h5>
                         <h5>
-                            Surulere, Lagos State, Nigeria.
+                            {{businessDetails.market + ', ' + businessDetails.state }}
                         </h5>
                         <h6>
                             +234 903 4567 9888
                         </h6>
+                        <div class="row">
+                            <a href="" class="col-md-2"><img src="assets/classyads/images/call-icon.jpg" class="square-width" alt="call-icon"></a>
+                            <a href="" class="col-md-2"><img src="assets/classyads/images/whatsapp.png" class="square-width" alt="call-icon"></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -126,12 +130,12 @@
                                 <div>
                                     <h3>General Info</h3>
                                     <p>
-                                        Working HoursLorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse
+                                        {{businessDetails.description}}
                                     </p>
                                 </div>
                                 <div class="work-time">
                                      <h3>Working Hours</h3>
-                                     <p>9:00am - 17:00pm</p>
+                                     <p>{{businessDetails.openingHour}} - {{businessDetails.openingHour}}</p>
                                 </div>
                                
                             </div>    
@@ -142,7 +146,7 @@
                                    </div>
                                    <div class="col-md-7">
                                         <h6>
-                                            Shoes | Watches | Shirts | Hoodies
+                                           <span *ngFor="let product of businessDetails.productCategories">{{product}} |</span>
                                         </h6>
                                    </div>
                                </div>
@@ -154,7 +158,7 @@
                                    </div>
                                    <div class="col-md-7">
                                         <h6>
-                                            +234 806 7894 6789
+                                            {{businessDetails.phoneNumber}}
                                         </h6>
                                    </div>
                                </div>
@@ -166,7 +170,7 @@
                                    </div>
                                    <div class="col-md-7">
                                         <h6>
-                                            +234 806 7894 6789
+                                           {{businessDetails.whatsappNumber}}
                                         </h6>
                                    </div>
                                </div>
@@ -178,7 +182,7 @@
                                    </div>
                                    <div class="col-md-7">
                                         <h6>
-                                            +234 806 7894 6789
+                                           <span *ngFor="let category of businessDetails.businessTypeNames">{{category}} |</span>
                                         </h6>
                                    </div>
                                </div>
@@ -190,7 +194,7 @@
                                    </div>
                                    <div class="col-md-7">
                                         <h6>
-                                            Payment on delivery
+                                            {{businessDetails.paymentMethodNames}}
                                         </h6>
                                    </div>
                                </div>
@@ -202,7 +206,7 @@
                                    </div>
                                    <div class="col-md-7">
                                         <h6>
-                                            www.tundeghadfishop.com
+                                           {{businessDetails.website}}
                                         </h6>
                                    </div>
                                </div>
