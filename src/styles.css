@@ -1,5 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&display=swap');
+*{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 .bg-primary, .btn-primary {background-color:#e3a909!important}
 .btn-primary {
     background-color:#e3a909!important;
@@ -27,7 +31,7 @@ a:hover {
 .Market_BG {
     background-image: url('./assets/classyads/images/Market_BG.png');
     background-repeat: no-repeat;
-    background-size: cover cover;
+    background-size: auto;
 }
 .Market_BG_2::before{
     background-image: url('./assets/classyads/images/Market_BG_A1_Rectangle_3_pattern@2x.png');
@@ -135,7 +139,7 @@ a:hover {
 .pageContentx {
     padding:100px;
     padding-top:0px;
-    padding-left:200px;
+    padding-left:100px;
 }
 .contentGroup {
     padding-top:50px;
@@ -251,6 +255,22 @@ a:hover {
 .card-borderless {
     border:unset;
 }
+.cardi-body {
+    background: rgb(7, 53, 82);
+    padding: 10px;
+    text-align: center;
+    margin-top: -10px;
+    z-index: -9999999999999;
+    border-radius: 5px;
+}
+.cardi-body h4 {
+    color: rgba(255,147,0,1);
+    
+}
+.cardi-body p {
+    color: #fff;
+
+}
 .gallery-sect {
     flex-direction: column;
 }
@@ -296,8 +316,16 @@ agm-map {
 
 }
 .bizdetails-text {
-    padding-top:50px;
+    padding-top:20px;
     padding-left:50px;
+}
+.ver-badge {
+    display:flex;
+    flex-direction:row;
+}
+.ver-badge img {
+    margin-left:40px;
+    height: max-content;
 }
 .footBox h5 {
     color: rgba(255,147,0,1);
@@ -375,7 +403,7 @@ img {
     align-content: center;
     margin-bottom: 30px;
 }
-.ind-details h4 {
+.ind-details h5 {
     margin-right:50px;
     color:rgba(255,255,255,0.5);
 }

@@ -6,6 +6,7 @@ import { AccountRoutes } from './account.routing';
 import { LoginComponent } from './login/login.component';
 import { VerifyComponent } from './verify/verify.component';
 import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -13,6 +14,7 @@ import { PasswordRecoveryComponent } from './password-recovery/password-recovery
   declarations: [RegisterComponent, LoginComponent, VerifyComponent, PasswordRecoveryComponent],
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule.forChild(AccountRoutes)
   ]
 })

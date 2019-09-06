@@ -19,7 +19,12 @@ export class AccountService {
     console.log('...validating login credentials');
     return this.http.post<UserSession>(Settings.base_url + '/api/auth/v1/signin', data , httpOptions).pipe(
       tap((token: any) => console.log('Login session created with token ' + JSON.stringify(token)),
-      catchError(error => of('error: ' + error))));
+      catchError(error => of('error: ' + error)))
+      );
+    }
+    userLogin(data: Login){
+      const userLogin = this.http.post(`${Settings.base_url}api/auth/v1/signin`,data,httpOptions );
+      return userLogin ;
     }
   }
   
