@@ -24,46 +24,68 @@ export class MerchantService {
   constructor(private http: HttpClient) { }
 
   // Get all market locatiins
-  getAllMarkets (): Observable<Market[]> { 
-    return this.http.get<Market[]>(Settings._url+"/markets", httpOptions); 
+  getAllMarkets (): Observable<Market[]> {
+    return this.http.get<Market[]>(Settings._url+"/markets", httpOptions);
   }
 
   // Get all Business Categories
-  getAllBusinessCategories (): Observable<BusinessCategory[]> { 
-    return this.http.get<BusinessCategory[]>(Settings._url +'/businesses/categories/all', httpOptions); 
+  getAllBusinessCategories (): Observable<BusinessCategory[]> {
+    return this.http.get<BusinessCategory[]>(Settings._url +'/businesses/categories/all', httpOptions);
   }
 
    // Get all businesses
-   getAllBusinesses ( page: number, size: number): Observable<Business[]> { 
-    return this.http.get<Business[]>(Settings._url +'/businesses/all?page='+page+'&size='+size, httpOptions); 
+   getAllBusinesses ( page: number, size: number): Observable<Business[]> {
+    return this.http.get<Business[]>(Settings._url +'/businesses/all?page='+page+'&size='+size, httpOptions);
   }
 
    // Get businesseses by category
-   getBusinessesByCategory (category: string, page: number, size: number): Observable<Business[]> { 
+   getBusinessesByCategory (category: string, page: number, size: number): Observable<Business[]> {
     console.log("This the real deal "+ category);
-    return this.http.get<Business[]>(Settings._url+'/businesses?category='+category+'&page='+page+'&size='+size, httpOptions); 
+    return this.http.get<Business[]>(Settings._url+'/businesses?category='+category+'&page='+page+'&size='+size, httpOptions);
   }
 
     // Get businesses in a marketplace
-    getBusinessesInAMarket (marketCode: string,page: number, size: number): Observable<Business[]> { 
+    getBusinessesInAMarket (marketCode: string,page: number, size: number): Observable<Business[]> {
       console.log("This the real deal "+ marketCode);
-      return this.http.get<Business[]>(Settings._url +'/businesses/'+marketCode+'?page='+page+'&size='+size, httpOptions); 
+      return this.http.get<Business[]>(Settings._url +'/businesses/'+marketCode+'?page='+page+'&size='+size, httpOptions);
     }
 
     // Get all merchant businesses by id
-    getMerchantBusinesses (merchantId: number): Observable<Business[]> { 
-      return this.http.get<Business[]>(Settings._url +'/businesses', httpOptions); 
+    getMerchantBusinesses (merchantId: number): Observable<Business[]> {
+      return this.http.get<Business[]>(Settings._url +'/businesses', httpOptions);
     }
 
-    // Get all businesses by merchant phone 
-    getBusinessesByPhone (phoneNumber: string): Observable<Business[]> { 
-      return this.http.get<Business[]>(Settings._url +`/merchants/${phoneNumber}`, httpOptions); 
+    // Get all businesses by merchant phone
+    getBusinessesByPhone (phoneNumber: string): Observable<Business[]> {
+      return this.http.get<Business[]>(Settings._url +`/merchants/${phoneNumber}`, httpOptions);
     }
 
-    // Get all businesses by product tag 
-    getBusinessesByProductTag (tag: string): Observable<Business[]> { 
-      return this.http.get<Business[]>(Settings._url +'/businesses', httpOptions); 
+    // Get all businesses by product tag
+    getBusinessesByProductTag (tag: string): Observable<Business[]> {
+      return this.http.get<Business[]>(Settings._url +'/businesses', httpOptions);
     }
 
+    postMerchantDetails(payload: any): Observable<any> {
+     return this.http.post('https://merchant-service.test.rensource.energy/api/auth/v1/onboarding/merchants', payload);
+    }
+
+    getAllStates(): Observable<any>{
+      return this.http.get('http://locationsng-api.herokuapp.com/api/v1/states');
+    }
+
+    getCities(stateName): Observable<any> {
+      return this.http.get(`http://locationsng-api.herokuapp.com/api/v1/states/${stateName}/cities`);
+    }
+    getStateCapital(stateName): Observable<any> {
+      // return this.http.get(`http://locationsng-api.herokuapp.com/api/v1/states/${stateName}/cities`);
+      return this.http.get(`http://locationsng-api.herokuapp.com/api/v1/states/${stateName}/capital`);
+    }
+
+    getBusinessCategories(): Observable<any> {
+     return this.http.get(Settings._url + '/businesses/categories/all');
+    }
+    getPaymentMethods(): Observable<any> {
+     return this.http.get(Settings._url + '/payment_methods');
+    }
 
 }
