@@ -91,7 +91,6 @@ export class MerchantService {
     return this.http.get(`http://locationsng-api.herokuapp.com/api/v1/states/${stateName}/cities`);
   }
   getStateCapital(stateName): Observable<any> {
-    // return this.http.get(`http://locationsng-api.herokuapp.com/api/v1/states/${stateName}/cities`);
     return this.http.get(`http://locationsng-api.herokuapp.com/api/v1/states/${stateName}/capital`);
   }
 
