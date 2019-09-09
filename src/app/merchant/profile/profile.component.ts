@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MerchantService } from 'src/app/services/marchant.service';
 import { Merchant } from 'src/app/models/merchant';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile',
@@ -10,7 +11,8 @@ import { Merchant } from 'src/app/models/merchant';
 export class ProfileComponent implements OnInit {
 
   constructor(
-    private merchantService: MerchantService
+    private merchantService: MerchantService,
+    private toastr: ToastrService
   ) { }
 
   lat = 3.4241753;
@@ -19,9 +21,13 @@ export class ProfileComponent implements OnInit {
     businesses: {}
   };
   dropdownSettings: any;
+  dropdownSettingsProduct:any;
   businessCategories :any;
+  bizCat : any =[] ;
+  payMode : any =[] ;
   ProductLists: any;
   paymentMethods: any;
+  listOfProducts: any = [];
 
   getBusinessInfo() {
     let phoneNumber =  localStorage.getItem('username');
@@ -46,8 +52,11 @@ export class ProfileComponent implements OnInit {
   getAllCategories() {
     this.merchantService.getAllBusinessCategories().subscribe(
       (Response: any)=>{
-        this.businessCategories = Response.data.map((category)=> {return category.name} );
+        console.log(Response);
+        this.businessCategories = Response.data;
+        
         console.log(this.businessCategories);
+        console.log(this.bizCat);
       },
       (error : any)=>{
         console.log(error);
@@ -57,7 +66,14 @@ export class ProfileComponent implements OnInit {
   getBusinessPayMethods(){
     this.merchantService.getBusinessesPayMethod().subscribe(
       (Response: any)=>{
-        this.paymentMethods = Response.data.map((paymode)=> {return paymode.paymentMode} );
+        this.paymentMethods = Response.data;
+        this.paymentMethods.map((payMethod, index) => {
+          const row = {
+            id: index + 1 ,
+            name:payMethod.paymentMode 
+          };
+          this.payMode = [...this.payMode,row]
+        });
         console.log(this.paymentMethods);
       },
       (error : any)=>{
@@ -65,18 +81,63 @@ export class ProfileComponent implements OnInit {
       }
     )
   }
-  fillProductLists(){
+  fillProductLists(){ 
+  }
+  editMerchantProfile (){
+    console.log(this.merchantProfile.businesses.businessTypeNames);
+    console.log(this.merchantProfile.businesses.paymentMethodNames);
+    console.log(this.merchantProfile.businesses);
+    this.merchantProfile.businesses.name = this.merchantProfile.businesses.businessName;
+    this.merchantProfile.businesses.businessTypeIdList = this.merchantProfile.businesses.businessTypeNames
+    .map(
+      buinessCategories => buinessCategories.id
+    ).filter(catNumber => catNumber !== undefined );
+    this.merchantProfile.businesses.paymentMethodIdList = this.merchantProfile.businesses.paymentMethodNames
+    .map(
+      buinessPayMode => buinessPayMode.id
+    ).filter(ModeNumber => ModeNumber !== undefined );
 
+    console.log(this.merchantProfile.businesses.businessTypeIdList);
+    console.log(this.merchantProfile.businesses.paymentMethodIdList);
+
+    this.merchantService.updateBusiness(this.merchantProfile.businesses).subscribe(
+      (response: any)=>{
+        this.toastr.success('Success', 'Profile Updated successfull')
+        console.log(response);
+      },
+      (error: any)=>{
+        console.log(error);
+      }
+    )
+  }
+  getCategoryProducts(productId) {
+    this.businessCategories[productId].productCategories;
+  }
+  onCategoryItemSelect(data) {
+    let catProduct ;
+    catProduct = this.businessCategories[data.id].productCategories;
+
+    this.listOfProducts = catProduct;
+    console.log(this.listOfProducts);
   }
   ngOnInit() {
     this.getAllCategories();
     this.getBusinessInfo();
     this.getBusinessPayMethods();
     
-    this.dropdownSettings = {
+    this.dropdownSettingsProduct = {
       singleSelection: false,
       idField: 'item_id',
-      textField: 'item_text',
+      textField: 'item_name',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'name',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
       itemsShowLimit: 3,

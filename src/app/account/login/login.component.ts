@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
     };
     this.accountService.userLogin(data).subscribe(
       (response :any)=>{
-        this.toastr.success('success', 'Logged successfuly')
+        this.toastr.success('success', 'Logged successfuly');
         console.log(response);
         localStorage.setItem('access_token',response.data.token)
         localStorage.setItem('username',response.data.username);
