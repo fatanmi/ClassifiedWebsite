@@ -90,7 +90,16 @@
 							<select id="businessTypeIdList"  class="form-control" (change)="onChangeBusinessCat($event)" formControlName="businessTypeIdList">
                 <option *ngFor="let b of businessCategories" value="{{b.id}}"> {{b.name}}</option>
               </select>
-						</div>
+              <ng-multiselect-dropdown
+                [placeholder]="'Business Category'"
+                [data]="businessCategories2"
+                [settings]="dropdownSettings"
+                (onSelect)="onItemSelect($event)"
+                (onSelectAll)="onSelectAll($event)"
+              >
+              </ng-multiselect-dropdown>
+
+            </div>
 						<div class="col-md-6">
 							<label class="text-dark" for="phoneNumber">Product Category</label>
 							<select id="businessCategory"  class="form-control" formControlName="productCategories" (change)="onProductCategories($event)" >

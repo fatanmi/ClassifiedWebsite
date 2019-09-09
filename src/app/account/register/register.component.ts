@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 
+  dropdownSettings: any;
   personalProfileForm = true;
   businessProfileForm = false;
   bioDataForm: FormGroup;
@@ -18,6 +19,7 @@ export class RegisterComponent implements OnInit {
   allState: any;
   stateCities: any;
   businessCategories: any;
+  businessCategories2: any;
   productCategories: any;
   paymentMethods: any;
   bioDataObj: any;
@@ -50,6 +52,16 @@ export class RegisterComponent implements OnInit {
     this.onGetPaymentMethods();
     this.initBioDataForm();
     this.initBusinessDataForm();
+
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
   }
 
   createMerchant() {
@@ -63,6 +75,12 @@ export class RegisterComponent implements OnInit {
     );
   }
 
+  onItemSelect(item: any) {
+    console.log(item);
+  }
+  onSelectAll(items: any) {
+    console.log(items);
+  }
 
   initBioDataForm() {
     this.bioDataForm = this.fb.group({
@@ -129,7 +147,9 @@ export class RegisterComponent implements OnInit {
     this.merchantService.getBusinessCategories().subscribe(
       (res) => {
         this.businessCategories = res.data;
-        console.log('getAllBizCat', this.businessCategories);
+        this.businessCategories2 = res.data.map(category => category.name );
+        console.log('businessCategories2', this.businessCategories2);
+        console.log('businessCategories', this.businessCategories);
       }
     );
   }
