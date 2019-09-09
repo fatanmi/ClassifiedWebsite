@@ -40,7 +40,7 @@ export const BrowserRoutes: Routes = [
   ,
 
   {
-    path: 'shop-info',
+    path: 'shop-info/:id',
     children: [
       {
         path: '',

@@ -7,51 +7,65 @@
 	<div class="auth-box on-sidebar bg-white">
 		<div [ngClass]="{'d-none': businessProfileForm}" style="padding:1px 60px" class="row" id="personalProfileForm" >
 			<div class="col-md-12" data-aos="fade" data-aos-delay="400">
-<!--				<form [formGroup]="bioDataForm" id="loginform" class="p-5 form-horizontal bg-white">-->
-				<form id="loginform" class="p-5 form-horizontal bg-white">
+				<form [formGroup]="bioDataForm" id="loginform" class="p-5 form-horizontal bg-white" (ngSubmit)="submitBioData()">
+<!--				<form id="loginform" class="p-5 form-horizontal bg-white">-->
 					<div class="row form-group">
 						<div class="col-md-12">
 							<h4 class="float-left"><strong>Personal Details  </strong></h4> <label class="float-right step uk-icon-step-forward">   step 1 of 3</label>
 						</div>
 					</div>
 					<div class="row form-group">
-						<div class="col-md-12">
+						<div class="col-md-4">
+							<label class="text-black" for="firstName">Title</label>
+              <select  id="title" class="form-control" formControlName="title">
+                <option value="mr">Mr.</option>
+                <option value="mrs">Mrs.</option>
+                <option value="ms">Ms.</option>
+                <option value="dr">Dr.</option>
+                <option value="chief">Chief</option>
+              </select>
+						</div>
+						<div class="col-md-8">
 							<label class="text-black" for="firstName">First Name</label>
-							<input type="text" id="firstName" class="form-control">
+							<input type="text" id="firstName" class="form-control" formControlName="firstName">
 						</div>
 					</div>
 					<div class="row form-group">
 						<div class="col-md-12">
 							<label class="text-black" for="firstName">Last Name</label>
-							<input type="text" id="lastName" class="form-control">
+							<input type="text" id="lastName" class="form-control" formControlName="lastName">
 						</div>
 					</div>
+          <div class="row form-group">
+            <div class="col-md-12">
+              <label class="text-black" for="email">Email Address</label>
+              <input type="email" id="email" class="form-control" formControlName="email">
+            </div>
+          </div>
 					<div class="row form-group">
-						<div class="col-md-12">
+						<div class="col-md-7">
 							<label class="text-black" for="phoneNumber">Phone Number</label>
-							<input type="text" id="phoneNumber" class="form-control">
+							<input type="text" id="phoneNumber" class="form-control" formControlName="phoneNumber">
 						</div>
-					</div>
-					<div class="row form-group">
-						<div class="col-md-12">
-							<label class="text-black" for="email">Email Address</label>
-							<input type="email" id="email" class="form-control">
+						<div class="col-md-5">
+							<label class="text-black" for="phoneNumber">Date of Birth</label>
+							<input type="date" id="dateOfBirth" class="form-control" formControlName="dateOfBirth">
 						</div>
 					</div>
 					<div class="row form-group">
 						<div class="col-lg-6 col-md-12">
 							<label class="text-black" for="password">Password</label>
-							<input type="password" id="password" class="form-control">
+							<input type="password" id="password" class="form-control" formControlName="password">
 						</div>
 						<div class="col-lg-6 col-md-12">
 							<label class="text-black" for="confirmPassword">Re-type Password</label>
-							<input type="password" id="confirmPassword" class="form-control">
+							<input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword">
 						</div>
 					</div>
 					<div class="row form-group">
 						<div class="col-md-12">
-							<a (click)="toggleFormView()" href="javascript:void(0)"  class="btn btn-primary py-2 px-4 text-white float-right"> Next </a>
-							<input type="submit" value="Cancel" class="btn btn-light float-right py-2 px-4">
+							<button type="submit"  class="btn btn-primary py-2 px-4 text-white float-right" [disabled]="bioDataForm.invalid"> Next </button>
+              <button (click)="resetBioDataForm()" class="btn btn-light float-right py-2 px-4">Cancel</button>
 						</div>
 					</div>
 				</form>
@@ -59,7 +73,7 @@
 		</div>
 		<div [ngClass]="{'d-block': businessProfileForm}" style="padding:1px 60px ; display:none" class="row" id="businessProfileForm" >
 			<div class="col-md-12" data-aos="fade-right" data-aos-delay="400" >
-				<form action="#" class="p-5 form-horizontal bg-white">
+				<form class="p-5 form-horizontal bg-white" [formGroup]="businessDataForm">
 					<div class="row form-group">
 						<div class="col-md-12">
 							<h4 class="float-left"><strong>Business Details</strong></h4> <label class="float-right step uk-icon-step-forward">   step 2 of 3</label>
@@ -68,65 +82,113 @@
 					<div class="row form-group">
 						<div class="col-md-12">
 							<label class="text-dark" for="businessName">Business Name</label>
-							<input type="text" id="businessName" class="form-control">
+							<input type="text" id="businessName" class="form-control" formControlName="name">
 						</div>
 					</div>
 					<div class="row form-group">
 						<div class="col-md-6">
 							<label class="text-dark" for="businessCategory">Business Category</label>
-							<select id="businessCategory"  class="form-control" (change)="onChangeBusinessCat($event)">
+							<select id="businessTypeIdList"  class="form-control" (change)="onChangeBusinessCat($event)" formControlName="businessTypeIdList">
                 <option *ngFor="let b of businessCategories" value="{{b.id}}"> {{b.name}}</option>
               </select>
 						</div>
 						<div class="col-md-6">
 							<label class="text-dark" for="phoneNumber">Product Category</label>
-							<select id="businessCategory"  class="form-control">
+							<select id="businessCategory"  class="form-control" formControlName="productCategories" (change)="onProductCategories($event)" >
                 <option *ngFor="let b of productCategories" value="{{b}}"> {{b}}</option>
               </select>
 						</div>
 					</div>
 					<div class="row form-group">
 						<div class="col-md-12">
-							<label class="text-black" for="businessAddress">Business Address</label>
-							<textarea class="form-control" name="businessAddress" id="businessAddress" rows="3"></textarea>
+							<label class="text-black" for="address">Business Address</label>
+							<input type="text" class="form-control" name="businessAddress" id="address"  formControlName="address"/>
+						</div>
+					</div>
+					<div class="row form-group">
+						<div class="col-md-12">
+							<label class="text-black" for="description">Business Description</label>
+							<textarea class="form-control" name="businessAddress" id="description" rows="3" formControlName="description"></textarea>
 						</div>
 					</div>
 					<div class="row form-group">
             <div class="col-md-6">
               <label class="text-dark" for="state">State</label>
-              <select id="state"  class="form-control" (change)="getCitiesInState($event)">
+              <select id="state"  class="form-control" (change)="getCitiesInState($event)" formControlName="state">
                 <option *ngFor="let s of allState" value="{{s.name}}"> {{s.name}}</option>
               </select>
             </div>
 						<div class="col-md-6">
 							<label class="text-dark" for="city">City</label>
-							<select id="city"  class="form-control"> stateCities
-                <option *ngFor="let c of stateCities" value="c"> {{c}}</option>
+							<select id="city"  class="form-control" formControlName="city">
+                <option *ngFor="let c of stateCities" value="{{c}}"> {{c}}</option>
               </select>
 						</div>
 
 					</div>
 					<div class="row form-group">
-						<div class="col-md-12">
+						<div class="col-md-8">
 							<label class="text-dark" for="marketName">Market Name</label>
-							<input type="text" id="marketName" class="form-control">
+							<input type="text" id="marketName" class="form-control" formControlName="market">
+						</div>
+						<div class="col-md-4">
+							<label class="text-dark" for="shopNumber">Shop Number</label>
+							<input type="text" id="shopNumber" class="form-control" formControlName="shopNumber">
 						</div>
 					</div>
 					<div class="row form-group">
 						<div class="col-lg-6 col-md-12">
 							<label class="text-black" for="password">Phone Number</label>
-							<input type="password" id="password" class="form-control">
+							<input type="text" id="password2" class="form-control" formControlName="phoneNumber">
 						</div>
 						<div class="col-lg-6 col-md-12">
 							<label class="text-black" for="confirmPassword">Select Payment methods</label>
-              <select id="state"  class="form-control">
+              <select id="paymentMethodIdList"  class="form-control" formControlName="paymentMethodIdList" (change)="onPaymentMethod($event)">
                 <option *ngFor="let s of paymentMethods" value="{{s.id}}"> {{s.paymentMode}}</option>
               </select>
 						</div>
 					</div>
+          <div class="row form-group">
+            <div class="col-md-12">
+              <label class="text-dark" for="marketName">Business Email</label>
+              <input type="email" id="businessemail" class="form-control" formControlName="email">
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-4">
+              <label class="text-dark" for="marketName">Active Days</label>
+              <select id="activeDays" class="form-control" formControlName="activeDays">
+                <option value="monday">Monday</option>
+                <option value="tuesday">Tuesday</option>
+                <option value="wednesday">Wednesday</option>
+                <option value="thursday">Thursday</option>
+                <option value="friday">Friday</option>
+                <option value="saturday">Saturday</option>
+                <option value="sunday">Sunday</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="text-dark" for="marketName">Opening Hours</label>
+              <input type="time" id="openingHour" class="form-control" formControlName="openingHour">
+            </div>
+            <div class="col-md-4">
+              <label class="text-dark" for="marketName">Closing Hours</label>
+              <input type="time" id="closingHours" class="form-control" formControlName="closingHours">
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-6">
+              <label class="text-dark" for="website">Website</label>
+              <input type="text" id="website" class="form-control" formControlName="website">
+            </div>
+            <div class="col-md-6">
+              <label class="text-dark" for="whatsappNumber">WhatsApp Number</label>
+              <input type="text" id="whatsappNumber" class="form-control" formControlName="whatsappNumber">
+            </div>
+          </div>
 					<div class="row form-group">
 						<div class="col-md-12">
-              <button type="submit" class="btn btn-primary py-2 px-4 text-white float-right" (click)="createMerchant()">Finish</button>
+              <button class="btn btn-primary py-2 px-4 text-white float-right" (click)="createMerchant()" >Finish</button>
 							<a (click)="toggleFormView()" href="javascript:void(0)" class="btn btn-info py-2 px-4 btn-light float-right">Back</a>
 						</div>
 					</div>

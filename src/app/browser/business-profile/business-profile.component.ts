@@ -1,18 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-
+import { ActivatedRoute } from '@angular/router';
+import { MerchantService } from 'src/app/services/marchant.service';
 @Component({
   selector: 'app-business-profile',
   templateUrl: './business-profile.component.html',
   styleUrls: ['./business-profile.component.css']
 })
 export class BusinessProfileComponent implements OnInit {
-
-  constructor() { }
-
   lng = 3.4241753;
   lat = 6.4255113;
+  businessId: string;
+  businessDetails: any = {};
 
-  ngOnInit() {
+  constructor(
+    private _Activatedroute: ActivatedRoute,
+    private merchantService: MerchantService
+  ) { }
+  getBusinessDetails() {
+    this.merchantService.getBusinessesById(this.businessId).subscribe(
+      (response: any)=>{
+        this.businessDetails = response.data[1];
+        console.log(this.businessDetails);
+      },
+      (error: any)=>{
+        console.log(error);
+      }
+      )
   }
-
+  ngOnInit() {
+    this._Activatedroute.params.subscribe((params) => {
+      this.businessId = params['id'];
+    });
+    this.getBusinessDetails();
+  }
 }

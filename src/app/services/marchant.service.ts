@@ -51,17 +51,27 @@ export class MerchantService {
     }
 
     // Get all merchant businesses by id
-    getMerchantBusinesses (merchantId: number): Observable<Business[]> {
+    getMerchantBusinesses(merchantId: number): Observable<Business[]> {
       return this.http.get<Business[]>(Settings._url +'/businesses', httpOptions);
     }
 
     // Get all businesses by merchant phone
-    getBusinessesByPhone (phoneNumber: string): Observable<Business[]> {
-      return this.http.get<Business[]>(Settings._url +`/merchants/${phoneNumber}`, httpOptions);
+    getBusinessesByPhone(phoneNumber: string): Observable<Business[]> {
+      return this.http.get<Business[]>(Settings._url + `/merchants/${phoneNumber}`, httpOptions);
+    }
+    // Get all businesses by merchant phone
+    // getBusinessesByPhone (phoneNumber: string): Observable<Business[]> {
+    //   return this.http.get<Business[]>(Settings._url +`/merchants/more-details/${phoneNumber}`, httpOptions);
+    // }
+
+    // Get all businesses by merchant Id
+    getBusinessesById(id: string): Observable<Business[]> {
+      console.log(id);
+      return this.http.get<Business[]>(Settings._url +`/businesses/id?merchantId=${id}`, httpOptions);
     }
 
     // Get all businesses by product tag
-    getBusinessesByProductTag (tag: string): Observable<Business[]> {
+    getBusinessesByProductTag(tag: string): Observable<Business[]> {
       return this.http.get<Business[]>(Settings._url +'/businesses', httpOptions);
     }
 
@@ -86,6 +96,10 @@ export class MerchantService {
     }
     getPaymentMethods(): Observable<any> {
      return this.http.get(Settings._url + '/payment_methods');
+    }
+    // Get business payment method
+    getBusinessesPayMethod(): Observable<Business[]> {
+      return this.http.get<Business[]>(Settings._url +'/payment_methods', httpOptions);
     }
 
 }

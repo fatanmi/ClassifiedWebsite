@@ -33,7 +33,7 @@
     <div class="row contentGroup">
       <div class="col-md-4 leftBizBox">
         <h4 class="storeName">
-          Tunde Ghadofi Store
+          {{merchantProfile.businesses.businessName}}
         </h4>
         <div class="groupImgeBtn">
           <img class="leftBoxImg" src="../assets/classyads/images/Shop_Image_A5_Rectangle_13_pattern.png" />
@@ -54,7 +54,7 @@
           <h4 class="pInfoLay pInfoTxt">
             Business Details
           </h4>
-          <textarea name="businessDetails" class="infoTextArea form-control" id="businessDetails" cols="100" rows="5">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse 
+          <textarea name="businessDetails" [(ngModel)]="merchantProfile.businesses.description" class="infoTextArea form-control" id="businessDetails" cols="100" rows="5">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse 
           </textarea>
         </div>
         <div class="row">
@@ -66,18 +66,42 @@
         </div>
         <div class="row prfInfos">
           <div class="col-md-4">
-            <input type="text" class="infoInput form-control"/>
+            <input type="text" [(ngModel)]="merchantProfile.businesses.openingHour" class="infoInput form-control"/>
           </div>
           <div class="col-md-4 ">
-            <input type="text" class="infoInput form-control"/>
+            <input type="text" [(ngModel)]="merchantProfile.businesses.closingHour" class="infoInput form-control"/>
           </div>
         </div>
+        <div class="row prfInfos">
+            <div class="col-md-4">
+              <h5 class="pInfoTxt">Categories</h5>
+            </div>
+            <div class="col-md-6">
+                <ng-multiselect-dropdown 
+                [placeholder]="'Product Categories'"
+                [data]="businessCategories"
+                [(ngModel)]="merchantProfile.businesses.businessTypeNames"
+                [settings]="dropdownSettings"
+                (onSelect)="onItemSelect($event)"
+                (onSelectAll)="onSelectAll($event)"
+              >
+              </ng-multiselect-dropdown>
+            </div>
+          </div>
         <div class="row prfInfos">
           <div class="col-md-4">
             <h5 class="pInfoTxt">Products</h5>
           </div>
           <div class="col-md-6">
-            <input type="text" class="infoInput form-control"/>
+              <ng-multiselect-dropdown 
+              [placeholder]="'Products'"
+              [data]="productsLists"
+              [(ngModel)]="merchantProfile.businesses.productCategories"
+              [settings]="dropdownSettings"
+              (onSelect)="onItemSelect($event)"
+              (onSelectAll)="onSelectAll($event)"
+            >
+            </ng-multiselect-dropdown>
           </div>
         </div>
         <div class="row prfInfos">
@@ -85,7 +109,7 @@
             <h5 class="pInfoTxt">Phone Number</h5>
           </div>
           <div class="col-md-6">
-            <input type="text" class="infoInput form-control"/>
+            <input type="text" [(ngModel)]="merchantProfile.businesses.phoneNumber" class="infoInput form-control"/>
           </div>
         </div>
         <div class="row prfInfos">
@@ -93,23 +117,25 @@
             <h5 class="pInfoTxt">WhatsApp Number</h5>
           </div>
           <div class="col-md-6">
-            <input type="text" class="infoInput form-control"/>
+            <input type="text" [(ngModel)]="merchantProfile.businesses.whatsappNumber" class="infoInput form-control"/>
           </div>
         </div>
-        <div class="row prfInfos">
-          <div class="col-md-4">
-            <h5 class="pInfoTxt">Categories</h5>
-          </div>
-          <div class="col-md-6">
-            <input type="text" class="infoInput form-control"/>
-          </div>
-        </div>
+        
         <div class="row prfInfos">
           <div class="col-md-4">
             <h5 class="pInfoTxt">Payment Method</h5>
           </div>
           <div class="col-md-6">
-            <input type="text" class="infoInput form-control"/>
+              <ng-multiselect-dropdown 
+              [placeholder]="'Payment Methods'"
+              [data]="paymentMethods"
+              [(ngModel)]="merchantProfile.businesses.paymentMethodNames"
+              [settings]="dropdownSettings"
+              (onSelect)="onItemSelect($event)"
+              (onSelectAll)="onSelectAll($event)"
+            >
+            </ng-multiselect-dropdown>
+           
           </div>
         </div>
         <div class="row prfInfos">
@@ -117,7 +143,7 @@
             <h5 class="pInfoTxt">Address</h5>
           </div>
           <div class="col-md-6">
-            <input type="text" class="infoInput form-control"/>
+            <input type="text" [(ngModel)]="merchantProfile.businesses.address" class="infoInput form-control"/>
           </div>
         </div>
         <div class="row prfInfos">
@@ -125,7 +151,7 @@
             <h5 class="pInfoTxt">Website</h5>
           </div>
           <div class="col-md-6">
-            <input type="text" class="infoInput form-control"/>
+            <input type="text" [(ngModel)]="merchantProfile.businesses.website" class="infoInput form-control"/>
           </div>
         </div>
       </div>
