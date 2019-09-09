@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {MerchantService} from '../../services/marchant.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ToastrService} from 'ngx-toastr';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +26,8 @@ export class RegisterComponent implements OnInit {
   paymentMethodIdListArr: any[] = [];
 
 
-  constructor(private merchantService: MerchantService, private fb: FormBuilder) {
+  constructor(private merchantService: MerchantService, private fb: FormBuilder, private toastr: ToastrService,
+              private router: Router) {
 
     this.personalProfileForm = true;
     this.businessProfileForm = false;
@@ -53,7 +56,9 @@ export class RegisterComponent implements OnInit {
     const payload = this.buildCreateMerchantPayload();
     this.merchantService.postMerchantDetails(payload).subscribe(
       (res) => {
-        console.log(res);
+        console.log('createMerchant', res);
+        this.toastr.success(res.message, 'SUCCESS!!!');
+        this.router.navigate(['/login']);
       }
     );
   }
@@ -174,20 +179,6 @@ export class RegisterComponent implements OnInit {
     return {
       businesses: [
         {
-          // activeDays: 'string',
-          // address: 'string',
-          // closingHour: 'string',
-          // description: 'string',
-          // email: 'samdeniyie@yopmail.com',
-          // market: 'string',
-          // merchantId: 0,
-          // name: 'string',
-          // openingHour: 'string',
-          // phoneNumber: '08030600903',
-          // shopNumber: 'string',
-          // state: 'string',
-          // website: 'string',
-          // whatsappNumber: 'string'
           ...this.businessDataForm.value,
           businessTypeIdList: this.businessTypeIdListArr,
           paymentMethodIdList: this.paymentMethodIdListArr,
