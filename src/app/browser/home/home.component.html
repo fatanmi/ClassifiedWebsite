@@ -45,7 +45,7 @@
               <form method="post">
                 <div class="row align-items-center">
                   <div class="col-lg-12 mb-4 mb-xl-0 col-xl-4">
-                    <input type="text" class="form-control rounded" placeholder="What are you looking for?">
+                    <input type="text" name="searchKey" [(ngModel)]="searchKey" (ngModelChange)="getAllBusinessesBySearchKey()" class="form-control rounded" placeholder="What are you looking for?">
                   </div>
                   <div class="col-lg-12 mb-4 mb-xl-0 col-xl-3">
                     <div class="select-wrap">
@@ -61,7 +61,7 @@
                       <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
                       <select [(ngModel)]="selectedCategory" (ngModelChange)="selectCategoryHandler($event)" class="form-control rounded" #category name="category" id="category">
                         <option value="">All Categories</option>
-                        <option *ngFor="let category of categories" [ngValue]="category"> {{category.name}}</option>
+                        <option *ngFor="let category of categories" [ngValue]="category.name"> {{category.name}}</option>
                       </select>
                     </div>
                   </div>
@@ -90,7 +90,7 @@
                 <span class="category">{{business.businessTypeName}}</span>
                 <a href="#" class="bookmark"><span class="icon-heart"></span></a>
                 <h3><a  [routerLink]="['/browser/shop-info/', business.businessId]">{{business.businessName}}</a></h3>
-                <address>{{business.branches[0].marketCode}}, {{business.branches[0].state}}</address>
+                <address *ngIf="business.branches">{{business.branches[0].marketCode}}, {{business.branches[0].state}}</address>
                 <p class="mb-0">
                   <span class="icon-star text-warning"></span>
                   <span class="icon-star text-warning"></span>

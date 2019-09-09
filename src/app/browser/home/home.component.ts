@@ -18,10 +18,16 @@ export class HomeComponent implements OnInit {
   title: String;
   fault: String;
   categories: BusinessCategory[];
-  bussinesses: Business[];
+  bussinesses: any;
   selectedMarket: string = '';
   selectedCategory: string = '';
   isLoading: boolean = false;
+  searchKey:string; 
+  page = 1;
+  size = 10;
+  emptyArray = []
+  emptyObject = {};
+
   constructor(
     private marketService: MerchantService, 
     private spinnerService: Ng4LoadingSpinnerService,
@@ -71,16 +77,16 @@ export class HomeComponent implements OnInit {
     }
     getCategories() {
       this.marketService.getAllBusinessCategories()
-      .subscribe(resp => {
-        console.log(resp);
-        this.resp = resp;
-        this.categories = this.resp.data;
-        console.log(this.categories)
-      },
-      error => {
-        this.fault = error ; // error path
-        console.log(JSON.stringify(this.fault));
-      }
+        .subscribe(resp => {
+          console.log(resp);
+          this.resp = resp;
+          this.categories = this.resp.data;
+          console.log(this.categories)
+        },
+        error => {
+          this.fault = error ; // error path
+          console.log(JSON.stringify(this.fault));
+        }
       );
     }
     getAllBusinesses( page: number, size: number) {
@@ -99,35 +105,49 @@ export class HomeComponent implements OnInit {
       );
     }
     getAllBusinessesByCategory(category: string, page: number, size: number) {
-      this.marketService.getBusinessesByCategory(category,page, size)
-      .subscribe(resp => {
-        console.log(resp);
-        this.resp = resp;
-        this.bussinesses = this.resp.data;
-        console.log(this.bussinesses)
-      },
-      error => {
-        this.fault = error ; // error path
-        console.log(JSON.stringify(this.fault));
-      }
+        this.marketService.getBusinessesByCategory(category,page, size)
+        .subscribe(
+          (response : any) => {
+          console.log(response);
+          this.bussinesses = response ? response.data : this.emptyArray ;
+          console.log(this.bussinesses)
+        },
+        (error:any) => {
+          console.log(error);
+        }
       );
     }
     getAllBusinessesByMarket(market: string, page: number, size: number) {
       this.marketService.getBusinessesInAMarket(market,page, size)
-      .subscribe(resp => {
-        console.log(resp);
-        this.resp = resp;
-        this.bussinesses = this.resp.data;
-      },
-      error => {
-        this.fault = error ; // error path
-        console.log(JSON.stringify(this.fault));
+      .subscribe(
+          (response :any) => {
+            console.log(response);
+            this.bussinesses = response ? response.data : this.emptyArray;
+          console.log(this.bussinesses)
+          },
+          (error :any) => {
+            this.fault = error ; // error path
+            console.log(JSON.stringify(this.fault));
+          }
+        );
       }
-      );
-    }
-    ngOnInit() {
-      this.getMarkets();
-      this.getCategories();
-      this.getAllBusinesses(1,500);
-    }
-  }
+      getAllBusinessesBySearchKey() {
+        this.marketService.getBusinessesInAMarketBySearchKey(this.searchKey,this.page, this.size)
+        .subscribe(
+            (response : any) => {
+              console.log(response);
+              this.bussinesses = response ? response.data : this.emptyArray;
+            },
+            (error :any) => {
+              this.fault = error ; // error path
+              console.log(this.fault);
+            }
+          );
+        }
+        ngOnInit() {
+          this.getMarkets();
+          this.getCategories();
+          // this.getAllBusinesses(1,500);
+        }
+}
+      
