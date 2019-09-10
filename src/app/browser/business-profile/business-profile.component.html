@@ -16,11 +16,11 @@
                     </ul>
                 </div>
                 <div class="col-md-2 rightLinks">
-                    <h5 class="orangeText boldText">My Business Proflie </h5>
+                    <h5 *ngIf="loggedIn" class="orangeText boldText">My Business Proflie </h5>
                 </div>
-                <div class="col-md-2 rightProfile">
-                    <div class="profLeft">
-                        <h5 class="orangeText boldText">Hi Ronke !</h5>
+                <div *ngIf="loggedIn" class="col-md-2 rightProfile">
+                    <div  class="profLeft">
+                        <h5 class="orangeText boldText">Hi {{ merchantProfile.firstName }} !</h5>
                         <h6 (click)="logOut()" class="whiteText text-align-left cursor-pointer">Log Out</h6>
                     </div>
                     <div class="profRight">

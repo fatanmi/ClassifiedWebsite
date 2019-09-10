@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MerchantService } from 'src/app/services/marchant.service';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-business-profile',
   templateUrl: './business-profile.component.html',
@@ -11,11 +12,14 @@ export class BusinessProfileComponent implements OnInit {
   lat = 6.4255113;
   businessId: string;
   businessDetails: any = {};
+  merchantProfile: any = {};
+  loggedIn : any ;
 
   constructor(
     private _Activatedroute: ActivatedRoute,
     private merchantService: MerchantService,
-    private router: Router
+    private router: Router,
+    private authService : AuthService
   ) { }
   getBusinessDetails() {
     this.merchantService.getBusinessesById(this.businessId).subscribe(
@@ -32,10 +36,29 @@ export class BusinessProfileComponent implements OnInit {
     localStorage.removeItem('access_token');
     this.router.navigate(['/']);
   }
+  getLoggedInStatus(){
+    this.loggedIn = this.authService.isAuthenticated();
+  }
+  getBusinessInfo() {
+    let phoneNumber =  localStorage.getItem('username');
+    this.merchantService.getBusinessesByPhone(phoneNumber).subscribe(
+      (response:any)=>{
+        this.merchantProfile = response.data;
+        this.merchantProfile.businesses = response.data.businesses[0];
+
+        console.log(response);
+      },
+      (error:any)=>{
+        console.log(error);
+      }
+    );
+  }
   ngOnInit() {
     this._Activatedroute.params.subscribe((params) => {
       this.businessId = params['id'];
     });
+    this.getBusinessInfo();
+    this.getLoggedInStatus();
     this.getBusinessDetails();
   }
 }
