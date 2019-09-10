@@ -14,6 +14,11 @@ import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { LoaderComponent } from './shared/loader/loader.component';
 import { LoaderInterceptor } from './loader.interceptor';
 import { LoaderService } from './services/loader.service';
+import { AgmCoreModule } from '@agm/core';
+import { MerchantModule } from "../app/merchant/merchant.module";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {ToastrModule} from 'ngx-toastr';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 //import { MainSiteFooterComponent } from './shared/main-site-footer/main-site-footer.component';
 
 export function tokenGetter() {
@@ -35,6 +40,9 @@ export function tokenGetter() {
     AppRoutingModule,
     HttpClientModule,
     FormsModule ,
+    BrowserAnimationsModule,
+    NgMultiSelectDropDownModule.forRoot(),
+    ToastrModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot(),
     JwtModule.forRoot({
       config: {

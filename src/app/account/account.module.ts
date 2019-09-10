@@ -6,6 +6,8 @@ import { AccountRoutes } from './account.routing';
 import { LoginComponent } from './login/login.component';
 import { VerifyComponent } from './verify/verify.component';
 import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 
 
 
@@ -13,6 +15,9 @@ import { PasswordRecoveryComponent } from './password-recovery/password-recovery
   declarations: [RegisterComponent, LoginComponent, VerifyComponent, PasswordRecoveryComponent],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgMultiSelectDropDownModule.forRoot(),
     RouterModule.forChild(AccountRoutes)
   ]
 })

@@ -10,14 +10,15 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoaderService } from './services/loader.service';
+import {ToastrService} from 'ngx-toastr';
 
- 
+
 @Injectable()
 export class LoaderInterceptor implements HttpInterceptor {
     private requests: HttpRequest<any>[] = [];
- 
-    constructor(private loaderService: LoaderService) { }
- 
+
+    constructor(private loaderService: LoaderService, private toastr: ToastrService) { }
+
     removeRequest(req: HttpRequest<any>) {
         const i = this.requests.indexOf(req);
         if (i >= 0) {
@@ -25,9 +26,8 @@ export class LoaderInterceptor implements HttpInterceptor {
         }
         this.loaderService.isLoading.next(this.requests.length > 0);
     }
- 
+
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
- 
         this.requests.push(req);
         console.log("No of requests--->" + this.requests.length);
         this.loaderService.isLoading.next(true);
@@ -41,7 +41,8 @@ export class LoaderInterceptor implements HttpInterceptor {
                         }
                     },
                     err => {
-                        alert('error returned');
+                        console.log('intercept', err);
+                        this.toastr.error(err.error.message, 'ERROR!!!');
                         this.removeRequest(req);
                         observer.error(err);
                     },

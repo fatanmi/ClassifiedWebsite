@@ -1,0 +1,2209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<title>Profile Page</title>
+<link rel="stylesheet" type="text/css" id="applicationStylesheet" href="Profile_Page.css"/>
+<script id="applicationScript">
+///////////////////////////////////////
+// INITIALIZATION
+///////////////////////////////////////
+
+/**
+ * Functionality for scaling, showing by media query, and navigation between multiple pages on a single page. 
+ * Code subject to change.
+ **/
+
+if (window.console==null) { window["console"] = { log : function() {} } }; // some browsers do not set
+
+var Application = function() {
+	// event constants
+	this.NAVIGATION_CHANGE = "viewChange";
+	this.VIEW_NOT_FOUND = "viewNotFound";
+	this.STATE_NOT_FOUND = "stateNotFound";
+	this.APPLICATION_COMPLETE = "applicationComplete";
+	this.SIZE_STATE_NAME = "data-is-view-scaled";
+
+	this.currentQuery = {index: 0, rule: null, mediaText: null, id: null};
+	this.inclusionQuery = "(min-width: 0px)";
+	this.exclusionQuery = "none and (min-width: 99999px)";
+	this.LastModifiedDateLabelName = "LastModifiedDateLabel";
+	this.viewScaleSliderId = "ViewScaleSliderInput";
+	this.pageRefreshedName = "showPageRefreshedNotification";
+	this.prefix = "--web-";
+	this.applicationStylesheet = null;
+	this.mediaQueryDictionary = {};
+	this.statesDictionary = {};
+	this.states = [];
+	this.views = {};
+	this.viewIds = [];
+	this.viewQueries = {};
+	this.numberOfViews = 0;
+	this.verticalPadding = 0;
+	this.horizontalPadding = 0;
+	this.stateName = null;
+	this.viewScale = 1;
+	this.viewLeft = 0;
+	this.viewTop = 0;
+
+	// view settings
+	this.showUpdateNotification = false;
+	this.showNavigationControls = false;
+	this.scaleViewsToFit = false;
+	this.scaleToFitOnDoubleClick = false;
+	this.actualSizeOnDoubleClick = false;
+	this.scaleViewsOnResize = false;
+	this.navigationOnKeypress = false;
+	this.showViewName = false;
+	this.enableDeepLinking = true;
+	this.refreshPageForChanges = false;
+	this.showRefreshNotifications = true;
+
+	// view controls
+	this.scaleViewSlider = null;
+	this.lastModifiedLabel = null;
+	this.supportsPopState = false; // window.history.pushState!=null;
+	this.initialized = false;
+
+	// refresh properties
+	this.refreshDuration = 250; // 2000;
+	this.lastModifiedDate = null;
+	this.refreshRequest = null;
+	this.refreshInterval = null;
+	this.refreshContent = null;
+	this.refreshContentSize = null;
+	this.refreshCheckContent = false;
+	this.refreshCheckContentSize = false;
+
+	var self = this;
+
+	self.initialize = function(event) {
+		var view = self.getVisibleView();
+		self.collectViews();
+		self.collectMediaQueries();
+		self.setViewOptions(view);
+
+		
+		// sometimes the body size is 0 so we call this now and again later
+		if (self.initialized) {
+			window.addEventListener(self.NAVIGATION_CHANGE, self.viewChangeHandler);
+			window.addEventListener("keyup", self.keypressHandler);
+			window.addEventListener("keypress", self.keypressHandler);
+			window.addEventListener("resize", self.resizeHandler);
+			window.document.addEventListener("dblclick", self.doubleClickHandler);
+
+			if (self.supportsPopState) {
+				window.addEventListener('popstate', self.popStateHandler);
+			}
+			else {
+				window.addEventListener('hashchange', self.hashChangeHandler);
+			}
+
+			// we are ready to go
+			window.dispatchEvent(new Event(self.APPLICATION_COMPLETE));
+		}
+
+		if (self.initialized==false) {
+			if (self.showNavigationControls || self.singlePageApplication) {
+				self.syncronizeViewToURL();
+			}
+	
+			if (self.refreshPageForChanges) {
+				self.setupRefreshForChanges();
+			}
+	
+			self.initialized = true;
+		}
+		
+		if (self.scaleViewsToFit) {
+			self.viewScale = self.scaleViewToFit(view);
+			
+			if (self.viewScale<0) {
+				setTimeout(self.scaleViewToFit, 500, view);
+			}
+		}
+		else if (view) {
+			self.viewScale = self.getViewScaleValue(view);
+			self.updateSliderValue(self.viewScale);
+		}
+		else {
+			// no view found
+		}
+	
+		if (self.showUpdateNotification) {
+			self.showNotification();
+		}
+	
+		//"addEventListener" in window ? null : window.addEventListener = window.attachEvent;
+		//"addEventListener" in document ? null : document.addEventListener = document.attachEvent;
+	}
+
+
+	///////////////////////////////////////
+	// AUTO REFRESH 
+	///////////////////////////////////////
+
+	self.setupRefreshForChanges = function() {
+		self.refreshRequest = new XMLHttpRequest();
+
+		if (!self.refreshRequest) {
+			return false;
+		}
+
+		// get document start values immediately
+		self.requestRefreshUpdate();
+	}
+
+	/**
+	 * Attempt to check the last modified date by the headers 
+	 * or the last modified property from the byte array (experimental)
+	 **/
+	self.requestRefreshUpdate = function() {
+		var url = document.location.href;
+		var protocol = window.location.protocol;
+		var method;
+		
+		try {
+
+			if (self.refreshCheckContentSize) {
+				self.refreshRequest.open('HEAD', url, true);
+			}
+			else if (self.refreshCheckContent) {
+				self.refreshContent = document.documentElement.outerHTML;
+				self.refreshRequest.open('GET', url, true);
+				self.refreshRequest.responseType = "text";
+			}
+			else {
+
+				// get page last modified date for the first call to compare to later
+				if (self.lastModifiedDate==null) {
+
+					// File system does not send headers in FF so get blob if possible
+					if (protocol=="file:") {
+						self.refreshRequest.open("GET", url, true);
+						self.refreshRequest.responseType = "blob";
+					}
+					else {
+						self.refreshRequest.open("HEAD", url, true);
+						self.refreshRequest.responseType = "blob";
+					}
+
+					self.refreshRequest.onload = self.refreshOnLoadOnceHandler;
+
+					// In some browsers (Chrome & Safari) this error occurs at send: 
+					// 
+					// Chrome - Access to XMLHttpRequest at 'file:///index.html' from origin 'null' 
+					// has been blocked by CORS policy: 
+					// Cross origin requests are only supported for protocol schemes: 
+					// http, data, chrome, chrome-extension, https.
+					// 
+					// Safari - XMLHttpRequest cannot load file:///Users/user/Public/index.html. Cross origin requests are only supported for HTTP.
+					// 
+					// Solution is to run a local server, set local permissions or test in another browser
+					self.refreshRequest.send(null);
+
+					// In MS browsers the following behavior occurs possibly due to an AJAX call to check last modified date: 
+					// 
+					// DOM7011: The code on this page disabled back and forward caching.
+
+				}
+				else {
+					self.refreshRequest = new XMLHttpRequest();
+					self.refreshRequest.onreadystatechange = self.refreshHandler;
+					self.refreshRequest.ontimeout = function() {
+						console.log("Couldn't find page to check for updates");
+					}
+					
+					var method;
+					if (protocol=="file:") {
+						method = "GET";
+					}
+					else {
+						method = "HEAD";
+					}
+
+					//refreshRequest.open('HEAD', url, true);
+					self.refreshRequest.open(method, url, true);
+					self.refreshRequest.responseType = "blob";
+					self.refreshRequest.send(null);
+				}
+			}
+		}
+		catch (error) {
+			console.log("Refresh failed for the following reason:")
+			console.log(error);
+		}
+	}
+
+	self.refreshHandler = function() {
+		var contentSize;
+
+		try {
+
+			if (self.refreshRequest.readyState === XMLHttpRequest.DONE) {
+				
+				if (self.refreshRequest.status === 2 || 
+					self.refreshRequest.status === 200) {
+					var pageChanged = false;
+
+					self.updateLastModifiedLabel();
+
+					if (self.refreshCheckContentSize) {
+						var lastModifiedHeader = self.refreshRequest.getResponseHeader("Last-Modified");
+						contentSize = self.refreshRequest.getResponseHeader("Content-Length");
+						//lastModifiedDate = refreshRequest.getResponseHeader("Last-Modified");
+						var headers = self.refreshRequest.getAllResponseHeaders();
+						var hasContentHeader = headers.indexOf("Content-Length")!=-1;
+						
+						if (hasContentHeader) {
+							contentSize = self.refreshRequest.getResponseHeader("Content-Length");
+
+							// size has not been set yet
+							if (self.refreshContentSize==null) {
+								self.refreshContentSize = contentSize;
+								// exit and let interval call this method again
+								return;
+							}
+
+							if (contentSize!=self.refreshContentSize) {
+								pageChanged = true;
+							}
+						}
+					}
+					else if (self.refreshCheckContent) {
+
+						if (self.refreshRequest.responseText!=self.refreshContent) {
+							pageChanged = true;
+						}
+					}
+					else {
+						lastModifiedHeader = self.getLastModified(self.refreshRequest);
+
+						if (self.lastModifiedDate!=lastModifiedHeader) {
+							pageChanged = true;
+						}
+
+					}
+
+					
+					if (pageChanged) {
+						clearInterval(self.refreshInterval);
+						self.refreshUpdatedPage();
+						return;
+					}
+
+				}
+				else {
+					console.log('There was a problem with the request.');
+				}
+
+			}
+		}
+		catch( error ) {
+			//console.log('Caught Exception: ' + error);
+		}
+	}
+
+	self.refreshOnLoadOnceHandler = function(event) {
+
+		// get the last modified date
+		if (self.refreshRequest.response) {
+			self.lastModifiedDate = self.getLastModified(self.refreshRequest);
+
+			if (self.lastModifiedDate!=null) {
+
+				if (self.refreshInterval==null) {
+					self.refreshInterval = setInterval(self.requestRefreshUpdate, self.refreshDuration);
+				}
+			}
+			else {
+				console.log("Could not get last modified date from the server");
+			}
+		}
+	}
+
+	self.refreshUpdatedPage = function() {
+		if (self.showRefreshNotifications) {
+			var date = new Date().setTime((new Date().getTime()+10000));
+			document.cookie = encodeURIComponent(self.pageRefreshedName) + "=true" + "; max-age=6000;" + " path=/";
+		}
+
+		document.location.reload(true);
+	}
+
+	self.showNotification = function(duration) {
+		var notificationID = self.pageRefreshedName+"ID";
+		var notification = document.getElementById(notificationID);
+		if (duration==null) duration = 4000;
+
+		if (notification!=null) {return;}
+
+		notification = document.createElement("div");
+		notification.id = notificationID;
+		notification.textContent = "PAGE UPDATED";
+		var styleRule = ""
+		styleRule = "position: fixed; padding: 7px 16px 6px 16px; font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; left: 50%;";
+		styleRule += "top: 20px; background-color: rgba(0,0,0,.5); border-radius: 12px; color:rgb(235, 235, 235); transition: all 2s linear;";
+		styleRule += "transform: translateX(-50%); letter-spacing: .5px; filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, .1))";
+		notification.setAttribute("style", styleRule);
+
+		notification.className= "PageRefreshedClass";
+		
+		document.body.appendChild(notification);
+
+		setTimeout(function() {
+			notification.style.opacity = "0";
+			notification.style.filter = "drop-shadow( 0px 0px 0px rgba(0,0,0, .5))";
+			setTimeout(function() {
+				notification.parentNode.removeChild(notification);
+			}, duration)
+		}, duration);
+
+		document.cookie = encodeURIComponent(self.pageRefreshedName) + "=; max-age=1; path=/";
+	}
+
+	/**
+	 * Get the last modified date from the header 
+	 * or file object after request has been received
+	 **/
+	self.getLastModified = function(request) {
+		var date;
+
+		// file protocol - FILE object with last modified property
+		if (request.response && request.response.lastModified) {
+			date = request.response.lastModified;
+		}
+		
+		// http protocol - check headers
+		if (date==null) {
+			date = request.getResponseHeader("Last-Modified");
+		}
+
+		return date;
+	}
+
+	self.updateLastModifiedLabel = function() {
+		var labelValue = "";
+		
+		if (self.lastModifiedLabel==null) {
+			self.lastModifiedLabel = document.getElementById("LastModifiedLabel");
+		}
+
+		if (self.lastModifiedLabel) {
+			var seconds = parseInt(((new Date().getTime() - Date.parse(document.lastModified)) / 1000 / 60) * 100 + "");
+			var minutes = 0;
+			var hours = 0;
+
+			if (seconds < 60) {
+				seconds = Math.floor(seconds/10)*10;
+				labelValue = seconds + " seconds";
+			}
+			else {
+				minutes = parseInt((seconds/60) + "");
+
+				if (minutes>60) {
+					hours = parseInt((seconds/60/60) +"");
+					labelValue += hours==1 ? " hour" : " hours";
+				}
+				else {
+					labelValue = minutes+"";
+					labelValue += minutes==1 ? " minute" : " minutes";
+				}
+			}
+			
+			if (seconds<10) {
+				labelValue = "Updated now";
+			}
+			else {
+				labelValue = "Updated " + labelValue + " ago";
+			}
+
+			if (self.lastModifiedLabel.firstElementChild) {
+				self.lastModifiedLabel.firstElementChild.textContent = labelValue;
+
+			}
+			else if ("textContent" in self.lastModifiedLabel) {
+				self.lastModifiedLabel.textContent = labelValue;
+			}
+		}
+	}
+
+	self.getShortString = function(string, length) {
+		if (length==null) length = 30;
+		string = string!=null ? string.substr(0, length).replace(/\n/g, "") : "[String is null]";
+		return string;
+	}
+
+	self.getShortNumber = function(value, places) {
+		if (places==null || places<1) places = 4;
+		value = Math.round(value * Math.pow(10,places)) / Math.pow(10, places);
+		return value;
+	}
+
+	///////////////////////////////////////
+	// NAVIGATION CONTROLS
+	///////////////////////////////////////
+
+	self.updateViewLabel = function() {
+		var viewNavigationLabel = document.getElementById("ViewNavigationLabel");
+		var view = self.getVisibleView();
+		var viewIndex = view ? self.getViewIndex(view) : -1;
+		var viewName = view ? self.getViewPreferenceValue(view, self.prefix + "view-name") : null;
+		var viewId = view ? view.id : null;
+
+		if (viewNavigationLabel && view) {
+			if (viewName && viewName.indexOf('"')!=-1) {
+				viewName = viewName.replace(/"/g, "");
+			}
+
+			if (self.showViewName) {
+				viewNavigationLabel.textContent = viewName;
+				self.setTooltip(viewNavigationLabel, viewIndex + 1 + " of " + self.numberOfViews);
+			}
+			else {
+				viewNavigationLabel.textContent = viewIndex + 1 + " of " + self.numberOfViews;
+				self.setTooltip(viewNavigationLabel, viewName);
+			}
+
+		}
+	}
+
+	self.updateURL = function(view) {
+		view = view == null ? self.getVisibleView() : view;
+		var viewId = view ? view.id : null
+		var viewFragment = view ? "#"+ viewId : null;
+
+		if (viewId && self.viewIds.length>1 && self.enableDeepLinking) {
+
+			if (self.supportsPopState==false) {
+				self.setFragment(viewId);
+			}
+			else {
+				if (viewFragment!=window.location.hash) {
+
+					if (window.location.hash==null) {
+						window.history.replaceState({name:viewId}, null, viewFragment);
+					}
+					else {
+						window.history.pushState({name:viewId}, null, viewFragment);
+					}
+				}
+			}
+		}
+	}
+
+	self.setFragment = function(value) {
+		window.location.hash = "#" + value;
+	}
+
+	self.setTooltip = function(element, value) {
+		// setting the tooltip in edge causes a page crash on hover
+		if (/Edge/.test(navigator.userAgent)) { return; }
+
+		if ("title" in element) {
+			element.title = value;
+		}
+	}
+
+	self.getStylesheetRules = function(styleSheet) {
+		try {
+			if (styleSheet) return styleSheet.cssRules || styleSheet.rules;
+	
+			return document.styleSheets[0]["cssRules"] || document.styleSheets[0]["rules"];
+		}
+		catch (error) {
+			// ERRORS:
+			// SecurityError: The operation is insecure.
+			// Errors happen when script loads before stylesheet or loading an external css locally
+
+			// InvalidAccessError: A parameter or an operation is not supported by the underlying object
+			// Place script after stylesheet
+
+			console.log(error);
+			if (error.toString().indexOf("The operation is insecure")!=-1) {
+				console.log("Load the stylesheet before the script or load the stylesheet inline until it can be loaded on a server")
+			}
+			return [];
+		}
+	}
+
+	/**
+	 * If single page application hide all of the views except first
+	 **/
+	self.hideViews = function(selectIndex) {
+		var rules = self.getStylesheetRules();
+		var queryIndex = 0;
+		var numberOfRules = rules!=null ? rules.length : 0;
+
+		// loop through rules and hide media queries except selected
+		for (var i=0;i<numberOfRules;i++) {
+			var rule = rules[i];
+
+			if (rule.media!=null) {
+
+				if (queryIndex==selectIndex) {
+					self.currentQuery.mediaText = rule.conditionText;
+					self.currentQuery.index = selectIndex;
+					self.currentQuery.rule = rule;
+					self.enableMediaQuery(rule);
+				}
+				else {
+					self.disableMediaQuery(rule);
+				}
+				
+				queryIndex++;
+			}
+		}
+
+		self.numberOfViews = queryIndex;
+		self.updateViewLabel();
+		self.updateURL();
+
+		self.dispatchViewChange();
+
+		var view = self.getVisibleView();
+		var viewIndex = view ? self.getViewIndex(view) : -1;
+
+		return viewIndex==selectIndex ? view : null;
+	}
+
+	self.showView = function(view) {
+		var id = view ? view.id : null;
+		var query = id ? self.mediaQueryDictionary[id] : null;
+		var display = null;
+
+		if (query) {
+			self.enableMediaQuery(query);
+			if (view==null) view =self.getVisibleView();
+			self.setViewOptions(view);
+		}
+		else if (id) {
+			display = window.getComputedStyle(view).getPropertyValue("display");
+			if (display=="" ||  display=="none") {
+				view.style.display = "block";
+			}
+		}
+	}
+
+	self.setViewOptions = function(view) {
+
+		if (view) {
+			self.minimumScale = self.getViewPreferenceValue(view, self.prefix + "minimum-scale");
+			self.scaleViewsToFit = self.getViewPreferenceBoolean(view, self.prefix + "scale-to-fit");
+			self.scaleToFitType = self.getViewPreferenceValue(view, self.prefix + "scale-to-fit-type");
+			self.scaleToFitOnDoubleClick = self.getViewPreferenceBoolean(view, self.prefix + "scale-on-double-click");
+			self.actualSizeOnDoubleClick = self.getViewPreferenceBoolean(view, self.prefix + "actual-size-on-double-click");
+			self.scaleViewsOnResize = self.getViewPreferenceBoolean(view, self.prefix + "scale-on-resize");
+			self.enableScaleUp = self.getViewPreferenceBoolean(view, self.prefix + "enable-scale-up");
+			self.centerHorizontally = self.getViewPreferenceBoolean(view, self.prefix + "center-horizontally");
+			self.centerVertically = self.getViewPreferenceBoolean(view, self.prefix + "center-vertically");
+			self.navigationOnKeypress = self.getViewPreferenceBoolean(view, self.prefix + "navigate-on-keypress");
+			self.showViewName = self.getViewPreferenceBoolean(view, self.prefix + "show-view-name");
+			self.refreshPageForChanges = self.getViewPreferenceBoolean(view, self.prefix + "refresh-for-changes");
+			self.showNavigationControls = self.getViewPreferenceBoolean(view, self.prefix + "show-navigation-controls");
+			self.scaleViewSlider = self.getViewPreferenceBoolean(view, self.prefix + "show-scale-controls");
+			self.enableDeepLinking = self.getViewPreferenceBoolean(view, self.prefix + "enable-deep-linking");
+			self.singlePageApplication = self.getViewPreferenceBoolean(view, self.prefix + "application");
+			self.showUpdateNotification = document.cookie!="" ? document.cookie.indexOf(self.pageRefreshedName)!=-1 : false;
+			self.imageComparisonDuration = self.getViewPreferenceValue(view, self.prefix + "image-comparison-duration");
+
+			if (self.scaleViewsToFit) {
+				var newScaleValue = self.scaleViewToFit(view);
+				
+				if (newScaleValue<0) {
+					setTimeout(self.scaleViewToFit, 500, view);
+				}
+			}
+			else {
+				self.viewScale = self.getViewScaleValue(view);
+				self.updateSliderValue(self.viewScale);
+			}
+
+			if (self.imageComparisonDuration!=null) {
+				// todo
+			}
+		}
+	}
+
+	self.previousView = function(event) {
+		var rules = self.getStylesheetRules();
+		var view = self.getVisibleView()
+		var index = view ? self.getViewIndex(view) : -1;
+		var prevQueryIndex = index!=-1 ? index-1 : self.currentQuery.index-1;
+		var queryIndex = 0;
+		var numberOfRules = rules!=null ? rules.length : 0;
+
+		if (event) {
+			event.stopImmediatePropagation();
+		}
+
+		if (prevQueryIndex<0) {
+			return;
+		}
+
+		// loop through rules and hide media queries except selected
+		for (var i=0;i<numberOfRules;i++) {
+			var rule = rules[i];
+			
+			if (rule.media!=null) {
+
+				if (queryIndex==prevQueryIndex) {
+					self.currentQuery.mediaText = rule.conditionText;
+					self.currentQuery.index = prevQueryIndex;
+					self.currentQuery.rule = rule;
+					self.enableMediaQuery(rule);
+					self.updateViewLabel();
+					self.updateURL();
+					self.dispatchViewChange();
+				}
+				else {
+					self.disableMediaQuery(rule);
+				}
+
+				queryIndex++;
+			}
+		}
+	}
+
+	self.nextView = function(event) {
+		var rules = self.getStylesheetRules();
+		var view = self.getVisibleView();
+		var index = view ? self.getViewIndex(view) : -1;
+		var nextQueryIndex = index!=-1 ? index+1 : self.currentQuery.index+1;
+		var queryIndex = 0;
+		var numberOfRules = rules!=null ? rules.length : 0;
+		var numberOfMediaQueries = self.getNumberOfMediaRules();
+
+		if (event) {
+			event.stopImmediatePropagation();
+		}
+
+		if (nextQueryIndex>=numberOfMediaQueries) {
+			return;
+		}
+
+		// loop through rules and hide media queries except selected
+		for (var i=0;i<numberOfRules;i++) {
+			var rule = rules[i];
+			
+			if (rule.media!=null) {
+
+				if (queryIndex==nextQueryIndex) {
+					self.currentQuery.mediaText = rule.conditionText;
+					self.currentQuery.index = nextQueryIndex;
+					self.currentQuery.rule = rule;
+					self.enableMediaQuery(rule);
+					self.updateViewLabel();
+					self.updateURL();
+					self.dispatchViewChange();
+				}
+				else {
+					self.disableMediaQuery(rule);
+				}
+
+				queryIndex++;
+			}
+		}
+	}
+
+	self.enableMediaQuery = function(rule) {
+
+		try {
+			rule.media.mediaText = self.inclusionQuery;
+		}
+		catch(error) {
+			//self.log(error);
+			rule.conditionText = self.inclusionQuery;
+		}
+	}
+
+	self.disableMediaQuery = function(rule) {
+
+		try {
+			rule.media.mediaText = self.exclusionQuery;
+		}
+		catch(error) {
+			rule.conditionText = self.exclusionQuery;
+		}
+	}
+
+	self.dispatchViewChange = function() {
+		try {
+			var event = new Event(self.NAVIGATION_CHANGE);
+			window.dispatchEvent(event);
+		}
+		catch (error) {
+			// In IE 11: Object doesn't support this action
+		}
+	}
+
+	self.getNumberOfMediaRules = function() {
+		var rules = self.getStylesheetRules();
+		var numberOfRules = rules ? rules.length : 0;
+		var numberOfQueries = 0;
+
+		for (var i=0;i<numberOfRules;i++) {
+			if (rules[i].media!=null) { numberOfQueries++; }
+		}
+		return numberOfQueries;
+	}
+
+	/////////////////////////////////////////
+	// VIEW SCALE 
+	/////////////////////////////////////////
+
+	self.sliderChangeHandler = function(event) {
+		var value = self.getShortNumber(event.currentTarget.value/100);
+		var view = self.getVisibleView();
+		self.setViewScaleValue(view, false, value, true);
+	}
+
+	self.updateSliderValue = function(scale) {
+		var slider = document.getElementById(self.viewScaleSliderId);
+		var tooltip = parseInt(scale * 100 + "") + "%";
+		var inputType;
+		var inputValue;
+		
+		if (slider) {
+			inputValue = self.getShortNumber(scale * 100);
+			if (inputValue!=slider["value"]) {
+				slider["value"] = inputValue;
+			}
+			inputType = slider.getAttributeNS(null, "type");
+
+			if (inputType!="range") {
+				// input range is not supported
+				slider.style.display = "none";
+			}
+
+			self.setTooltip(slider, tooltip);
+		}
+	}
+
+	self.viewChangeHandler = function(event) {
+		var view = self.getVisibleView();
+		var matrix = view ? getComputedStyle(view).transform : null;
+		
+		if (matrix) {
+			self.viewScale = self.getViewScaleValue(view);
+			
+			var scaleNeededToFit = self.getViewFitToViewportScale(view);
+			var isViewLargerThanViewport = scaleNeededToFit<1;
+			
+			// scale large view to fit if scale to fit is enabled
+			if (self.scaleViewsToFit) {
+				self.scaleViewToFit(view);
+			}
+			else {
+				self.updateSliderValue(self.viewScale);
+			}
+		}
+	}
+
+	self.getViewScaleValue = function(view) {
+		var matrix = getComputedStyle(view).transform;
+
+		if (matrix) {
+			var matrixArray = matrix.replace("matrix(", "").split(",");
+			var scaleX = parseFloat(matrixArray[0]);
+			var scaleY = parseFloat(matrixArray[3]);
+			var scale = Math.min(scaleX, scaleY);
+		}
+
+		return scale;
+	}
+
+	self.getViewTranslateYValue = function(view) {
+		var matrix = getComputedStyle(view).transform;
+
+		if (matrix) {
+			var matrixArray = matrix.replace("matrix(", "").split(",");
+			var translateY = parseFloat(matrixArray[5]);
+		}
+
+		return translateY;
+	}
+
+	self.getViewTop = function(view) {
+		var top = getComputedStyle(view).top;
+
+		return top;
+	}
+
+	/**
+	 * Scales view to scale. 
+	 * @param {Object} view view to scale. views are in views array
+	 * @param {Boolean} scaleToFit set to true to scale to fit. set false to use desired scale value
+	 * @param {Number} desiredScale scale to define. not used if scale to fit is false
+	 * @param {Boolean} isSliderChange indicates if slider is callee
+	 */
+	self.setViewScaleValue = function(view, scaleToFit, desiredScale, isSliderChange) {
+		var enableScaleUp = self.enableScaleUp;
+		var scaleToFitType = self.scaleToFitType;
+		var minimumScale = self.minimumScale;
+		var hasMinimumScale = !isNaN(minimumScale) && minimumScale!=""
+		var scaleNeededToFit = self.getViewFitToViewportScale(view, enableScaleUp);
+		var scaleNeededToFitWidth = self.getViewFitToViewportWidthScale(view, enableScaleUp);
+		var scaleNeededToFitHeight = self.getViewFitToViewportHeightScale(view, enableScaleUp);
+		var scaleToFitFull = self.getViewFitToViewportScale(view, true);
+		var scaleToFitFullWidth = self.getViewFitToViewportWidthScale(view, true);
+		var scaleToFitFullHeight = self.getViewFitToViewportHeightScale(view, true);
+		var scaleToWidth = scaleToFitType=="width";
+		var scaleToHeight = scaleToFitType=="height";
+		var shrunkToFit = false;
+		var topPosition = null;
+		var leftPosition = null;
+		var translateY = null;
+		var translateX = null;
+		var transformValue = "";
+		var canCenterVertically = true;
+		var canCenterHorizontally = true;
+
+		//console.log("height:"+scaleNeededToFitHeight+",width:"+scaleNeededToFitWidth+",fit:"+scaleNeededToFit,"desired:"+desiredScale);
+
+		if (scaleToFit && isSliderChange!=true) {
+			if (scaleToFitType=="fit") {
+				desiredScale = scaleNeededToFit;
+			}
+			else if (scaleToFitType=="width") {
+				desiredScale = scaleNeededToFitWidth;
+			}
+			else if (scaleToFitType=="height") {
+				desiredScale = scaleNeededToFitHeight;
+			}
+		}
+		else {
+			if (isNaN(desiredScale)) {
+				desiredScale = 1;
+			}
+		}
+
+		self.updateSliderValue(desiredScale);
+		
+		// scale to fit width
+		if (scaleToWidth && scaleToHeight==false) {
+			canCenterVertically = scaleNeededToFitHeight>=scaleNeededToFitWidth;
+			canCenterHorizontally = scaleNeededToFitWidth>=1 && enableScaleUp==false;
+
+			if (isSliderChange) {
+				canCenterHorizontally = desiredScale<scaleToFitFullWidth;
+			}
+			else if (scaleToFit) {
+				desiredScale = scaleNeededToFitWidth;
+			}
+
+			if (hasMinimumScale) {
+				desiredScale = Math.max(desiredScale, Number(minimumScale));
+			}
+
+			//desiredScale = self.getShortNumber(desiredScale);
+			desiredScale = self.getShortNumber(desiredScale);
+
+			if (desiredScale>1 && (enableScaleUp || isSliderChange)) {
+				transformValue = "scale(" + desiredScale + ")";
+			}
+			else if (desiredScale>=1 && enableScaleUp==false) {
+				transformValue = "scale(" + 1 + ")";
+			}
+			else {
+				transformValue = "scale(" + desiredScale + ")";
+			}
+
+			if (self.centerVertically) {
+				if (canCenterVertically) {
+					translateY = "-50%";
+					topPosition = "50%";
+				}
+				else {
+					translateY = "0";
+					topPosition = "0";
+				}
+				
+				if (view.style.top != topPosition) {
+					view.style.top = topPosition + "";
+				}
+
+				if (canCenterVertically) {
+					transformValue += " translateY(" + translateY+ ")";
+				}
+			}
+
+			if (self.centerHorizontally) {
+				if (canCenterHorizontally) {
+					translateX = "-50%";
+					leftPosition = "50%";
+				}
+				else {
+					translateX = "0";
+					leftPosition = "0";
+				}
+
+				if (view.style.left != leftPosition) {
+					view.style.left = leftPosition + "";
+				}
+
+				if (canCenterHorizontally) {
+					transformValue += " translateX(" + translateX+ ")";
+				}
+			}
+
+			view.style.transformOrigin = "0 0";
+			view.style.transform = transformValue;
+
+			self.viewScale = desiredScale;
+			self.viewLeft = leftPosition;
+			self.viewTop = topPosition;
+
+			return desiredScale;
+		}
+
+		// scale to fit height
+		if (scaleToHeight && scaleToWidth==false) {
+			//canCenterVertically = scaleNeededToFitHeight>=scaleNeededToFitWidth;
+			//canCenterHorizontally = scaleNeededToFitHeight<=scaleNeededToFitWidth && enableScaleUp==false;
+			canCenterVertically = scaleNeededToFitHeight>=scaleNeededToFitWidth;
+			canCenterHorizontally = scaleNeededToFitWidth>=1 && enableScaleUp==false;
+			
+			if (isSliderChange) {
+				canCenterHorizontally = desiredScale<scaleToFitFullHeight;
+			}
+			else if (scaleToFit) {
+				desiredScale = scaleNeededToFitHeight;
+			}
+
+			if (hasMinimumScale) {
+				desiredScale = Math.max(desiredScale, Number(minimumScale));
+			}
+
+			desiredScale = self.getShortNumber(desiredScale);
+
+			if (desiredScale>1 && (enableScaleUp || isSliderChange)) {
+				transformValue = "scale(" + desiredScale + ")";
+			}
+			else if (desiredScale>=1 && enableScaleUp==false) {
+				transformValue = "scale(" + 1 + ")";
+			}
+			else {
+				transformValue = "scale(" + desiredScale + ")";
+			}
+
+			if (self.centerHorizontally) {
+				if (canCenterHorizontally) {
+					translateX = "-50%";
+					leftPosition = "50%";
+				}
+				else {
+					translateX = "0";
+					leftPosition = "0";
+				}
+
+				if (view.style.left != leftPosition) {
+					view.style.left = leftPosition + "";
+				}
+
+				if (canCenterHorizontally) {
+					transformValue += " translateX(" + translateX+ ")";
+				}
+			}
+
+			if (self.centerVertically) {
+				if (canCenterVertically) {
+					translateY = "-50%";
+					topPosition = "50%";
+				}
+				else {
+					translateY = "0";
+					topPosition = "0";
+				}
+				
+				if (view.style.top != topPosition) {
+					view.style.top = topPosition + "";
+				}
+
+				if (canCenterVertically) {
+					transformValue += " translateY(" + translateY+ ")";
+				}
+			}
+
+			view.style.transformOrigin = "0 0";
+			view.style.transform = transformValue;
+
+			self.viewScale = desiredScale;
+			self.viewLeft = leftPosition;
+			self.viewTop = topPosition;
+
+			return scaleNeededToFitHeight;
+		}
+
+		if (scaleToFitType=="fit") {
+			//canCenterVertically = scaleNeededToFitHeight>=scaleNeededToFitWidth;
+			//canCenterHorizontally = scaleNeededToFitWidth>=scaleNeededToFitHeight;
+			canCenterVertically = scaleNeededToFitHeight>=scaleNeededToFit;
+			canCenterHorizontally = scaleNeededToFitWidth>=scaleNeededToFit;
+
+			if (hasMinimumScale) {
+				desiredScale = Math.max(desiredScale, Number(minimumScale));
+			}
+
+			desiredScale = self.getShortNumber(desiredScale);
+
+			if (isSliderChange || scaleToFit==false) {
+				canCenterVertically = scaleToFitFullHeight>=desiredScale;
+				canCenterHorizontally = desiredScale<scaleToFitFullWidth;
+			}
+			else if (scaleToFit) {
+				desiredScale = scaleNeededToFit;
+			}
+
+			transformValue = "scale(" + desiredScale + ")";
+
+			if (self.centerVertically) {
+				if (canCenterVertically) {
+					translateY = "-50%";
+					topPosition = "50%";
+				}
+				else {
+					translateY = "0";
+					topPosition = "0";
+				}
+				
+				if (view.style.top != topPosition) {
+					view.style.top = topPosition + "";
+				}
+
+				if (canCenterVertically) {
+					transformValue += " translateY(" + translateY+ ")";
+				}
+			}
+
+			if (self.centerHorizontally) {
+				if (canCenterHorizontally) {
+					translateX = "-50%";
+					leftPosition = "50%";
+				}
+				else {
+					translateX = "0";
+					leftPosition = "0";
+				}
+
+				if (view.style.left != leftPosition) {
+					view.style.left = leftPosition + "";
+				}
+
+				if (canCenterHorizontally) {
+					transformValue += " translateX(" + translateX+ ")";
+				}
+			}
+
+			view.style.transformOrigin = "0 0";
+			view.style.transform = transformValue;
+
+			self.viewScale = desiredScale;
+			self.viewLeft = leftPosition;
+			self.viewTop = topPosition;
+
+			self.updateSliderValue(desiredScale);
+			
+			return desiredScale;
+		}
+	}
+
+	self.getViewFitToViewportScale = function(view, scaleUp) {
+		var enableScaleUp = scaleUp;
+		var availableWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		var availableHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		var elementWidth = parseFloat(getComputedStyle(view, "style").width);
+		var elementHeight = parseFloat(getComputedStyle(view, "style").height);
+		var newScale = 1;
+
+		availableWidth -= self.horizontalPadding;
+		availableHeight -= self.verticalPadding;
+
+		if (enableScaleUp) {
+			newScale = Math.min(availableHeight/elementHeight, availableWidth/elementWidth);
+		}
+		else if (elementWidth > availableWidth || elementHeight > availableHeight) {
+			newScale = Math.min(availableHeight/elementHeight, availableWidth/elementWidth);
+		}
+		
+		return newScale;
+	}
+
+	self.getViewFitToViewportWidthScale = function(view, scaleUp) {
+		var enableScaleUp = scaleUp;
+		var availableWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		var elementWidth = parseFloat(getComputedStyle(view, "style").width);
+		var newScale = 1;
+
+		availableWidth -= self.horizontalPadding;
+
+		if (enableScaleUp) {
+			newScale = availableWidth/elementWidth;
+		}
+		else if (elementWidth > availableWidth) {
+			newScale = availableWidth/elementWidth;
+		}
+		
+		return newScale;
+	}
+
+	self.getViewFitToViewportHeightScale = function(view, scaleUp) {
+		var enableScaleUp = scaleUp;
+		var availableHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		var elementHeight = parseFloat(getComputedStyle(view, "style").height);
+		var newScale = 1;
+
+		availableHeight -= self.verticalPadding;
+
+		if (enableScaleUp) {
+			newScale = availableHeight/elementHeight;
+		}
+		else if (elementHeight > availableHeight) {
+			newScale = availableHeight/elementHeight;
+		}
+		
+		return newScale;
+	}
+
+	self.keypressHandler = function(event) {
+		var rightKey = 39;
+		var leftKey = 37;
+		
+		// listen for both events 
+		if (event.type=="keypress") {
+			window.removeEventListener("keyup", self.keypressHandler);
+		}
+		else {
+			window.removeEventListener("keypress", self.keypressHandler);
+		}
+		
+		if (self.showNavigationControls) {
+			if (self.navigationOnKeypress) {
+				if (event.keyCode==rightKey) {
+					self.nextView();
+				}
+				if (event.keyCode==leftKey) {
+					self.previousView();
+				}
+			}
+		}
+		else if (self.navigationOnKeypress) {
+			if (event.keyCode==rightKey) {
+				self.nextView();
+			}
+			if (event.keyCode==leftKey) {
+				self.previousView();
+			}
+		}
+	}
+
+	///////////////////////////////////
+	// GENERAL FUNCTIONS
+	///////////////////////////////////
+
+	self.getViewById = function(id) {
+		id = id ? id.replace("#", "") : "";
+		var view = self.viewIds.indexOf(id)!=-1 && document.getElementById(id);
+		return view;
+	}
+
+	self.getViewIds = function() {
+		var viewIds = self.getViewPreferenceValue(document.body, self.prefix + "view-ids");
+		var viewId = null;
+
+		viewIds = viewIds!=null && viewIds!="" ? viewIds.split(",") : [];
+
+		if (viewIds.length==0) {
+			viewId = self.getViewPreferenceValue(document.body, self.prefix + "view-id");
+			viewIds = viewId ? [viewId] : [];
+		}
+
+		return viewIds;
+	}
+
+	self.getApplicationStylesheet = function() {
+		var stylesheetId = self.getViewPreferenceValue(document.body, self.prefix + "stylesheet-id");
+		self.applicationStylesheet = document.getElementById("applicationStylesheet");
+		return self.applicationStylesheet.sheet;
+	}
+
+	self.getViewQueries = function() {
+		var stylesheetId = self.getViewPreferenceValue(document.body, self.prefix + "stylesheet-id");
+		var viewIds = self.getViewIds();
+	}
+
+	self.getVisibleView = function() {
+		var viewIds = self.getViewIds();
+
+		try {
+			// to do 
+		}
+		catch(error) {
+			console.log("For the page functionality to work the first two style declarations must be the generated ones.");
+			return;
+		}
+		
+		for (var i=0;i<viewIds.length;i++) {
+			var viewId = viewIds[i].replace(/[\#?\.?](.*)/, "$" + "1");
+			var view = document.getElementById(viewId);
+			var postName = "_Class";
+
+			if (view==null && viewId && viewId.lastIndexOf(postName)!=-1) {
+				view = document.getElementById(viewId.replace(postName, ""));
+			}
+			
+			if (view) {
+				var display = window.getComputedStyle(view).display;
+		
+				if (display=="block") {
+					return view;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	self.getViewIndex = function(view) {
+		var viewIds = self.getViewIds();
+		var id = view ? view.id : null;
+		var index = id && viewIds ? viewIds.indexOf(id) : -1;
+
+		return index;
+	}
+
+	self.syncronizeViewToURL = function() {
+		var fragment = window.location.hash;
+		var view = self.getViewById(fragment);
+		var index = view ? self.getViewIndex(view) : 0;
+		if (index==-1) index = 0;
+		var currentView = self.hideViews(index);
+
+		if (self.supportsPopState && currentView) {
+
+			if (fragment==null) {
+				window.history.replaceState({name:currentView.id}, null, "#"+ currentView.id);
+			}
+			else {
+				window.history.pushState({name:currentView.id}, null, "#"+ currentView.id);
+			}
+		}
+		return view;
+	}
+
+	self.getViewPreferenceBoolean = function(view, property) {
+		var value = window.getComputedStyle(view).getPropertyValue(property);
+		var type = typeof value;
+		
+		if (value=="true" || (type=="string" && value.indexOf("true")!=-1)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	self.getViewPreferenceValue = function(view, property, defaultValue) {
+		var value = window.getComputedStyle(view).getPropertyValue(property);
+
+		if (value===undefined) {
+			return defaultValue;
+		}
+		
+		value = value.replace(/^[\s\"]*/, "");
+		value = value.replace(/[\s\"]*$/, "");
+		value = value.replace(/^[\s"]*(.*?)[\s"]*$/, function (match, capture) { 
+			return capture;
+		});
+
+		return value;
+	}
+
+	self.getStyleRuleValue = function(cssRule, property) {
+		var value = cssRule ? cssRule.style.getPropertyValue(property) : null;
+
+		if (value===undefined) {
+			return null;
+		}
+		
+		value = value.replace(/^[\s\"]*/, "");
+		value = value.replace(/[\s\"]*$/, "");
+		value = value.replace(/^[\s"]*(.*?)[\s"]*$/, function (match, capture) { 
+			return capture;
+		});
+
+		return value;
+	}
+
+	self.getCSSPropertyValueForElement = function(id, property) {
+		var styleSheets = document.styleSheets;
+		var numOfStylesheets = styleSheets.length;
+		var values = [];
+		var selectorIDText = "#" + id;
+		var selectorClassText = "." + id + "_Class";
+		var value;
+
+		for(var i=0;i<numOfStylesheets;i++) {
+			var styleSheet = styleSheets[i];
+			var cssRules = self.getStylesheetRules(styleSheet);
+			var numOfCSSRules = cssRules.length;
+			var cssRule;
+			
+			for (var j=0;j<numOfCSSRules;j++) {
+				cssRule = cssRules[j];
+				
+				if (cssRule.media) {
+					var mediaRules = cssRule.cssRules;
+					var numOfMediaRules = mediaRules ? mediaRules.length : 0;
+					
+					for(var k=0;k<numOfMediaRules;k++) {
+						var mediaRule = mediaRules[k];
+						
+						if (mediaRule.selectorText==selectorIDText || mediaRule.selectorText==selectorClassText) {
+							
+							if (mediaRule.style && property in mediaRule.style) {
+								value = mediaRule.style.getPropertyValue(property);
+								//console.log(property+":" + value);
+								values.push(value);
+							}
+						}
+					}
+				}
+				else {
+
+					if (cssRule.selectorText==selectorIDText || cssRule.selectorText==selectorClassText) {
+						if (cssRule.style && property in cssRule.style) {
+							value = cssRule.style.getPropertyValue(property);
+							//console.log(property+":" + value);
+							values.push(value);
+						}
+					}
+				}
+			}
+		}
+		
+		return values.pop();
+	}
+
+	self.collectViews = function() {
+		var viewIds = self.getViewIds();
+
+		for (let index = 0; index < viewIds.length; index++) {
+			const id = viewIds[index];
+			const view = self.getViewById(id);
+			self.views[id] = view;
+		}
+		
+		self.viewIds = viewIds;
+	}
+
+	self.collectMediaQueries = function() {
+		var viewIds = self.getViewIds();
+		var styleSheet = self.getApplicationStylesheet();
+		var cssRules = self.getStylesheetRules(styleSheet);
+		var numOfCSSRules = cssRules ? cssRules.length : 0;
+		var cssRule;
+		var id = viewIds.length ? viewIds[0]: ""; // single view
+		var selectorIDText = "#" + id;
+		var selectorClassText = "." + id + "_Class";
+		var viewsNotFound = viewIds.slice();
+		var viewsFound = [];
+		var selectorText = null;
+		var property = self.prefix + "view-id";
+		
+		for (var j=0;j<numOfCSSRules;j++) {
+			cssRule = cssRules[j];
+			
+			if (cssRule.media) {
+				var mediaRules = cssRule.cssRules;
+				var numOfMediaRules = mediaRules ? mediaRules.length : 0;
+				
+				for(var k=0;k<numOfMediaRules;k++) {
+					var mediaRule = mediaRules[k];
+					var mediaId = null;
+
+					selectorText = mediaRule.selectorText;
+					
+					if (selectorText==".mediaViewInfo") {
+
+						mediaId = self.getStyleRuleValue(mediaRule, property);
+
+						self.mediaQueryDictionary[mediaId] = cssRule;
+						self.addState(mediaId, cssRule);
+						viewsFound.push(mediaId);
+
+						if (viewsNotFound.indexOf(mediaId)!=-1) {
+							viewsNotFound.splice(viewsNotFound.indexOf(mediaId));
+						}
+
+						break;
+					}
+				}
+			}
+			else {
+				selectorText = cssRule.selectorText.replace(/[#|\s|*]?/g, "");
+
+				if (viewIds.indexOf(selectorText)!=-1) {
+					self.mediaQueryDictionary[selectorText] = cssRule;
+					self.addState(selectorText, cssRule);
+					if (viewsNotFound.indexOf(selectorText)!=-1) {
+						viewsNotFound.splice(viewsNotFound.indexOf(selectorText));
+					}
+					break;
+				}
+			}
+		}
+
+		if (viewsNotFound.length) {
+			console.log("Could not find the following views:" + viewsNotFound.join(",") + "");
+			console.log("Views found:" + viewsFound.join(",") + "");
+		}
+	}
+
+	self.addState = function(name, cssRule) {
+		var state = {name:name, rule:cssRule};
+		self.states.push(name);
+		self.statesDictionary[name] = state;
+	}
+
+	self.hasState = function(name) {
+		
+		if (self.states.indexOf(name)!=-1) {
+			return true;
+		}
+		return false;
+	}
+
+	self.goToState = function(name, maintainPreviousState) {
+		var state = self.statesDictionary[name];
+
+		if (state) {
+			if (maintainPreviousState==false || maintainPreviousState==null) {
+				self.hideViews();
+			}
+			self.enableMediaQuery(state.rule);
+			self.updateViewLabel();
+			self.updateURL();
+		}
+		else {
+			var event = new Event(self.STATE_NOT_FOUND);
+			self.stateName = name;
+			window.dispatchEvent(event);
+		}
+	}
+
+	self.resizeHandler = function(event) {
+		if (self.scaleViewsOnResize) {
+			var view = self.getVisibleView();
+			var isViewScaled = view.getAttributeNS(null, self.SIZE_STATE_NAME)=="false" ? false : true;
+
+			if (isViewScaled) {
+				self.scaleViewToFit(view, true);
+			}
+			else {
+				self.scaleViewToActualSize(view);
+			}
+		}
+	}
+
+	self.preventDoubleClick = function(event) {
+		event.stopImmediatePropagation();
+	}
+
+	self.hashChangeHandler = function(event) {
+		var fragment = window.location.hash ? window.location.hash.replace("#", "") : "";
+		var view = self.getViewById(fragment);
+
+		if (view) {
+			self.hideViews();
+			self.showView(view);
+			self.updateViewLabel();
+		}
+		else {
+			window.dispatchEvent(new Event(self.VIEW_NOT_FOUND));
+		}
+	}
+
+	self.popStateHandler = function(event) {
+		var state = event.state;
+		var fragment = state ? state.name : window.location.hash;
+		var view = self.getViewById(fragment);
+
+		if (view) {
+			self.hideViews();
+			self.showView(view);
+			self.updateViewLabel();
+		}
+		else {
+			window.dispatchEvent(new Event(self.VIEW_NOT_FOUND));
+		}
+	}
+
+	self.doubleClickHandler = function(event) {
+		var view = self.getVisibleView();
+		var scaleValue = view ? self.getViewScaleValue(view) : 1;
+		var scaleNeededToFit = view ? self.getViewFitToViewportScale(view) : 1;
+		var scaleNeededToFitWidth = view ? self.getViewFitToViewportWidthScale(view) : 1;
+		var scaleNeededToFitHeight = view ? self.getViewFitToViewportHeightScale(view) : 1;
+		var scaleToFitType = self.scaleToFitType;
+
+		// Three scenarios
+		// - scale to fit on double click
+		// - set scale to actual size on double click
+		// - switch between scale to fit and actual page size
+
+		if (scaleToFitType=="width") {
+			scaleNeededToFit = scaleNeededToFitWidth;
+		}
+		else if (scaleToFitType=="height") {
+			scaleNeededToFit = scaleNeededToFitHeight;
+		}
+
+		// if scale and actual size enabled then switch between
+		if (self.scaleToFitOnDoubleClick && self.actualSizeOnDoubleClick) {
+			var isViewScaled = view.getAttributeNS(null, self.SIZE_STATE_NAME);
+			var isScaled = false;
+			
+			// if scale is not 1 then view needs scaling
+			if (scaleNeededToFit!=1) {
+
+				// if current scale is at 1 it is at actual size
+				// scale it to fit
+				if (scaleValue==1) {
+					self.scaleViewToFit(view);
+					isScaled = true;
+				}
+				else {
+					// scale is not at 1 so switch to actual size
+					self.scaleViewToActualSize(view);
+					isScaled = false;
+				}
+			}
+			else {
+				// view is smaller than viewport 
+				// so scale to fit() is scale actual size
+				// actual size and scaled size are the same
+				// but call scale to fit to retain centering
+				self.scaleViewToFit(view);
+				isScaled = false;
+			}
+			
+			view.setAttributeNS(null, self.SIZE_STATE_NAME, isScaled+"");
+			isViewScaled = view.getAttributeNS(null, self.SIZE_STATE_NAME);
+		}
+		else if (self.scaleToFitOnDoubleClick) {
+			self.scaleViewToFit(view);
+		}
+		else if (self.actualSizeOnDoubleClick) {
+			self.scaleViewToActualSize(view);
+		}
+
+	}
+
+	self.scaleViewToFit = function(view) {
+		return self.setViewScaleValue(view, true);
+	}
+
+	self.scaleViewToActualSize = function(view) {
+		self.setViewScaleValue(view, false, 1);
+	}
+
+	self.onloadHandler = function(event) {
+		self.initialize();
+	}
+
+	self.getStackArray = function(error) {
+		var value = "";
+		
+		if (error==null) {
+		  try {
+			 error = new Error("Stack");
+		  }
+		  catch (e) {
+			 
+		  }
+		}
+		
+		if ("stack" in error) {
+		  value = error.stack;
+		  var methods = value.match(/\\n/gm);
+	 
+		  var newArray = methods ? methods.map(function (value, index, array) {
+			 value = value.replace("at ","");
+			 return value;
+		  }) : null;
+	 
+		  if (newArray && newArray[0]=="getStackTrace") {
+			 newArray.shift();
+		  }
+		  if (newArray && newArray[0]=="getStackArray") {
+			 newArray.shift();
+		  }
+		  if (newArray && newArray[0]=="getFunctionName") {
+			 newArray.shift();
+		  }
+		  if (newArray && newArray[0]=="object") {
+			 newArray.shift();
+		  }
+		  if (newArray && newArray[0]=="log") {
+			 newArray.shift();
+		  }
+	 
+			return newArray;
+		}
+		
+		return null;
+	}
+
+	this.log = function(value) {
+		console.log.apply(this, [value]);
+	}
+	
+	// initialize on load
+	// sometimes the body size is 0 so we call this now and again later
+	window.addEventListener("load", self.onloadHandler);
+	window.document.addEventListener("DOMContentLoaded", self.onloadHandler);
+}
+
+window.application = new Application();
+</script>
+</head>
+<body>
+<div id="Profile_Page" class="Profile_Page_Class">
+	<div class="BG_Class">
+		<svg class="BG_A5_Rectangle_1">
+			<rect fill="rgba(249,249,249,1)" class="BG_A5_Rectangle_1_Class" rx="0" ry="0" x="0" y="0" width="1922" height="2417">
+			</rect>
+		</svg>
+	</div>
+	<svg class="Rectangle_140">
+		<rect fill="rgba(7,7,7,1)" stroke="rgba(112,112,112,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Rectangle_140_Class" rx="0" ry="0" x="0" y="0" width="1957" height="363">
+		</rect>
+	</svg>
+	<div class="Component_7_Class">
+		<svg class="Footer_BG_Blue">
+			<rect fill="rgba(29,35,39,1)" class="Footer_BG_Blue_Class" rx="0" ry="0" x="0" y="0" width="1920" height="364">
+			</rect>
+		</svg>
+		<div class="About_us__Company_Vision_Team__Class">
+			<span>About us<br/></span><br><span style="color:rgba(255,255,255,1);">Company<br/>Vision<br/>Team<br/>Our Blog <br/>Contact us</span>
+		</div>
+		<div class="How_it_works__Registration_Upl_Class">
+			<span>How it works<br/></span><br><span style="color:rgba(255,255,255,1);">Registration<br/>Upload files<br/>Booast Ads</span>
+		</div>
+		<div class="Legal__Term_of_Use_Content_Pol_Class">
+			<span>Legal<br/></span><br><span style="color:rgba(255,255,255,1);">Term of Use<br/>Content Policy<br/>Privacy Policy<br/>Indemity & Abitration</span>
+		</div>
+		<div class="Payment___Class">
+			<span>Payment<br/></span><br>
+		</div>
+		<div class="Bank__Transfer_Class">
+			<span>Bank <br/>Transfer</span>
+		</div>
+		<div class="Support__support_spaces_com_Ac_Class">
+			<span>Support<br/></span><br><span style="color:rgba(255,255,255,1);">support@spaces.com<br/>Accessibility<br/>Safety tips<br/>FAQs<br/>Site Map</span>
+		</div>
+		<svg class="Mastercard_Logo">
+			<pattern elementId="Mastercard_Logo_A5_Rectangle_5" id="Mastercard_Logo_A5_Rectangle_5_pattern" x="0" y="0" width="100%" height="100%">
+				<image x="0" y="0" width="100%" height="100%" href="Mastercard_Logo_A5_Rectangle_5_pattern.png" xlink:href="Mastercard_Logo_A5_Rectangle_5_pattern.png"></image>
+			</pattern>
+			<rect fill="url(#Mastercard_Logo_A5_Rectangle_5_pattern)" class="Mastercard_Logo_Class" rx="0" ry="0" x="0" y="0" width="77" height="63">
+			</rect>
+		</svg>
+		<svg class="Visa_Logo">
+			<pattern elementId="Visa_Logo_A5_Rectangle_7" id="Visa_Logo_A5_Rectangle_7_pattern" x="0" y="0" width="100%" height="100%">
+				<image x="0" y="0" width="100%" height="100%" href="Visa_Logo_A5_Rectangle_7_pattern.png" xlink:href="Visa_Logo_A5_Rectangle_7_pattern.png"></image>
+			</pattern>
+			<rect fill="url(#Visa_Logo_A5_Rectangle_7_pattern)" class="Visa_Logo_Class" rx="0" ry="0" x="0" y="0" width="68" height="67">
+			</rect>
+		</svg>
+		<svg class="Verver_Logo">
+			<pattern elementId="Verver_Logo_A5_Rectangle_9" id="Verver_Logo_A5_Rectangle_9_pattern" x="0" y="0" width="100%" height="100%">
+				<image x="0" y="0" width="100%" height="100%" href="Verver_Logo_A5_Rectangle_9_pattern.png" xlink:href="Verver_Logo_A5_Rectangle_9_pattern.png"></image>
+			</pattern>
+			<rect fill="url(#Verver_Logo_A5_Rectangle_9_pattern)" class="Verver_Logo_Class" rx="0" ry="0" x="0" y="0" width="85" height="33">
+			</rect>
+		</svg>
+		<div class="Bank_Transfer_Logo_Class">
+			<div class="Group_176_Class">
+				<svg class="Path_55" viewBox="694.222 793.619 7.662 8.163">
+					<path fill="rgba(255,255,255,1)" class="Path_55_Class" d="M 699.6324462890625 798.0855102539062 C 699.5744018554688 797.1056518554688 699.5744018554688 796.732421875 699.5633544921875 796.4182739257812 L 699.5633544921875 793.6190795898438 L 701.8837280273438 793.6190795898438 L 701.8837280273438 801.7822875976562 L 699.9249877929688 801.7822875976562 L 696.5186157226562 797.3860473632812 L 696.553955078125 799.1699829101562 L 696.553955078125 801.7822875976562 L 694.2220458984375 801.7822875976562 L 694.2220458984375 793.6190795898438 L 696.1806640625 793.6190795898438 L 699.6324462890625 798.0855102539062 Z">
+					</path>
+				</svg>
+				<svg class="Rectangle_134">
+					<rect fill="rgba(255,255,255,1)" class="Rectangle_134_Class" rx="0" ry="0" x="0" y="0" width="9.856" height="1.421">
+					</rect>
+				</svg>
+				<svg class="Rectangle_135">
+					<rect fill="rgba(255,255,255,1)" class="Rectangle_135_Class" rx="0" ry="0" x="0" y="0" width="9.856" height="1.421">
+					</rect>
+				</svg>
+			</div>
+			<div class="Group_177_Class">
+				<svg class="Path_56" viewBox="712.239 769.913 20.024 20.718">
+					<path fill="rgba(255,0,0,1)" class="Path_56_Class" d="M 732.2628173828125 780.2750244140625 L 721.2467041015625 769.9129638671875 L 721.2296142578125 775.507080078125 L 712.2390747070312 775.507080078125 L 712.2390747070312 775.602783203125 C 715.7776489257812 777.4796142578125 718.3518676757812 780.9423828125 719.0082397460938 785.037841796875 L 721.2008056640625 785.037841796875 L 721.1836547851562 790.630859375 L 732.2628173828125 780.2750244140625 Z">
+					</path>
+				</svg>
+				<svg class="Path_57" viewBox="654.051 794.622 20.024 20.718">
+					<path fill="rgba(255,248,0,1)" class="Path_57_Class" d="M 667.3056640625 800.2150268554688 L 665.113037109375 800.2150268554688 L 665.1301879882812 794.6219482421875 L 654.051025390625 804.9779052734375 L 665.067138671875 815.33984375 L 665.0842895507812 809.7457885742188 L 674.0748291015625 809.7457885742188 L 674.0748291015625 809.6500854492188 C 670.5362548828125 807.7732543945312 667.9620361328125 804.3104248046875 667.3056640625 800.2150268554688 Z">
+					</path>
+				</svg>
+			</div>
+			<svg class="Path_58" viewBox="681.454 781.204 21.894 21.894">
+				<path fill="rgba(255,255,255,1)" class="Path_58_Class" d="M 692.4010009765625 783.962890625 C 696.9161376953125 783.962890625 700.5897216796875 787.6358642578125 700.5897216796875 792.1510009765625 C 700.5897216796875 796.6661987304688 696.9161376953125 800.3392333984375 692.4010009765625 800.3392333984375 C 687.8858642578125 800.3392333984375 684.212890625 796.6661987304688 684.212890625 792.1510009765625 C 684.212890625 787.6358642578125 687.8858642578125 783.962890625 692.4010009765625 783.962890625 M 692.4010009765625 781.2039794921875 C 686.355224609375 781.2039794921875 681.4539794921875 786.1051635742188 681.4539794921875 792.1510009765625 C 681.4539794921875 798.1968994140625 686.355224609375 803.0980834960938 692.4010009765625 803.0980834960938 C 698.4468994140625 803.0980834960938 703.34814453125 798.1968994140625 703.34814453125 792.1510009765625 C 703.34814453125 786.1051635742188 698.4468994140625 781.2039794921875 692.4010009765625 781.2039794921875 L 692.4010009765625 781.2039794921875 Z">
+				</path>
+			</svg>
+		</div>
+	</div>
+	<div class="Merch_Logo_Class">
+		<svg class="Path_38" viewBox="2090.993 1032.533 52.604 40.776">
+			<path fill="rgba(255,255,255,1)" class="Path_38_Class" d="M 2109.9482421875 1043.47998046875 C 2109.4580078125 1042.745483398438 2108.625732421875 1042.3779296875 2107.450439453125 1042.3779296875 C 2106.27490234375 1042.3779296875 2105.44140625 1042.745483398438 2104.952392578125 1043.47998046875 C 2104.4619140625 1044.21484375 2104.217529296875 1045.41552734375 2104.217529296875 1047.079956054688 L 2104.217529296875 1068.459594726562 C 2104.217529296875 1071.137817382812 2102.046875 1073.30859375 2099.36865234375 1073.30859375 L 2095.842041015625 1073.30859375 C 2093.163818359375 1073.30859375 2090.992919921875 1071.137817382812 2090.992919921875 1068.459594726562 L 2090.992919921875 1038.41064453125 C 2090.992919921875 1035.732543945312 2093.163818359375 1033.561645507812 2095.842041015625 1033.561645507812 L 2098.927978515625 1033.561645507812 C 2101.60595703125 1033.561645507812 2103.77685546875 1035.732543945312 2103.77685546875 1038.41064453125 L 2103.77685546875 1038.41064453125 L 2103.923828125 1038.41064453125 C 2105.637451171875 1034.49267578125 2108.84619140625 1032.532958984375 2113.548583984375 1032.532958984375 C 2116.290771484375 1032.532958984375 2118.38427734375 1033.035766601562 2119.829833984375 1034.0390625 C 2120.022705078125 1034.17333984375 2120.210205078125 1034.316650390625 2120.39208984375 1034.469482421875 C 2122.108154296875 1035.911743164062 2124.5673828125 1035.896118164062 2126.37353515625 1034.56787109375 C 2126.721435546875 1034.311889648438 2127.087646484375 1034.086547851562 2127.470703125 1033.892456054688 C 2129.25830078125 1032.986572265625 2131.180908203125 1032.532958984375 2133.238037109375 1032.532958984375 C 2134.70751953125 1032.532958984375 2136.066650390625 1032.692626953125 2137.315673828125 1033.010620117188 C 2138.564697265625 1033.329711914062 2139.65380859375 1033.90478515625 2140.5849609375 1034.737060546875 C 2141.514892578125 1035.570556640625 2142.24951171875 1036.672607421875 2142.789306640625 1038.043090820312 C 2143.3271484375 1039.414916992188 2143.596923828125 1041.178344726562 2143.596923828125 1043.3330078125 L 2143.596923828125 1068.459594726562 C 2143.596923828125 1071.137817382812 2141.42626953125 1073.30859375 2138.74853515625 1073.30859375 L 2135.2216796875 1073.30859375 C 2132.543701171875 1073.30859375 2130.372802734375 1071.137817382812 2130.372802734375 1068.459594726562 L 2130.372802734375 1047.079956054688 C 2130.372802734375 1045.41552734375 2130.12744140625 1044.21484375 2129.638427734375 1043.47998046875 C 2129.14794921875 1042.745483398438 2128.315673828125 1042.3779296875 2127.140380859375 1042.3779296875 C 2125.964599609375 1042.3779296875 2125.13134765625 1042.745483398438 2124.642333984375 1043.47998046875 C 2124.15185546875 1044.21484375 2123.90771484375 1045.41552734375 2123.90771484375 1047.079956054688 L 2123.90771484375 1068.459594726562 C 2123.90771484375 1071.137817382812 2121.736328125 1073.30859375 2119.05859375 1073.30859375 L 2115.531982421875 1073.30859375 C 2112.853759765625 1073.30859375 2110.682861328125 1071.137817382812 2110.682861328125 1068.459594726562 L 2110.682861328125 1047.079956054688 C 2110.682861328125 1045.41552734375 2110.437255859375 1044.21484375 2109.9482421875 1043.47998046875 Z">
+			</path>
+		</svg>
+		<svg class="Path_39" viewBox="2263.929 1032.533 32.841 41.584">
+			<path fill="rgba(255,255,255,1)" class="Path_39_Class" d="M 2277.153076171875 1060.892456054688 C 2277.153076171875 1063.048217773438 2277.520751953125 1064.480712890625 2278.25537109375 1065.190063476562 C 2278.990234375 1065.900756835938 2279.82275390625 1066.255615234375 2280.75341796875 1066.255615234375 C 2281.92919921875 1066.255615234375 2282.84765625 1065.77783203125 2283.50830078125 1064.82275390625 C 2284.023681640625 1064.07861328125 2284.33837890625 1062.80615234375 2284.451904296875 1061.005126953125 C 2284.510498046875 1060.075805664062 2285.27978515625 1059.349487304688 2286.211181640625 1059.349487304688 L 2294.54150390625 1059.349487304688 C 2295.5732421875 1059.349487304688 2296.391845703125 1060.234252929688 2296.300048828125 1061.26220703125 C 2295.94677734375 1065.218383789062 2294.731689453125 1068.266723632812 2292.655517578125 1070.406494140625 C 2290.255126953125 1072.880493164062 2286.31201171875 1074.116821289062 2280.826904296875 1074.116821289062 C 2277.642333984375 1074.116821289062 2274.9736328125 1073.760986328125 2272.81884765625 1073.051513671875 C 2270.662841796875 1072.342163085938 2268.9248046875 1071.16650390625 2267.6025390625 1069.52490234375 C 2266.280029296875 1067.884521484375 2265.33642578125 1065.741088867188 2264.77392578125 1063.096557617188 C 2264.210205078125 1060.451538085938 2263.928955078125 1057.244140625 2263.928955078125 1053.471801757812 C 2263.928955078125 1049.651489257812 2264.2470703125 1046.418701171875 2264.884033203125 1043.77392578125 C 2265.52001953125 1041.12890625 2266.5244140625 1038.97412109375 2267.896240234375 1037.308715820312 C 2269.26708984375 1035.644287109375 2271.018798828125 1034.431762695312 2273.149169921875 1033.671875 C 2275.280029296875 1032.912841796875 2277.8388671875 1032.532958984375 2280.826904296875 1032.532958984375 C 2283.471923828125 1032.532958984375 2285.786376953125 1032.852294921875 2287.769775390625 1033.488037109375 C 2289.753173828125 1034.12548828125 2291.418212890625 1035.190673828125 2292.765625 1036.683959960938 C 2294.1123046875 1038.1787109375 2295.11669921875 1040.137084960938 2295.7783203125 1042.561767578125 C 2296.439453125 1044.986328125 2296.770263671875 1048.010864257812 2296.770263671875 1051.635009765625 L 2296.770263671875 1053.912719726562 C 2296.770263671875 1054.886596679688 2295.980712890625 1055.675903320312 2295.006591796875 1055.675903320312 L 2278.916748046875 1055.675903320312 C 2277.94287109375 1055.675903320312 2277.153076171875 1056.465454101562 2277.153076171875 1057.439086914062 L 2277.153076171875 1060.892456054688 Z M 2283.655517578125 1042.083984375 C 2283.14111328125 1041.104736328125 2282.173828125 1040.61474609375 2280.75341796875 1040.61474609375 C 2279.381591796875 1040.61474609375 2278.439208984375 1041.104736328125 2277.925048828125 1042.083984375 C 2277.410400390625 1043.064453125 2277.153076171875 1044.607299804688 2277.153076171875 1046.712768554688 L 2277.153076171875 1046.712768554688 C 2277.153076171875 1047.686401367188 2277.94287109375 1048.475830078125 2278.916748046875 1048.475830078125 L 2282.66357421875 1048.475830078125 C 2283.63720703125 1048.475830078125 2284.4267578125 1047.686401367188 2284.4267578125 1046.712768554688 L 2284.4267578125 1046.712768554688 C 2284.4267578125 1044.607299804688 2284.169677734375 1043.064453125 2283.655517578125 1042.083984375 Z">
+			</path>
+		</svg>
+		<svg class="Path_40" viewBox="2374.856 1032.533 23.951 40.776">
+			<path fill="rgba(255,255,255,1)" class="Path_40_Class" d="M 2386.12451171875 1033.561645507812 C 2386.96142578125 1033.561645507812 2387.64013671875 1034.240112304688 2387.64013671875 1035.0771484375 L 2387.64013671875 1039.8798828125 L 2387.78662109375 1039.8798828125 C 2388.521728515625 1037.480712890625 2389.69677734375 1035.655639648438 2391.3134765625 1034.406616210938 C 2392.9296875 1033.157592773438 2394.716796875 1032.532958984375 2396.6767578125 1032.532958984375 L 2397.291748046875 1032.532958984375 C 2398.12890625 1032.532958984375 2398.807373046875 1033.211791992188 2398.807373046875 1034.048461914062 L 2398.807373046875 1043.150268554688 C 2398.807373046875 1044.049560546875 2398.029296875 1044.739990234375 2397.133544921875 1044.6572265625 L 2397.11767578125 1044.655639648438 C 2396.577880859375 1044.607299804688 2396.03955078125 1044.58203125 2395.501220703125 1044.58203125 C 2393.150390625 1044.58203125 2391.32470703125 1045.09619140625 2390.027587890625 1046.124877929688 C 2388.72900390625 1047.153564453125 2388.080810546875 1048.990356445312 2388.080810546875 1051.635009765625 L 2388.080810546875 1071.793090820312 C 2388.080810546875 1072.630249023438 2387.40234375 1073.30859375 2386.565185546875 1073.30859375 L 2376.37158203125 1073.30859375 C 2375.534423828125 1073.30859375 2374.85595703125 1072.630249023438 2374.85595703125 1071.793090820312 L 2374.85595703125 1035.0771484375 C 2374.85595703125 1034.240112304688 2375.534423828125 1033.561645507812 2376.37158203125 1033.561645507812 L 2386.12451171875 1033.561645507812 Z">
+			</path>
+		</svg>
+		<svg class="Path_41" viewBox="2451.74 1032.533 32.801 41.584">
+			<path fill="rgba(255,255,255,1)" class="Path_41_Class" d="M 2472.458251953125 1045.20654296875 C 2472.311279296875 1044.203369140625 2472.091064453125 1043.382446289062 2471.797119140625 1042.745483398438 C 2471.257568359375 1041.619262695312 2470.278564453125 1041.0556640625 2468.858154296875 1041.0556640625 C 2468.12353515625 1041.0556640625 2467.499267578125 1041.239379882812 2466.984619140625 1041.606689453125 C 2466.470458984375 1041.973876953125 2466.06640625 1042.635009765625 2465.7724609375 1043.590087890625 C 2465.478515625 1044.54541015625 2465.269775390625 1045.819458007812 2465.147705078125 1047.41064453125 C 2465.025390625 1049.002685546875 2464.964111328125 1051.023071289062 2464.964111328125 1053.471801757812 C 2464.964111328125 1055.921630859375 2465.025390625 1057.942138671875 2465.147705078125 1059.533203125 C 2465.269775390625 1061.12548828125 2465.478515625 1062.38671875 2465.7724609375 1063.316772460938 C 2466.06640625 1064.247680664062 2466.470458984375 1064.896484375 2466.984619140625 1065.263671875 C 2467.499267578125 1065.63134765625 2468.12353515625 1065.814697265625 2468.858154296875 1065.814697265625 C 2470.082275390625 1065.814697265625 2471.02587890625 1065.349731445312 2471.68701171875 1064.418823242188 C 2472.34814453125 1063.489135742188 2472.6787109375 1061.773803710938 2472.6787109375 1059.27587890625 L 2472.6787109375 1058.694580078125 C 2472.6787109375 1057.595458984375 2473.56982421875 1056.70458984375 2474.6689453125 1056.70458984375 L 2482.549072265625 1056.70458984375 C 2483.67822265625 1056.70458984375 2484.58642578125 1057.644653320312 2484.5390625 1058.7724609375 C 2484.4443359375 1061.0302734375 2484.188720703125 1063.010131835938 2483.77294921875 1064.712646484375 C 2483.232666015625 1066.916748046875 2482.327392578125 1068.729370117188 2481.05419921875 1070.149536132812 C 2478.55615234375 1072.79443359375 2474.489990234375 1074.116821289062 2468.858154296875 1074.116821289062 C 2466.311279296875 1074.116821289062 2463.98388671875 1073.896484375 2461.878662109375 1073.45556640625 C 2459.77197265625 1073.0146484375 2457.97216796875 1072.072265625 2456.478515625 1070.627197265625 C 2454.98388671875 1069.182739257812 2453.8212890625 1067.149658203125 2452.989013671875 1064.528930664062 C 2452.155517578125 1061.909423828125 2451.739990234375 1058.443725585938 2451.739990234375 1054.132934570312 C 2451.739990234375 1049.430908203125 2452.205078125 1045.659790039062 2453.135498046875 1042.81884765625 C 2454.065673828125 1039.978637695312 2455.327392578125 1037.798706054688 2456.919921875 1036.279907226562 C 2458.5107421875 1034.762451171875 2460.3837890625 1033.7578125 2462.539794921875 1033.267700195312 C 2464.694580078125 1032.778686523438 2467.021484375 1032.532958984375 2469.519287109375 1032.532958984375 C 2472.458251953125 1032.532958984375 2474.894287109375 1032.937377929688 2476.829833984375 1033.745483398438 C 2478.76416015625 1034.553588867188 2480.30712890625 1035.6806640625 2481.458251953125 1037.124877929688 C 2482.6083984375 1038.5703125 2483.41650390625 1040.309326171875 2483.8828125 1042.341064453125 C 2484.2138671875 1043.788452148438 2484.427490234375 1045.353637695312 2484.52294921875 1047.036254882812 C 2484.587646484375 1048.176391601562 2483.675537109375 1049.137084960938 2482.533935546875 1049.137084960938 L 2474.62646484375 1049.137084960938 C 2473.559326171875 1049.137084960938 2472.68798828125 1048.2939453125 2472.638671875 1047.228271484375 C 2472.602294921875 1046.454223632812 2472.542236328125 1045.78076171875 2472.458251953125 1045.20654296875 Z">
+			</path>
+		</svg>
+		<svg class="Path_42" viewBox="2088.99 961.196 191.01 88.231">
+			<path fill="rgba(255,147,0,1)" class="Path_42_Class" d="M 2280.000732421875 976.9476318359375 L 2280.000732421875 1045.239379882812 C 2280.000732421875 1047.552001953125 2278.1259765625 1049.426635742188 2275.8134765625 1049.426635742188 L 2093.17724609375 1049.426635742188 C 2090.864990234375 1049.426635742188 2088.990234375 1047.552001953125 2088.990234375 1045.239379882812 L 2088.990234375 1039.950927734375 C 2088.990234375 1037.638305664062 2090.864990234375 1035.763671875 2093.17724609375 1035.763671875 L 2262.1474609375 1035.763671875 C 2264.459716796875 1035.763671875 2266.33447265625 1033.889038085938 2266.33447265625 1031.576538085938 L 2266.33447265625 1007.8056640625 C 2266.33447265625 1005.4931640625 2264.459716796875 1003.618530273438 2262.1474609375 1003.618530273438 L 2262.14697265625 1003.618530273438 C 2259.8349609375 1003.618530273438 2257.9599609375 1005.4931640625 2257.9599609375 1007.8056640625 L 2257.9599609375 1021.02880859375 C 2257.9599609375 1023.34130859375 2256.08544921875 1025.215942382812 2253.77294921875 1025.215942382812 L 2248.481201171875 1025.215942382812 C 2246.168701171875 1025.215942382812 2244.2939453125 1023.34130859375 2244.2939453125 1021.02880859375 L 2244.2939453125 979.0494384765625 C 2244.2939453125 976.73681640625 2242.419189453125 974.8621826171875 2240.10693359375 974.8621826171875 L 2093.17724609375 974.8621826171875 C 2090.864990234375 974.8621826171875 2088.990234375 972.987548828125 2088.990234375 970.675048828125 L 2088.990234375 965.3831787109375 C 2088.990234375 963.0706787109375 2090.864990234375 961.196044921875 2093.17724609375 961.196044921875 L 2253.77294921875 961.196044921875 C 2256.08544921875 961.196044921875 2257.9599609375 963.0706787109375 2257.9599609375 965.3831787109375 L 2257.9599609375 987.8212890625 C 2257.9599609375 990.1339111328125 2259.8349609375 992.0084228515625 2262.14697265625 992.0084228515625 L 2262.1474609375 992.0084228515625 C 2264.459716796875 992.0084228515625 2266.33447265625 990.1339111328125 2266.33447265625 987.8212890625 L 2266.33447265625 976.9476318359375 C 2266.33447265625 974.6351318359375 2268.20947265625 972.760498046875 2270.521484375 972.760498046875 L 2275.8134765625 972.760498046875 C 2278.1259765625 972.760498046875 2280.000732421875 974.6351318359375 2280.000732421875 976.9476318359375 Z">
+			</path>
+		</svg>
+	</div>
+	<div class="Tailoring_______Fashion________Class">
+		<span>Tailoring   |   Fashion   |   AutoMobile   |   Computing   |   Manufacturing   |   Food</span>
+	</div>
+	<svg class="Line">
+		<path fill="transparent" stroke="rgba(238,238,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Line_Class" d="M 0 0 L 1545 0">
+		</path>
+	</svg>
+	<div class="Categories_Class">
+		<div class="My_business_Profile_Class">
+			<span>My business Profile</span>
+		</div>
+	</div>
+	<div class="Profile_Name_Class">
+		<div class="Hi_Ronke___Class">
+			<span>Hi Ronke !</span>
+		</div>
+		<div class="Log_Out_Class">
+			<span>Log Out</span>
+		</div>
+	</div>
+	<div class="Profile_Class">
+		<svg class="Profile_A5_Ellipse_1">
+			<pattern elementId="Profile_A5_Ellipse_2" id="Profile_A5_Ellipse_2_pattern" x="0" y="0" width="100%" height="100%">
+				<image x="0" y="0" width="100%" height="100%" href="Profile_A5_Ellipse_2_pattern.png" xlink:href="Profile_A5_Ellipse_2_pattern.png"></image>
+			</pattern>
+			<ellipse fill="url(#Profile_A5_Ellipse_2_pattern)" class="Profile_A5_Ellipse_1_Class" rx="37" ry="37" cx="37" cy="37">
+			</ellipse>
+		</svg>
+	</div>
+	<div class="Edit_Icon_Class">
+		<svg class="Path_59" viewBox="5.7 114.3 27.313 1.279">
+			<path fill="rgba(255,255,255,1)" class="Path_59_Class" d="M 32.03841400146484 114.3000106811523 L 6.651427745819092 114.3000106811523 C 6.117697715759277 114.3000106811523 5.699996471405029 114.5962600708008 5.699996471405029 114.9392776489258 C 5.699996471405029 115.2823257446289 6.140902519226074 115.5785598754883 6.651427745819092 115.5785598754883 L 32.06161880493164 115.5785598754883 C 32.59535217285156 115.5785598754883 33.01305389404297 115.2823257446289 33.01305389404297 114.9392776489258 C 33.01305389404297 114.5962600708008 32.57213973999023 114.3000106811523 32.03841400146484 114.3000106811523 Z">
+			</path>
+		</svg>
+		<svg class="Edit_icon" viewBox="5.6 6.9 19.219 19.26">
+			<path fill="rgba(255,255,255,1)" class="Edit_icon_Class" d="M 5.620315551757812 21.3447380065918 L 5.599999904632568 25.30637550354004 C 5.599999904632568 25.52985000610352 5.681263446807861 25.75332832336426 5.843789577484131 25.91585731506348 C 6.0063157081604 26.0783863067627 6.209473609924316 26.15964889526367 6.432948112487793 26.15964889526367 L 10.37421035766602 26.13933372497559 C 10.59768295288086 26.13933372497559 10.80084228515625 26.05806922912598 10.9633674621582 25.89554214477539 L 24.57494735717773 12.28376483917236 C 24.89999771118164 11.95870685577393 24.89999771118164 11.43048858642578 24.57494735717773 11.08511543273926 L 20.67431449890137 7.143795013427734 C 20.34926223754883 6.818737983703613 19.82105255126953 6.818737983703613 19.47568321228027 7.143795013427734 L 16.75336647033691 9.886466979980469 L 5.864105701446533 20.75557327270508 C 5.721895694732666 20.91810035705566 5.620316505432129 21.12126541137695 5.620316505432129 21.34473991394043 Z M 20.08515357971191 8.931611061096191 L 22.82778739929199 11.67428302764893 L 21.28378868103027 13.21830463409424 L 18.54115676879883 10.47563362121582 L 20.08515357971191 8.931610107421875 Z M 7.306525230407715 21.71043014526367 L 17.3425235748291 11.67428302764893 L 20.08515357971191 14.41695404052734 L 10.04915618896484 24.43278312683105 L 7.286208152770996 24.45309829711914 L 7.306525230407715 21.71042633056641 Z">
+			</path>
+		</svg>
+	</div>
+	<svg class="Shop_Image">
+		<pattern elementId="Shop_Image_A5_Rectangle_13" id="Shop_Image_A5_Rectangle_13_pattern" x="0" y="0" width="100%" height="100%">
+			<image x="0" y="0" width="100%" height="100%" href="Shop_Image_A5_Rectangle_13_pattern.png" xlink:href="Shop_Image_A5_Rectangle_13_pattern.png"></image>
+		</pattern>
+		<rect fill="url(#Shop_Image_A5_Rectangle_13_pattern)" class="Shop_Image_Class" rx="5" ry="5" x="0" y="0" width="299" height="262">
+		</rect>
+	</svg>
+	<div class="Map_Class">
+		<svg class="Map_A5_Rectangle_14">
+			<pattern elementId="Map_A5_Rectangle_15" id="Map_A5_Rectangle_15_pattern" x="0" y="0" width="100%" height="100%">
+				<image x="0" y="0" width="100%" height="100%" href="Map_A5_Rectangle_15_pattern.png" xlink:href="Map_A5_Rectangle_15_pattern.png"></image>
+			</pattern>
+			<rect fill="url(#Map_A5_Rectangle_15_pattern)" class="Map_A5_Rectangle_14_Class" rx="43" ry="43" x="0" y="0" width="298" height="533">
+			</rect>
+		</svg>
+	</div>
+	<div class="Business_Profile_Class">
+		<span>Business Profile</span>
+	</div>
+	<div class="Tunde_Ghadofi_Store_Class">
+		<span>Tunde Ghadofi Store</span>
+	</div>
+	<div class="SIgn_In_Box_Class">
+		<svg class="Sign_box">
+			<rect fill="rgba(255,147,0,1)" class="Sign_box_Class" rx="5" ry="5" x="0" y="0" width="302" height="61">
+			</rect>
+		</svg>
+		<div class="UPLOAD_IMAGE_Class">
+			<span>UPLOAD IMAGE</span>
+		</div>
+	</div>
+	<div class="Text_Box_Class">
+		<svg class="Phone_Number_Tab">
+			<rect fill="rgba(255,255,255,1)" stroke="rgba(183,183,183,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Phone_Number_Tab_Class" rx="5" ry="5" x="0" y="0" width="593" height="61">
+			</rect>
+		</svg>
+		<div class="Component_112___1_Class">
+			<div class="Shoes_____Watches_____Shirts___Class">
+				<span>Shoes  |  Watches  |  Shirts  |  Hoodies<br/><br/></span><br>
+			</div>
+		</div>
+	</div>
+	<div class="Text_Box_A5_SymbolInstance_11_Class">
+		<svg class="Phone_Number_Tab_A5_Rectangle_18">
+			<rect fill="rgba(255,255,255,1)" stroke="rgba(183,183,183,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Phone_Number_Tab_A5_Rectangle_18_Class" rx="5" ry="5" x="0" y="0" width="593" height="61">
+			</rect>
+		</svg>
+		<div class="Component_112___1_A5_SymbolInstance_12_Class">
+			<div class="_234_806_7894_6789_Class">
+				<span>+234 806 7894 6789</span>
+			</div>
+		</div>
+	</div>
+	<div class="Text_Box_A5_SymbolInstance_13_Class">
+		<svg class="Phone_Number_Tab_A5_Rectangle_19">
+			<rect fill="rgba(255,255,255,1)" stroke="rgba(183,183,183,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Phone_Number_Tab_A5_Rectangle_19_Class" rx="5" ry="5" x="0" y="0" width="593" height="61">
+			</rect>
+		</svg>
+		<div class="Component_112___1_A5_SymbolInstance_14_Class">
+			<div class="_234_806_7894_6789_A5_Text_16_Class">
+				<span>+234 806 7894 6789</span>
+			</div>
+		</div>
+	</div>
+	<div class="Text_Box_A5_SymbolInstance_15_Class">
+		<svg class="Phone_Number_Tab_A5_Rectangle_20">
+			<rect fill="rgba(255,255,255,1)" stroke="rgba(183,183,183,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Phone_Number_Tab_A5_Rectangle_20_Class" rx="5" ry="5" x="0" y="0" width="593" height="61">
+			</rect>
+		</svg>
+		<div class="Component_112___1_A5_SymbolInstance_16_Class">
+			<div class="Fashion_Class">
+				<span>Fashion</span>
+			</div>
+		</div>
+	</div>
+	<div class="Text_Box_A5_SymbolInstance_17_Class">
+		<svg class="Phone_Number_Tab_A5_Rectangle_21">
+			<rect fill="rgba(255,255,255,1)" stroke="rgba(183,183,183,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Phone_Number_Tab_A5_Rectangle_21_Class" rx="5" ry="5" x="0" y="0" width="593" height="61">
+			</rect>
+		</svg>
+		<div class="Component_112___1_A5_SymbolInstance_18_Class">
+			<div class="Payment_on_delivery_Class">
+				<span>Payment on delivery</span>
+			</div>
+		</div>
+	</div>
+	<div class="Text_Box_A5_SymbolInstance_19_Class">
+		<svg class="Phone_Number_Tab_A5_Rectangle_22">
+			<rect fill="rgba(255,255,255,1)" stroke="rgba(183,183,183,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Phone_Number_Tab_A5_Rectangle_22_Class" rx="5" ry="5" x="0" y="0" width="593" height="61">
+			</rect>
+		</svg>
+		<div class="Component_112___1_A5_SymbolInstance_20_Class">
+			<div class="Shop_007__Ikeja_Class">
+				<span>Shop 007, Ikeja</span>
+			</div>
+		</div>
+	</div>
+	<div class="Text_Box_A5_SymbolInstance_21_Class">
+		<svg class="Phone_Number_Tab_A5_Rectangle_23">
+			<rect fill="rgba(255,255,255,1)" stroke="rgba(183,183,183,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Phone_Number_Tab_A5_Rectangle_23_Class" rx="5" ry="5" x="0" y="0" width="593" height="61">
+			</rect>
+		</svg>
+		<div class="Component_112___1_A5_SymbolInstance_22_Class">
+			<div class="www_tundeghadfishop_com_Class">
+				<span>www.tundeghadfishop.com</span>
+			</div>
+		</div>
+	</div>
+	<svg class="Line_A5_Line_2">
+		<path fill="transparent" stroke="rgba(238,238,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Line_A5_Line_2_Class" d="M 3 0 L 0 1049">
+		</path>
+	</svg>
+	<svg class="Business_Detail_Bar">
+		<rect fill="rgba(255,255,255,1)" stroke="rgba(183,183,183,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Business_Detail_Bar_Class" rx="5" ry="5" x="0" y="0" width="1024" height="162">
+		</rect>
+	</svg>
+	<div class="Edit_Icon_A5_SymbolInstance_23_Class">
+		<svg class="Edit_Icon_A5_Path_12" viewBox="5.6 6.9 19.219 19.26">
+			<path fill="rgba(5,5,5,1)" class="Edit_Icon_A5_Path_12_Class" d="M 5.620315551757812 21.3447380065918 L 5.599999904632568 25.30637550354004 C 5.599999904632568 25.52985000610352 5.681263446807861 25.75332832336426 5.843789577484131 25.91585731506348 C 6.0063157081604 26.0783863067627 6.209473609924316 26.15964889526367 6.432948112487793 26.15964889526367 L 10.37421035766602 26.13933372497559 C 10.59768295288086 26.13933372497559 10.80084228515625 26.05806922912598 10.9633674621582 25.89554214477539 L 24.57494735717773 12.28376483917236 C 24.89999771118164 11.95870685577393 24.89999771118164 11.43048858642578 24.57494735717773 11.08511543273926 L 20.67431449890137 7.143795013427734 C 20.34926223754883 6.818737983703613 19.82105255126953 6.818737983703613 19.47568321228027 7.143795013427734 L 16.75336647033691 9.886466979980469 L 5.864105701446533 20.75557327270508 C 5.721895694732666 20.91810035705566 5.620316505432129 21.12126541137695 5.620316505432129 21.34473991394043 Z M 20.08515357971191 8.931611061096191 L 22.82778739929199 11.67428302764893 L 21.28378868103027 13.21830463409424 L 18.54115676879883 10.47563362121582 L 20.08515357971191 8.931610107421875 Z M 7.306525230407715 21.71043014526367 L 17.3425235748291 11.67428302764893 L 20.08515357971191 14.41695404052734 L 10.04915618896484 24.43278312683105 L 7.286208152770996 24.45309829711914 L 7.306525230407715 21.71042633056641 Z">
+			</path>
+		</svg>
+	</div>
+	<div class="Repeat_Grid_7_Class">
+		<div class="Repeat_Grid_7_0_Class">
+			<div class="Edit_Icon_A5_SymbolInstance_24_Class">
+				<svg class="Edit_Icon_A5_Path_13" viewBox="5.6 6.9 19.219 19.26">
+					<path fill="rgba(5,5,5,1)" class="Edit_Icon_A5_Path_13_Class" d="M 5.620315551757812 21.3447380065918 L 5.599999904632568 25.30637550354004 C 5.599999904632568 25.52985000610352 5.681263446807861 25.75332832336426 5.843789577484131 25.91585731506348 C 6.0063157081604 26.0783863067627 6.209473609924316 26.15964889526367 6.432948112487793 26.15964889526367 L 10.37421035766602 26.13933372497559 C 10.59768295288086 26.13933372497559 10.80084228515625 26.05806922912598 10.9633674621582 25.89554214477539 L 24.57494735717773 12.28376483917236 C 24.89999771118164 11.95870685577393 24.89999771118164 11.43048858642578 24.57494735717773 11.08511543273926 L 20.67431449890137 7.143795013427734 C 20.34926223754883 6.818737983703613 19.82105255126953 6.818737983703613 19.47568321228027 7.143795013427734 L 16.75336647033691 9.886466979980469 L 5.864105701446533 20.75557327270508 C 5.721895694732666 20.91810035705566 5.620316505432129 21.12126541137695 5.620316505432129 21.34473991394043 Z M 20.08515357971191 8.931611061096191 L 22.82778739929199 11.67428302764893 L 21.28378868103027 13.21830463409424 L 18.54115676879883 10.47563362121582 L 20.08515357971191 8.931610107421875 Z M 7.306525230407715 21.71043014526367 L 17.3425235748291 11.67428302764893 L 20.08515357971191 14.41695404052734 L 10.04915618896484 24.43278312683105 L 7.286208152770996 24.45309829711914 L 7.306525230407715 21.71042633056641 Z">
+					</path>
+				</svg>
+			</div>
+		</div>
+		<div class="Repeat_Grid_7_1_Class">
+			<div class="Edit_Icon_A5_SymbolInstance_25_Class">
+				<svg class="Edit_Icon_A5_Path_14" viewBox="5.6 6.9 19.219 19.26">
+					<path fill="rgba(5,5,5,1)" class="Edit_Icon_A5_Path_14_Class" d="M 5.620315551757812 21.3447380065918 L 5.599999904632568 25.30637550354004 C 5.599999904632568 25.52985000610352 5.681263446807861 25.75332832336426 5.843789577484131 25.91585731506348 C 6.0063157081604 26.0783863067627 6.209473609924316 26.15964889526367 6.432948112487793 26.15964889526367 L 10.37421035766602 26.13933372497559 C 10.59768295288086 26.13933372497559 10.80084228515625 26.05806922912598 10.9633674621582 25.89554214477539 L 24.57494735717773 12.28376483917236 C 24.89999771118164 11.95870685577393 24.89999771118164 11.43048858642578 24.57494735717773 11.08511543273926 L 20.67431449890137 7.143795013427734 C 20.34926223754883 6.818737983703613 19.82105255126953 6.818737983703613 19.47568321228027 7.143795013427734 L 16.75336647033691 9.886466979980469 L 5.864105701446533 20.75557327270508 C 5.721895694732666 20.91810035705566 5.620316505432129 21.12126541137695 5.620316505432129 21.34473991394043 Z M 20.08515357971191 8.931611061096191 L 22.82778739929199 11.67428302764893 L 21.28378868103027 13.21830463409424 L 18.54115676879883 10.47563362121582 L 20.08515357971191 8.931610107421875 Z M 7.306525230407715 21.71043014526367 L 17.3425235748291 11.67428302764893 L 20.08515357971191 14.41695404052734 L 10.04915618896484 24.43278312683105 L 7.286208152770996 24.45309829711914 L 7.306525230407715 21.71042633056641 Z">
+					</path>
+				</svg>
+			</div>
+		</div>
+		<div class="Repeat_Grid_7_2_Class">
+			<div class="Edit_Icon_A5_SymbolInstance_26_Class">
+				<svg class="Edit_Icon_A5_Path_15" viewBox="5.6 6.9 19.219 19.26">
+					<path fill="rgba(5,5,5,1)" class="Edit_Icon_A5_Path_15_Class" d="M 5.620315551757812 21.3447380065918 L 5.599999904632568 25.30637550354004 C 5.599999904632568 25.52985000610352 5.681263446807861 25.75332832336426 5.843789577484131 25.91585731506348 C 6.0063157081604 26.0783863067627 6.209473609924316 26.15964889526367 6.432948112487793 26.15964889526367 L 10.37421035766602 26.13933372497559 C 10.59768295288086 26.13933372497559 10.80084228515625 26.05806922912598 10.9633674621582 25.89554214477539 L 24.57494735717773 12.28376483917236 C 24.89999771118164 11.95870685577393 24.89999771118164 11.43048858642578 24.57494735717773 11.08511543273926 L 20.67431449890137 7.143795013427734 C 20.34926223754883 6.818737983703613 19.82105255126953 6.818737983703613 19.47568321228027 7.143795013427734 L 16.75336647033691 9.886466979980469 L 5.864105701446533 20.75557327270508 C 5.721895694732666 20.91810035705566 5.620316505432129 21.12126541137695 5.620316505432129 21.34473991394043 Z M 20.08515357971191 8.931611061096191 L 22.82778739929199 11.67428302764893 L 21.28378868103027 13.21830463409424 L 18.54115676879883 10.47563362121582 L 20.08515357971191 8.931610107421875 Z M 7.306525230407715 21.71043014526367 L 17.3425235748291 11.67428302764893 L 20.08515357971191 14.41695404052734 L 10.04915618896484 24.43278312683105 L 7.286208152770996 24.45309829711914 L 7.306525230407715 21.71042633056641 Z">
+					</path>
+				</svg>
+			</div>
+		</div>
+		<div class="Repeat_Grid_7_3_Class">
+			<div class="Edit_Icon_A5_SymbolInstance_27_Class">
+				<svg class="Edit_Icon_A5_Path_16" viewBox="5.6 6.9 19.219 19.26">
+					<path fill="rgba(5,5,5,1)" class="Edit_Icon_A5_Path_16_Class" d="M 5.620315551757812 21.3447380065918 L 5.599999904632568 25.30637550354004 C 5.599999904632568 25.52985000610352 5.681263446807861 25.75332832336426 5.843789577484131 25.91585731506348 C 6.0063157081604 26.0783863067627 6.209473609924316 26.15964889526367 6.432948112487793 26.15964889526367 L 10.37421035766602 26.13933372497559 C 10.59768295288086 26.13933372497559 10.80084228515625 26.05806922912598 10.9633674621582 25.89554214477539 L 24.57494735717773 12.28376483917236 C 24.89999771118164 11.95870685577393 24.89999771118164 11.43048858642578 24.57494735717773 11.08511543273926 L 20.67431449890137 7.143795013427734 C 20.34926223754883 6.818737983703613 19.82105255126953 6.818737983703613 19.47568321228027 7.143795013427734 L 16.75336647033691 9.886466979980469 L 5.864105701446533 20.75557327270508 C 5.721895694732666 20.91810035705566 5.620316505432129 21.12126541137695 5.620316505432129 21.34473991394043 Z M 20.08515357971191 8.931611061096191 L 22.82778739929199 11.67428302764893 L 21.28378868103027 13.21830463409424 L 18.54115676879883 10.47563362121582 L 20.08515357971191 8.931610107421875 Z M 7.306525230407715 21.71043014526367 L 17.3425235748291 11.67428302764893 L 20.08515357971191 14.41695404052734 L 10.04915618896484 24.43278312683105 L 7.286208152770996 24.45309829711914 L 7.306525230407715 21.71042633056641 Z">
+					</path>
+				</svg>
+			</div>
+		</div>
+		<div class="Repeat_Grid_7_4_Class">
+			<div class="Edit_Icon_A5_SymbolInstance_28_Class">
+				<svg class="Edit_Icon_A5_Path_17" viewBox="5.6 6.9 19.219 19.26">
+					<path fill="rgba(5,5,5,1)" class="Edit_Icon_A5_Path_17_Class" d="M 5.620315551757812 21.3447380065918 L 5.599999904632568 25.30637550354004 C 5.599999904632568 25.52985000610352 5.681263446807861 25.75332832336426 5.843789577484131 25.91585731506348 C 6.0063157081604 26.0783863067627 6.209473609924316 26.15964889526367 6.432948112487793 26.15964889526367 L 10.37421035766602 26.13933372497559 C 10.59768295288086 26.13933372497559 10.80084228515625 26.05806922912598 10.9633674621582 25.89554214477539 L 24.57494735717773 12.28376483917236 C 24.89999771118164 11.95870685577393 24.89999771118164 11.43048858642578 24.57494735717773 11.08511543273926 L 20.67431449890137 7.143795013427734 C 20.34926223754883 6.818737983703613 19.82105255126953 6.818737983703613 19.47568321228027 7.143795013427734 L 16.75336647033691 9.886466979980469 L 5.864105701446533 20.75557327270508 C 5.721895694732666 20.91810035705566 5.620316505432129 21.12126541137695 5.620316505432129 21.34473991394043 Z M 20.08515357971191 8.931611061096191 L 22.82778739929199 11.67428302764893 L 21.28378868103027 13.21830463409424 L 18.54115676879883 10.47563362121582 L 20.08515357971191 8.931610107421875 Z M 7.306525230407715 21.71043014526367 L 17.3425235748291 11.67428302764893 L 20.08515357971191 14.41695404052734 L 10.04915618896484 24.43278312683105 L 7.286208152770996 24.45309829711914 L 7.306525230407715 21.71042633056641 Z">
+					</path>
+				</svg>
+			</div>
+		</div>
+		<div class="Repeat_Grid_7_5_Class">
+			<div class="Edit_Icon_A5_SymbolInstance_29_Class">
+				<svg class="Edit_Icon_A5_Path_18" viewBox="5.6 6.9 19.219 19.26">
+					<path fill="rgba(5,5,5,1)" class="Edit_Icon_A5_Path_18_Class" d="M 5.620315551757812 21.3447380065918 L 5.599999904632568 25.30637550354004 C 5.599999904632568 25.52985000610352 5.681263446807861 25.75332832336426 5.843789577484131 25.91585731506348 C 6.0063157081604 26.0783863067627 6.209473609924316 26.15964889526367 6.432948112487793 26.15964889526367 L 10.37421035766602 26.13933372497559 C 10.59768295288086 26.13933372497559 10.80084228515625 26.05806922912598 10.9633674621582 25.89554214477539 L 24.57494735717773 12.28376483917236 C 24.89999771118164 11.95870685577393 24.89999771118164 11.43048858642578 24.57494735717773 11.08511543273926 L 20.67431449890137 7.143795013427734 C 20.34926223754883 6.818737983703613 19.82105255126953 6.818737983703613 19.47568321228027 7.143795013427734 L 16.75336647033691 9.886466979980469 L 5.864105701446533 20.75557327270508 C 5.721895694732666 20.91810035705566 5.620316505432129 21.12126541137695 5.620316505432129 21.34473991394043 Z M 20.08515357971191 8.931611061096191 L 22.82778739929199 11.67428302764893 L 21.28378868103027 13.21830463409424 L 18.54115676879883 10.47563362121582 L 20.08515357971191 8.931610107421875 Z M 7.306525230407715 21.71043014526367 L 17.3425235748291 11.67428302764893 L 20.08515357971191 14.41695404052734 L 10.04915618896484 24.43278312683105 L 7.286208152770996 24.45309829711914 L 7.306525230407715 21.71042633056641 Z">
+					</path>
+				</svg>
+			</div>
+		</div>
+		<div class="Repeat_Grid_7_6_Class">
+			<div class="Edit_Icon_A5_SymbolInstance_30_Class">
+				<svg class="Edit_Icon_A5_Path_19" viewBox="5.6 6.9 19.219 19.26">
+					<path fill="rgba(5,5,5,1)" class="Edit_Icon_A5_Path_19_Class" d="M 5.620315551757812 21.3447380065918 L 5.599999904632568 25.30637550354004 C 5.599999904632568 25.52985000610352 5.681263446807861 25.75332832336426 5.843789577484131 25.91585731506348 C 6.0063157081604 26.0783863067627 6.209473609924316 26.15964889526367 6.432948112487793 26.15964889526367 L 10.37421035766602 26.13933372497559 C 10.59768295288086 26.13933372497559 10.80084228515625 26.05806922912598 10.9633674621582 25.89554214477539 L 24.57494735717773 12.28376483917236 C 24.89999771118164 11.95870685577393 24.89999771118164 11.43048858642578 24.57494735717773 11.08511543273926 L 20.67431449890137 7.143795013427734 C 20.34926223754883 6.818737983703613 19.82105255126953 6.818737983703613 19.47568321228027 7.143795013427734 L 16.75336647033691 9.886466979980469 L 5.864105701446533 20.75557327270508 C 5.721895694732666 20.91810035705566 5.620316505432129 21.12126541137695 5.620316505432129 21.34473991394043 Z M 20.08515357971191 8.931611061096191 L 22.82778739929199 11.67428302764893 L 21.28378868103027 13.21830463409424 L 18.54115676879883 10.47563362121582 L 20.08515357971191 8.931610107421875 Z M 7.306525230407715 21.71043014526367 L 17.3425235748291 11.67428302764893 L 20.08515357971191 14.41695404052734 L 10.04915618896484 24.43278312683105 L 7.286208152770996 24.45309829711914 L 7.306525230407715 21.71042633056641 Z">
+					</path>
+				</svg>
+			</div>
+		</div>
+	</div>
+	<div class="Edit_Icon_A5_SymbolInstance_31_Class">
+		<svg class="Edit_Icon_A5_Path_20" viewBox="5.6 6.9 19.219 19.26">
+			<path fill="rgba(5,5,5,1)" class="Edit_Icon_A5_Path_20_Class" d="M 5.620315551757812 21.3447380065918 L 5.599999904632568 25.30637550354004 C 5.599999904632568 25.52985000610352 5.681263446807861 25.75332832336426 5.843789577484131 25.91585731506348 C 6.0063157081604 26.0783863067627 6.209473609924316 26.15964889526367 6.432948112487793 26.15964889526367 L 10.37421035766602 26.13933372497559 C 10.59768295288086 26.13933372497559 10.80084228515625 26.05806922912598 10.9633674621582 25.89554214477539 L 24.57494735717773 12.28376483917236 C 24.89999771118164 11.95870685577393 24.89999771118164 11.43048858642578 24.57494735717773 11.08511543273926 L 20.67431449890137 7.143795013427734 C 20.34926223754883 6.818737983703613 19.82105255126953 6.818737983703613 19.47568321228027 7.143795013427734 L 16.75336647033691 9.886466979980469 L 5.864105701446533 20.75557327270508 C 5.721895694732666 20.91810035705566 5.620316505432129 21.12126541137695 5.620316505432129 21.34473991394043 Z M 20.08515357971191 8.931611061096191 L 22.82778739929199 11.67428302764893 L 21.28378868103027 13.21830463409424 L 18.54115676879883 10.47563362121582 L 20.08515357971191 8.931610107421875 Z M 7.306525230407715 21.71043014526367 L 17.3425235748291 11.67428302764893 L 20.08515357971191 14.41695404052734 L 10.04915618896484 24.43278312683105 L 7.286208152770996 24.45309829711914 L 7.306525230407715 21.71042633056641 Z">
+			</path>
+		</svg>
+	</div>
+	<div class="Business_Details_Class">
+		<span>Business Details</span>
+	</div>
+	<div class="Working_Hours_Class">
+		<span>Working Hours</span>
+	</div>
+	<div class="Lorem_ipsum_dolor_sit_amet__co_Class">
+		<span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse </span>
+	</div>
+	<div class="Component_99___3_Class">
+		<div class="Repeat_Grid_1_Class">
+			<div class="Repeat_Grid_1_0_Class">
+				<div class="Text_Box_A5_SymbolInstance_33_Class">
+					<svg class="Phone_Number_Tab_A5_Rectangle_25">
+						<rect fill="rgba(255,255,255,1)" stroke="rgba(183,183,183,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Phone_Number_Tab_A5_Rectangle_25_Class" rx="5" ry="5" x="0" y="0" width="285" height="61">
+						</rect>
+					</svg>
+					<div class="Component_112___1_A5_SymbolInstance_34_Class">
+						<div class="ID9_00am_Class">
+							<span>9:00am</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="Repeat_Grid_1_1_Class">
+				<div class="Text_Box_A5_SymbolInstance_35_Class">
+					<svg class="Phone_Number_Tab_A5_Rectangle_26">
+						<rect fill="rgba(255,255,255,1)" stroke="rgba(183,183,183,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" class="Phone_Number_Tab_A5_Rectangle_26_Class" rx="5" ry="5" x="0" y="0" width="285" height="61">
+						</rect>
+					</svg>
+					<div class="Component_112___1_A5_SymbolInstance_36_Class">
+						<div class="ID6_00pm_Class">
+							<span>6:00pm</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="Products__Phone_Number__WhatsA_Class">
+		<span>Products<br/><br/>Phone Number<br/><br/>WhatsApp Number<br/><br/>Categories<br/><br/>Payment Method<br/><br/>Address<br/><br/>Website</span>
+	</div>
+	<div class="Gallery_Class">
+		<span>Gallery</span>
+	</div>
+	<div class="Repeat_Grid_8_Class">
+		<div class="Repeat_Grid_8_0_Class">
+			<div class="Component_106___1_Class">
+				<svg class="Shop_Image_A5_Rectangle_27">
+					<pattern elementId="Shop_Image_A5_Rectangle_28" id="Shop_Image_A5_Rectangle_28_pattern" x="0" y="0" width="100%" height="100%">
+						<image x="0" y="0" width="100%" height="100%" href="Shop_Image_A5_Rectangle_28_pattern.png" xlink:href="Shop_Image_A5_Rectangle_28_pattern.png"></image>
+					</pattern>
+					<rect fill="url(#Shop_Image_A5_Rectangle_28_pattern)" class="Shop_Image_A5_Rectangle_27_Class" rx="5" ry="5" x="0" y="0" width="316.621" height="287.563">
+					</rect>
+				</svg>
+				<div class="Delete_Icon_Class">
+					<svg class="Search_Bar">
+						<rect fill="rgba(255,147,0,1)" class="Search_Bar_Class" rx="5" ry="5" x="0" y="0" width="23.729" height="24.534">
+						</rect>
+					</svg>
+					<svg class="Path_37" viewBox="0 0 14.903 14.903">
+						<path fill="rgba(255,255,255,1)" class="Path_37_Class" d="M 14.37156677246094 5.323317050933838 L 9.581011772155762 5.323317050933838 L 9.581011772155762 0.532784640789032 C 9.581011772155762 0.2378790527582169 9.343193054199219 0 9.048272132873535 0 L 5.855349063873291 0 C 5.561142921447754 0 5.322556972503662 0.2378790527582169 5.322556972503662 0.532784640789032 L 5.322556972503662 5.323317050933838 L 0.532761812210083 5.323317050933838 C 0.237871453166008 5.323317050933838 0 5.56112003326416 0 5.85456657409668 L 0 9.048279762268066 C 0 9.342455863952637 0.237871453166008 9.581019401550293 0.532761812210083 9.581019401550293 L 5.322556972503662 9.581019401550293 L 5.322556972503662 14.37077617645264 C 5.322556972503662 14.66498279571533 5.561150550842285 14.90286159515381 5.855356693267822 14.90286159515381 L 9.048279762268066 14.90286159515381 C 9.34320068359375 14.90286159515381 9.581011772155762 14.66498279571533 9.581011772155762 14.37077617645264 L 9.581011772155762 9.581019401550293 L 14.37156677246094 9.581019401550293 C 14.66501331329346 9.581019401550293 14.90285396575928 9.342455863952637 14.90285396575928 9.048279762268066 L 14.90285396575928 5.85456657409668 C 14.90285396575928 5.56112003326416 14.66501331329346 5.323317050933838 14.37156677246094 5.323317050933838 Z">
+						</path>
+					</svg>
+				</div>
+			</div>
+		</div>
+		<div class="Repeat_Grid_8_1_Class">
+			<div class="Component_106___1_A5_SymbolInstance_38_Class">
+				<svg class="Shop_Image_A5_Rectangle_30">
+					<pattern elementId="Shop_Image_A5_Rectangle_31" id="Shop_Image_A5_Rectangle_31_pattern" x="0" y="0" width="100%" height="100%">
+						<image x="0" y="0" width="100%" height="100%" href="Shop_Image_A5_Rectangle_31_pattern.png" xlink:href="Shop_Image_A5_Rectangle_31_pattern.png"></image>
+					</pattern>
+					<rect fill="url(#Shop_Image_A5_Rectangle_31_pattern)" class="Shop_Image_A5_Rectangle_30_Class" rx="5" ry="5" x="0" y="0" width="316.621" height="287.563">
+					</rect>
+				</svg>
+				<div class="Delete_Icon_A5_Group_17_Class">
+					<svg class="Search_Bar_A5_Rectangle_32">
+						<rect fill="rgba(255,147,0,1)" class="Search_Bar_A5_Rectangle_32_Class" rx="5" ry="5" x="0" y="0" width="23.729" height="24.534">
+						</rect>
+					</svg>
+					<svg class="Path_37_A5_Path_22" viewBox="0 0 14.903 14.903">
+						<path fill="rgba(255,255,255,1)" class="Path_37_A5_Path_22_Class" d="M 14.37156677246094 5.323317050933838 L 9.581011772155762 5.323317050933838 L 9.581011772155762 0.532784640789032 C 9.581011772155762 0.2378790527582169 9.343193054199219 0 9.048272132873535 0 L 5.855349063873291 0 C 5.561142921447754 0 5.322556972503662 0.2378790527582169 5.322556972503662 0.532784640789032 L 5.322556972503662 5.323317050933838 L 0.532761812210083 5.323317050933838 C 0.237871453166008 5.323317050933838 0 5.56112003326416 0 5.85456657409668 L 0 9.048279762268066 C 0 9.342455863952637 0.237871453166008 9.581019401550293 0.532761812210083 9.581019401550293 L 5.322556972503662 9.581019401550293 L 5.322556972503662 14.37077617645264 C 5.322556972503662 14.66498279571533 5.561150550842285 14.90286159515381 5.855356693267822 14.90286159515381 L 9.048279762268066 14.90286159515381 C 9.34320068359375 14.90286159515381 9.581011772155762 14.66498279571533 9.581011772155762 14.37077617645264 L 9.581011772155762 9.581019401550293 L 14.37156677246094 9.581019401550293 C 14.66501331329346 9.581019401550293 14.90285396575928 9.342455863952637 14.90285396575928 9.048279762268066 L 14.90285396575928 5.85456657409668 C 14.90285396575928 5.56112003326416 14.66501331329346 5.323317050933838 14.37156677246094 5.323317050933838 Z">
+						</path>
+					</svg>
+				</div>
+			</div>
+		</div>
+		<div class="Repeat_Grid_8_2_Class">
+			<div class="Component_106___1_A5_SymbolInstance_39_Class">
+				<svg class="Shop_Image_A5_Rectangle_33">
+					<pattern elementId="Shop_Image_A5_Rectangle_34" id="Shop_Image_A5_Rectangle_34_pattern" x="0" y="0" width="100%" height="100%">
+						<image x="0" y="0" width="100%" height="100%" href="Shop_Image_A5_Rectangle_34_pattern.png" xlink:href="Shop_Image_A5_Rectangle_34_pattern.png"></image>
+					</pattern>
+					<rect fill="url(#Shop_Image_A5_Rectangle_34_pattern)" class="Shop_Image_A5_Rectangle_33_Class" rx="5" ry="5" x="0" y="0" width="316.621" height="287.563">
+					</rect>
+				</svg>
+				<div class="Delete_Icon_A5_Group_19_Class">
+					<svg class="Search_Bar_A5_Rectangle_35">
+						<rect fill="rgba(255,147,0,1)" class="Search_Bar_A5_Rectangle_35_Class" rx="5" ry="5" x="0" y="0" width="23.729" height="24.534">
+						</rect>
+					</svg>
+					<svg class="Path_37_A5_Path_23" viewBox="0 0 14.903 14.903">
+						<path fill="rgba(255,255,255,1)" class="Path_37_A5_Path_23_Class" d="M 14.37156677246094 5.323317050933838 L 9.581011772155762 5.323317050933838 L 9.581011772155762 0.532784640789032 C 9.581011772155762 0.2378790527582169 9.343193054199219 0 9.048272132873535 0 L 5.855349063873291 0 C 5.561142921447754 0 5.322556972503662 0.2378790527582169 5.322556972503662 0.532784640789032 L 5.322556972503662 5.323317050933838 L 0.532761812210083 5.323317050933838 C 0.237871453166008 5.323317050933838 0 5.56112003326416 0 5.85456657409668 L 0 9.048279762268066 C 0 9.342455863952637 0.237871453166008 9.581019401550293 0.532761812210083 9.581019401550293 L 5.322556972503662 9.581019401550293 L 5.322556972503662 14.37077617645264 C 5.322556972503662 14.66498279571533 5.561150550842285 14.90286159515381 5.855356693267822 14.90286159515381 L 9.048279762268066 14.90286159515381 C 9.34320068359375 14.90286159515381 9.581011772155762 14.66498279571533 9.581011772155762 14.37077617645264 L 9.581011772155762 9.581019401550293 L 14.37156677246094 9.581019401550293 C 14.66501331329346 9.581019401550293 14.90285396575928 9.342455863952637 14.90285396575928 9.048279762268066 L 14.90285396575928 5.85456657409668 C 14.90285396575928 5.56112003326416 14.66501331329346 5.323317050933838 14.37156677246094 5.323317050933838 Z">
+						</path>
+					</svg>
+				</div>
+			</div>
+		</div>
+		<div class="Repeat_Grid_8_3_Class">
+			<div class="Component_106___1_A5_SymbolInstance_40_Class">
+				<svg class="Shop_Image_A5_Rectangle_36">
+					<pattern elementId="Shop_Image_A5_Rectangle_37" id="Shop_Image_A5_Rectangle_37_pattern" x="0" y="0" width="100%" height="100%">
+						<image x="0" y="0" width="100%" height="100%" href="Shop_Image_A5_Rectangle_37_pattern.png" xlink:href="Shop_Image_A5_Rectangle_37_pattern.png"></image>
+					</pattern>
+					<rect fill="url(#Shop_Image_A5_Rectangle_37_pattern)" class="Shop_Image_A5_Rectangle_36_Class" rx="5" ry="5" x="0" y="0" width="316.621" height="287.563">
+					</rect>
+				</svg>
+				<div class="Delete_Icon_A5_Group_21_Class">
+					<svg class="Search_Bar_A5_Rectangle_38">
+						<rect fill="rgba(255,147,0,1)" class="Search_Bar_A5_Rectangle_38_Class" rx="5" ry="5" x="0" y="0" width="23.729" height="24.534">
+						</rect>
+					</svg>
+					<svg class="Path_37_A5_Path_24" viewBox="0 0 14.903 14.903">
+						<path fill="rgba(255,255,255,1)" class="Path_37_A5_Path_24_Class" d="M 14.37156677246094 5.323317050933838 L 9.581011772155762 5.323317050933838 L 9.581011772155762 0.532784640789032 C 9.581011772155762 0.2378790527582169 9.343193054199219 0 9.048272132873535 0 L 5.855349063873291 0 C 5.561142921447754 0 5.322556972503662 0.2378790527582169 5.322556972503662 0.532784640789032 L 5.322556972503662 5.323317050933838 L 0.532761812210083 5.323317050933838 C 0.237871453166008 5.323317050933838 0 5.56112003326416 0 5.85456657409668 L 0 9.048279762268066 C 0 9.342455863952637 0.237871453166008 9.581019401550293 0.532761812210083 9.581019401550293 L 5.322556972503662 9.581019401550293 L 5.322556972503662 14.37077617645264 C 5.322556972503662 14.66498279571533 5.561150550842285 14.90286159515381 5.855356693267822 14.90286159515381 L 9.048279762268066 14.90286159515381 C 9.34320068359375 14.90286159515381 9.581011772155762 14.66498279571533 9.581011772155762 14.37077617645264 L 9.581011772155762 9.581019401550293 L 14.37156677246094 9.581019401550293 C 14.66501331329346 9.581019401550293 14.90285396575928 9.342455863952637 14.90285396575928 9.048279762268066 L 14.90285396575928 5.85456657409668 C 14.90285396575928 5.56112003326416 14.66501331329346 5.323317050933838 14.37156677246094 5.323317050933838 Z">
+						</path>
+					</svg>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="SIgn_In_Box_A5_SymbolInstance_41_Class">
+		<svg class="Sign_box_A5_Rectangle_39">
+			<rect fill="rgba(255,147,0,1)" class="Sign_box_A5_Rectangle_39_Class" rx="5" ry="5" x="0" y="0" width="247" height="61">
+			</rect>
+		</svg>
+		<div class="Save___UPLOAD_Class">
+			<span>Save & UPLOAD</span>
+		</div>
+	</div>
+	<div class="Repeat_Grid_9_Class">
+		<div class="Repeat_Grid_9_0_Class">
+			<div class="Component_107___1_Class">
+				<svg class="Add_Image_box">
+					<rect fill="rgba(228,228,228,1)" class="Add_Image_box_Class" rx="5" ry="5" x="0" y="0" width="317" height="288">
+					</rect>
+				</svg>
+				<svg class="Addition_Icon" viewBox="0 0 84.435 84.435">
+					<path fill="rgba(255,255,255,1)" class="Addition_Icon_Class" d="M 81.42514038085938 30.16037559509277 L 54.28324127197266 30.16037559509277 L 54.28324127197266 3.018603801727295 C 54.28324127197266 1.347754001617432 52.93582916259766 0 51.264892578125 0 L 33.17471694946289 0 C 31.50782775878906 0 30.15606880187988 1.347754001617432 30.15606880187988 3.018603801727295 L 30.15606880187988 30.16037559509277 L 3.018474340438843 30.16037559509277 C 1.347710847854614 30.16037559509277 0 31.50769805908203 0 33.17028045654297 L 0 51.26493835449219 C 0 52.93165588378906 1.347710847854614 54.28328704833984 3.018474340438843 54.28328704833984 L 30.15606880187988 54.28328704833984 L 30.15606880187988 81.42066192626953 C 30.15606880187988 83.08755493164062 31.50787162780762 84.435302734375 33.17475891113281 84.435302734375 L 51.26493835449219 84.435302734375 C 52.93587493896484 84.435302734375 54.28324127197266 83.08755493164062 54.28324127197266 81.42066192626953 L 54.28324127197266 54.28328704833984 L 81.42514038085938 54.28328704833984 C 83.08772277832031 54.28328704833984 84.43526458740234 52.93165588378906 84.43526458740234 51.26493835449219 L 84.43526458740234 33.17028045654297 C 84.43526458740234 31.50769805908203 83.08772277832031 30.16037559509277 81.42514038085938 30.16037559509277 Z">
+					</path>
+				</svg>
+				<div class="Add_Image_Class">
+					<span>Add Image</span>
+				</div>
+			</div>
+		</div>
+		<div class="Repeat_Grid_9_1_Class">
+			<div class="Component_107___1_A5_SymbolInstance_43_Class">
+				<svg class="Add_Image_box_A5_Rectangle_41">
+					<rect fill="rgba(228,228,228,1)" class="Add_Image_box_A5_Rectangle_41_Class" rx="5" ry="5" x="0" y="0" width="317" height="288">
+					</rect>
+				</svg>
+				<svg class="Addition_Icon_A5_Path_26" viewBox="0 0 84.435 84.435">
+					<path fill="rgba(255,255,255,1)" class="Addition_Icon_A5_Path_26_Class" d="M 81.42514038085938 30.16037559509277 L 54.28324127197266 30.16037559509277 L 54.28324127197266 3.018603801727295 C 54.28324127197266 1.347754001617432 52.93582916259766 0 51.264892578125 0 L 33.17471694946289 0 C 31.50782775878906 0 30.15606880187988 1.347754001617432 30.15606880187988 3.018603801727295 L 30.15606880187988 30.16037559509277 L 3.018474340438843 30.16037559509277 C 1.347710847854614 30.16037559509277 0 31.50769805908203 0 33.17028045654297 L 0 51.26493835449219 C 0 52.93165588378906 1.347710847854614 54.28328704833984 3.018474340438843 54.28328704833984 L 30.15606880187988 54.28328704833984 L 30.15606880187988 81.42066192626953 C 30.15606880187988 83.08755493164062 31.50787162780762 84.435302734375 33.17475891113281 84.435302734375 L 51.26493835449219 84.435302734375 C 52.93587493896484 84.435302734375 54.28324127197266 83.08755493164062 54.28324127197266 81.42066192626953 L 54.28324127197266 54.28328704833984 L 81.42514038085938 54.28328704833984 C 83.08772277832031 54.28328704833984 84.43526458740234 52.93165588378906 84.43526458740234 51.26493835449219 L 84.43526458740234 33.17028045654297 C 84.43526458740234 31.50769805908203 83.08772277832031 30.16037559509277 81.42514038085938 30.16037559509277 Z">
+					</path>
+				</svg>
+				<div class="Add_Image_A5_Text_30_Class">
+					<span>Add Image</span>
+				</div>
+			</div>
+		</div>
+		<div class="Repeat_Grid_9_2_Class">
+			<div class="Component_107___1_A5_SymbolInstance_44_Class">
+				<svg class="Add_Image_box_A5_Rectangle_42">
+					<rect fill="rgba(228,228,228,1)" class="Add_Image_box_A5_Rectangle_42_Class" rx="5" ry="5" x="0" y="0" width="317" height="288">
+					</rect>
+				</svg>
+				<svg class="Addition_Icon_A5_Path_27" viewBox="0 0 84.435 84.435">
+					<path fill="rgba(255,255,255,1)" class="Addition_Icon_A5_Path_27_Class" d="M 81.42514038085938 30.16037559509277 L 54.28324127197266 30.16037559509277 L 54.28324127197266 3.018603801727295 C 54.28324127197266 1.347754001617432 52.93582916259766 0 51.264892578125 0 L 33.17471694946289 0 C 31.50782775878906 0 30.15606880187988 1.347754001617432 30.15606880187988 3.018603801727295 L 30.15606880187988 30.16037559509277 L 3.018474340438843 30.16037559509277 C 1.347710847854614 30.16037559509277 0 31.50769805908203 0 33.17028045654297 L 0 51.26493835449219 C 0 52.93165588378906 1.347710847854614 54.28328704833984 3.018474340438843 54.28328704833984 L 30.15606880187988 54.28328704833984 L 30.15606880187988 81.42066192626953 C 30.15606880187988 83.08755493164062 31.50787162780762 84.435302734375 33.17475891113281 84.435302734375 L 51.26493835449219 84.435302734375 C 52.93587493896484 84.435302734375 54.28324127197266 83.08755493164062 54.28324127197266 81.42066192626953 L 54.28324127197266 54.28328704833984 L 81.42514038085938 54.28328704833984 C 83.08772277832031 54.28328704833984 84.43526458740234 52.93165588378906 84.43526458740234 51.26493835449219 L 84.43526458740234 33.17028045654297 C 84.43526458740234 31.50769805908203 83.08772277832031 30.16037559509277 81.42514038085938 30.16037559509277 Z">
+					</path>
+				</svg>
+				<div class="Add_Image_A5_Text_31_Class">
+					<span>Add Image</span>
+				</div>
+			</div>
+		</div>
+		<div class="Repeat_Grid_9_3_Class">
+			<div class="Component_107___1_A5_SymbolInstance_45_Class">
+				<svg class="Add_Image_box_A5_Rectangle_43">
+					<rect fill="rgba(228,228,228,1)" class="Add_Image_box_A5_Rectangle_43_Class" rx="5" ry="5" x="0" y="0" width="317" height="288">
+					</rect>
+				</svg>
+				<svg class="Addition_Icon_A5_Path_28" viewBox="0 0 84.435 84.435">
+					<path fill="rgba(255,255,255,1)" class="Addition_Icon_A5_Path_28_Class" d="M 81.42514038085938 30.16037559509277 L 54.28324127197266 30.16037559509277 L 54.28324127197266 3.018603801727295 C 54.28324127197266 1.347754001617432 52.93582916259766 0 51.264892578125 0 L 33.17471694946289 0 C 31.50782775878906 0 30.15606880187988 1.347754001617432 30.15606880187988 3.018603801727295 L 30.15606880187988 30.16037559509277 L 3.018474340438843 30.16037559509277 C 1.347710847854614 30.16037559509277 0 31.50769805908203 0 33.17028045654297 L 0 51.26493835449219 C 0 52.93165588378906 1.347710847854614 54.28328704833984 3.018474340438843 54.28328704833984 L 30.15606880187988 54.28328704833984 L 30.15606880187988 81.42066192626953 C 30.15606880187988 83.08755493164062 31.50787162780762 84.435302734375 33.17475891113281 84.435302734375 L 51.26493835449219 84.435302734375 C 52.93587493896484 84.435302734375 54.28324127197266 83.08755493164062 54.28324127197266 81.42066192626953 L 54.28324127197266 54.28328704833984 L 81.42514038085938 54.28328704833984 C 83.08772277832031 54.28328704833984 84.43526458740234 52.93165588378906 84.43526458740234 51.26493835449219 L 84.43526458740234 33.17028045654297 C 84.43526458740234 31.50769805908203 83.08772277832031 30.16037559509277 81.42514038085938 30.16037559509277 Z">
+					</path>
+				</svg>
+				<div class="Add_Image_A5_Text_32_Class">
+					<span>Add Image</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

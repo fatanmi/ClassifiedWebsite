@@ -1,1 +1,377 @@
-<p>business-profile works!</p>
+<div class="container-fluid">
+    <div class="row topBg site-blocks-cover site-blocks-coverx inner-page-cover overlay Market_BG" data-aos="fade" data-stellar-background-ratio="0.5">
+        <div class="col">
+            <div class="row topBg-inner">
+                <div class="col-md-2 logo">
+                    <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
+                </div>
+                <div class="col-md-6 Mlinks">
+                    <ul  class="topGMenu">
+                        <li><a href="#">Tailoring</a> |</li>
+                        <li><a href="#">Fashion</a> |</li>
+                        <li><a href="#">AutoMobile</a> |</li>
+                        <li><a href="#">Computing</a> |</li>
+                        <li><a href="#">Manufacturing</a> |</li>
+                        <li><a href="#">Food</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 rightLinks">
+                    <h5 class="orangeText boldText">My Business Proflie </h5>
+                </div>
+                <div class="col-md-2 rightProfile">
+                    <div class="profLeft">
+                        <h5 class="orangeText boldText">Hi Ronke !</h5>
+                        <h6 (click)="logOut()" class="whiteText text-align-left cursor-pointer">Log Out</h6>
+                    </div>
+                    <div class="profRight">
+                        <img src="assets/classyads/images/Profile_A5_Ellipse_2_pattern.png" alt="" srcset="">
+                    </div>
+                </div>
+            </div>
+            <div class="row search-params" >
+                <div class="col-md-12" data-aos="fade-up" data-aos-delay="400">
+                    <div class="row justify-content-center mt-5">
+                        <div class="col-md-8 col-sm-12 text-center">
+                            <h1 class="text-white">Buy or sell anything you want to.</h1>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="form-search-wrap" data-aos="fade-up" data-aos-delay="200">
+                        <form method="post">
+                            <div class="row align-items-center">
+                                <div class="col-lg-12 mb-4 mb-xl-0 col-xl-4">
+                                    <input type="text" class="form-control rounded" placeholder="What are you looking for?">
+                                </div>
+                                <div class="col-lg-12 mb-4 mb-xl-0 col-xl-3">
+                                    <div class="select-wrap">
+                                        <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
+                                        <select [(ngModel)]="selectedMarket" (ngModelChange)="selectMarketHandler($event,market.marketName)" class="form-control rounded" name="market" #market>
+                                            <option value="" >All Markets</option>
+                                            <option *ngFor="let market of markets" [ngValue]="market"> {{market.marketName}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mb-4 mb-xl-0 col-xl-3">
+                                    <div class="select-wrap">
+                                        <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
+                                        <select [(ngModel)]="selectedCategory" (ngModelChange)="selectCategoryHandler($event)" class="form-control rounded" #category name="category" id="category">
+                                            <option value="">All Categories</option>
+                                            <option *ngFor="let category of categories" [ngValue]="category"> {{category.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-xl-2 ml-auto text-right">
+                                    <input type="submit" class="btn btn-primary btn-block rounded" value="Search">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pageContentx">
+        <div class="row bizDetails">
+            <div class="col-md-8 groupImgDet">
+                <div class="row">
+                    <div class="col-md-4 groupImgeBtn elevate-50">
+                        <img class="leftBoxImg" src="../assets/classyads/images/Shop_Image_A5_Rectangle_13_pattern.png" />
+                    </div> 
+                    <div class="col-md-8 bizdetails-text">
+                        <div class="ver-badge">
+                            <h1 class="pgTitle orangeText">
+                                {{businessDetails.businessName}}
+                            </h1>
+                            <img src="assets/classyads/images/Verification Icon.png" alt="verification-badge" srcset="">
+                        </div>
+                        
+                        <h5>
+                            {{businessDetails.address}}
+                        </h5>
+                        <h5>
+                            {{businessDetails.market + ', ' + businessDetails.state }}
+                        </h5>
+                        <h6>
+                            +234 903 4567 9888
+                        </h6>
+                        <div class="row">
+                            <a href="tel:+23490345679888" class="col-md-2"><img src="assets/classyads/images/call-icon.jpg" class="square-width" alt="call-icon"></a>
+                            <a href="" class="col-md-2"><img src="assets/classyads/images/whatsapp.png" class="square-width" alt="call-icon"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 agm-vert elevate-50 ">
+                <agm-map [latitude]="lat" [longitude]="lng">
+                    <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+                </agm-map>
+            </div>
+        </div>
+        <div class="row contentGroup">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link tab-bg tabLinks active" id="biz-tab" data-toggle="tab" href="#biz" role="tab" aria-controls="home" aria-selected="true">Business Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link tab-bg tabLinks" id="gallery-tab" data-toggle="tab" href="#gallery" role="tab" aria-controls="profile" aria-selected="false">Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link tab-bg tabLinks" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="contact" aria-selected="false">Review</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link tabLinks" id="write-review-tab" data-toggle="tab" href="#write-review" role="tab" aria-controls="contact" aria-selected="false">Write a Review</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane blue-tab fade show active" id="biz" role="tabpanel" aria-labelledby="biz-tab">
+                        <div class="row bizdetail-block">
+                            <div class="col-md-5 detail-info">
+                                <div>
+                                    <h3>General Info</h3>
+                                    <p>
+                                        {{businessDetails.description}}
+                                    </p>
+                                </div>
+                                <div class="work-time">
+                                     <h3>Working Hours</h3>
+                                     <p>{{businessDetails.openingHour}} - {{businessDetails.openingHour}}</p>
+                                </div>
+                               
+                            </div>    
+                            <div class="col-md-7 details-list">
+                               <div class="ind-details">
+                                   <div class="col-md-5">
+                                       <h5>Products</h5>
+                                   </div>
+                                   <div class="col-md-7">
+                                        <h6 *ngIf="businessDetails.productCategories">
+                                           <span *ngFor="let product of businessDetails.productCategories">{{product}} |</span>
+                                        </h6>
+                                   </div>
+                               </div>
+                               <div class="ind-details">
+                                   <div class="col-md-5">
+                                       <h5>
+                                           Phone Number
+                                        </h5>
+                                   </div>
+                                   <div class="col-md-7">
+                                        <h6>
+                                            {{businessDetails.phoneNumber}}
+                                        </h6>
+                                   </div>
+                               </div>
+                               <div class="ind-details">
+                                   <div class="col-md-5">
+                                       <h5>
+                                            WhatsApp Number
+                                        </h5>
+                                   </div>
+                                   <div class="col-md-7">
+                                        <h6>
+                                           {{businessDetails.whatsappNumber}}
+                                        </h6>
+                                   </div>
+                               </div>
+                               <div class="ind-details">
+                                   <div class="col-md-5">
+                                       <h5>
+                                            Categories
+                                        </h5>
+                                   </div>
+                                   <div class="col-md-7">
+                                        <h6>
+                                           <span *ngFor="let category of businessDetails.businessTypeNames">{{category}} |</span>
+                                        </h6>
+                                   </div>
+                               </div>
+                               <div class="ind-details">
+                                   <div class="col-md-5">
+                                       <h5>
+                                            Payment Method
+                                        </h5>
+                                   </div>
+                                   <div class="col-md-7">
+                                        <h6>
+                                            {{businessDetails.paymentMethodNames}}
+                                        </h6>
+                                   </div>
+                               </div>
+                               <div class="ind-details">
+                                   <div class="col-md-5">
+                                       <h5>
+                                            Website
+                                        </h5>
+                                   </div>
+                                   <div class="col-md-7">
+                                        <h6>
+                                           {{businessDetails.website}}
+                                        </h6>
+                                   </div>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane blue-tab fade" id="gallery" role="tabpanel" aria-labelledby="gallery-tab">Gallery</div>
+                    <div class="tab-pane blue-tab fade" id="review" role="tabpanel" aria-labelledby="review-tab">Review</div>
+                    <div class="tab-pane blue-tab fade" id="write-review" role="tabpanel" aria-labelledby="write-review-tab">Review</div>
+                </div>
+            </div>
+        </div>
+        <div class="row gallery-sect">
+            <h4 class="pInfoLay pInfoTxt reco-text">
+                Recommended Stores
+            </h4>
+            <div class="row gal-Images reco-store ">
+                <div class="col-md-3">
+                    <div class="cardi" >
+                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
+                        <div class="cardi-body">
+                            <h4>Tunde Ghadofi Store</h4>
+                            <p>
+                                Lorem ipsum dolor sit amet,
+                                adipiscing elit, sed diam nonummy
+                            </p>
+                            <p>Fashion | Ikeja | Lagos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="cardi" >
+                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
+                        <div class="cardi-body">
+                            <h4>Tunde Ghadofi Store</h4>
+                            <p>
+                                Lorem ipsum dolor sit amet,
+                                adipiscing elit, sed diam nonummy
+                            </p>
+                            <p>Fashion | Ikeja | Lagos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="cardi" >
+                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
+                        <div class="cardi-body">
+                            <h4>Tunde Ghadofi Store</h4>
+                            <p>
+                                Lorem ipsum dolor sit amet,
+                                adipiscing elit, sed diam nonummy
+                            </p>
+                            <p>Fashion | Ikeja | Lagos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="cardi" >
+                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
+                        <div class="cardi-body">
+                            <h4>Tunde Ghadofi Store</h4>
+                            <p>
+                                Lorem ipsum dolor sit amet,
+                                adipiscing elit, sed diam nonummy
+                            </p>
+                            <p>Fashion | Ikeja | Lagos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="cardi" >
+                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
+                        <div class="cardi-body">
+                            <h4>Tunde Ghadofi Store</h4>
+                            <p>
+                                Lorem ipsum dolor sit amet,
+                                adipiscing elit, sed diam nonummy
+                            </p>
+                            <p>Fashion | Ikeja | Lagos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="cardi" >
+                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
+                        <div class="cardi-body">
+                            <h4>Tunde Ghadofi Store</h4>
+                            <p>
+                                Lorem ipsum dolor sit amet,
+                                adipiscing elit, sed diam nonummy
+                            </p>
+                            <p>Fashion | Ikeja | Lagos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="cardi" >
+                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
+                        <div class="cardi-body">
+                            <h4>Tunde Ghadofi Store</h4>
+                            <p>
+                                Lorem ipsum dolor sit amet,
+                                adipiscing elit, sed diam nonummy
+                            </p>
+                            <p>Fashion | Ikeja | Lagos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="cardi" >
+                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
+                        <div class="cardi-body">
+                            <h4>Tunde Ghadofi Store</h4>
+                            <p>
+                                Lorem ipsum dolor sit amet,
+                                adipiscing elit, sed diam nonummy
+                            </p>
+                            <p>Fashion | Ikeja | Lagos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="row foot dark">
+        <div class="col footBox">
+            <h5>About us </h5>
+            <h6> Company </h6>
+            <h6>Vision</h6>
+            <h6>Team </h6>
+            <h6>Our Blog </h6>
+            <h6>Contact us </h6>
+        </div>
+        <div class="col footBox">
+            <h5>How it works </h5>
+            <h6> Registration </h6>
+            <h6>Upload files</h6>
+            <h6>Boast Ads </h6>
+        </div>
+        <div class="col footBox">
+            <h5>Legal </h5>
+            <h6>Content Policy</h6>
+            <h6>Privacy Policy</h6>
+            <h6>Indemity & Abiration </h6>
+        </div>
+        <div class="col footBox">
+            <h5>Payment</h5>
+            <div class="pay-badge-parent">
+                <div class="pay-badges give-way-50">
+                    <img src="assets/classyads/images/Mastercard_Logo_A5_Rectangle_5_pattern.png" alt="mastercard-logo" srcset="">
+                    <img src="assets/classyads/images/Visa_Logo_A5_Rectangle_7_pattern.png" alt="mastercard-logo" srcset="">
+                </div>
+                <div class="pay-badges">
+                    <img src="assets/classyads/images/Verver_Logo_A5_Rectangle_9_pattern.png" alt="mastercard-logo" srcset="">
+                    <img src="assets/classyads/images/Bank Transfer.png" alt="mastercard-logo" srcset="">
+                </div>
+            </div>
+        </div>
+        <div class="col footBox">
+            <h5>Support</h5>
+            <h6>support@spaces.com </h6>
+            <h6>Accessibility</h6>
+            <h6>Safety tips </h6>
+            <h6>FAQs </h6>
+            <h6>Site Map</h6>
+        </div>
+    </footer>
+</div>
