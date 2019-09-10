@@ -18,15 +18,16 @@ export class BusinessProfileComponent implements OnInit {
   ) { }
   getBusinessDetails() {
     this.merchantService.getBusinessesById(this.businessId).subscribe(
-      (response: any)=>{
-        this.businessDetails = response.data[1];
-        console.log(this.businessDetails);
-      },
-      (error: any)=>{
-        console.log(error);
-      }
+        (response: any)=>{
+          this.businessDetails = response.data[1];
+          console.log(this.businessDetails);
+        },
+        (error: any)=>{
+          console.log(error);
+        }
       )
   }
+  
   ngOnInit() {
     this._Activatedroute.params.subscribe((params) => {
       this.businessId = params['id'];

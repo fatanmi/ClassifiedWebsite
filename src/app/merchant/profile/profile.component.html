@@ -66,10 +66,10 @@
         </div>
         <div class="row prfInfos">
           <div class="col-md-4">
-            <input type="text" [(ngModel)]="merchantProfile.businesses.openingHour" class="infoInput form-control"/>
+            <input type="time" [(ngModel)]="merchantProfile.businesses.openingHour" class="infoInput form-control"/>
           </div>
           <div class="col-md-4 ">
-            <input type="text" [(ngModel)]="merchantProfile.businesses.closingHour" class="infoInput form-control"/>
+            <input type="time" [(ngModel)]="merchantProfile.businesses.closingHour" class="infoInput form-control"/>
           </div>
         </div>
         <div class="row prfInfos">
@@ -82,7 +82,7 @@
                 [data]="businessCategories"
                 [(ngModel)]="merchantProfile.businesses.businessTypeNames"
                 [settings]="dropdownSettings"
-                (onSelect)="onItemSelect($event)"
+                (onSelect)="onCategoryItemSelect($event)"
                 (onSelectAll)="onSelectAll($event)"
               >
               </ng-multiselect-dropdown>
@@ -95,9 +95,9 @@
           <div class="col-md-6">
               <ng-multiselect-dropdown 
               [placeholder]="'Products'"
-              [data]="productsLists"
+              [data]="listOfProducts"
               [(ngModel)]="merchantProfile.businesses.productCategories"
-              [settings]="dropdownSettings"
+              [settings]="dropdownSettingsProduct"
               (onSelect)="onItemSelect($event)"
               (onSelectAll)="onSelectAll($event)"
             >
@@ -128,7 +128,7 @@
           <div class="col-md-6">
               <ng-multiselect-dropdown 
               [placeholder]="'Payment Methods'"
-              [data]="paymentMethods"
+              [data]="payMode"
               [(ngModel)]="merchantProfile.businesses.paymentMethodNames"
               [settings]="dropdownSettings"
               (onSelect)="onItemSelect($event)"
@@ -212,7 +212,7 @@
       </div>
         
       <div class="btnBox">
-        <button type="button" class="padBtn btn btn-orange btn-sm orangeBackg">
+        <button type="button" (click)="editMerchantProfile()" class="padBtn btn btn-orange btn-sm orangeBackg">
           Save & UPLOAD
         </button>
       </div>

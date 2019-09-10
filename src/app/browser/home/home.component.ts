@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   fault: String;
   categories: BusinessCategory[];
   bussinesses: any;
-  selectedMarket: string = '';
+  selectedMarket: any ;
   selectedCategory: string = '';
   isLoading: boolean = false;
   searchKey:string; 
@@ -144,10 +144,20 @@ export class HomeComponent implements OnInit {
             }
           );
         }
+        filterSearchForMarket() {
+          console.log(this.selectedMarket.marketName);
+          this.bussinesses = this.bussinesses.filter(business=> business.market === this.selectedMarket.marketName );
+          console.log(this.bussinesses);
+        }
+        filterSearchForCategories() {
+          this.bussinesses = this.bussinesses.filter(business=> business.businessTypeNames.include(this.selectedCategory) );
+          console.log(this.bussinesses);          
+        }
         ngOnInit() {
           this.getMarkets();
           this.getCategories();
-          // this.getAllBusinesses(1,500);
+          this.getAllBusinesses(1,12);
         }
+
 }
       
