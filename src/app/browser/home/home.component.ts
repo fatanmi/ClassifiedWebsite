@@ -7,6 +7,7 @@ import { MerchantService } from 'src/app/services/marchant.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -27,11 +28,13 @@ export class HomeComponent implements OnInit {
   size = 10;
   emptyArray = []
   emptyObject = {};
+  loggedIn : Boolean;
 
   constructor(
     private marketService: MerchantService, 
     private spinnerService: Ng4LoadingSpinnerService,
-    private _Activatedroute : ActivatedRoute
+    private _Activatedroute : ActivatedRoute,
+    private authService : AuthService
     ){ } 
     //event handler for the select element's change event
     selectMarketHandler ($event, selectedMarket) {
@@ -117,6 +120,9 @@ export class HomeComponent implements OnInit {
         }
       );
     }
+    getLoggedInStatus(){
+      this.loggedIn = this.authService.isAuthenticated();
+    }
     getAllBusinessesByMarket(market: string, page: number, size: number) {
       this.marketService.getBusinessesInAMarket(market,page, size)
       .subscribe(
@@ -157,6 +163,7 @@ export class HomeComponent implements OnInit {
           this.getMarkets();
           this.getCategories();
           this.getAllBusinesses(1,12);
+          this.getLoggedInStatus();
         }
 
 }

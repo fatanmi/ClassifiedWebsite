@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MerchantService } from 'src/app/services/marchant.service';
 @Component({
   selector: 'app-business-profile',
@@ -14,12 +14,13 @@ export class BusinessProfileComponent implements OnInit {
 
   constructor(
     private _Activatedroute: ActivatedRoute,
-    private merchantService: MerchantService
+    private merchantService: MerchantService,
+    private router: Router
   ) { }
   getBusinessDetails() {
     this.merchantService.getBusinessesById(this.businessId).subscribe(
         (response: any)=>{
-          this.businessDetails = response.data[1];
+          this.businessDetails = response.data[0];
           console.log(this.businessDetails);
         },
         (error: any)=>{
@@ -27,7 +28,10 @@ export class BusinessProfileComponent implements OnInit {
         }
       )
   }
-  
+  logOut() {
+    localStorage.removeItem('access_token');
+    this.router.navigate(['/']);
+  }
   ngOnInit() {
     this._Activatedroute.params.subscribe((params) => {
       this.businessId = params['id'];

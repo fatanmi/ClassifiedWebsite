@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MerchantService } from 'src/app/services/marchant.service';
 import { Merchant } from 'src/app/models/merchant';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +13,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private merchantService: MerchantService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router : Router
   ) { }
 
   lat = 3.4241753;
@@ -48,6 +50,10 @@ export class ProfileComponent implements OnInit {
   }
   onSelectAll(items: any) {
     console.log(items);
+  }
+  logOut() {
+    localStorage.removeItem('access_token');
+    this.router.navigate(['/']);
   }
   getAllCategories() {
     this.merchantService.getAllBusinessCategories().subscribe(
