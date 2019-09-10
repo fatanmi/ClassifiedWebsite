@@ -87,14 +87,14 @@ export class MerchantService {
   }
 
   getAllStates(): Observable<any>{
-    return this.http.get('http://locationsng-api.herokuapp.com/api/v1/states');
+    return this.http.get('https://locationsng-api.herokuapp.com/api/v1/states');
   }
 
   getCities(stateName): Observable<any> {
-    return this.http.get(`http://locationsng-api.herokuapp.com/api/v1/states/${stateName}/cities`);
+    return this.http.get(`https://locationsng-api.herokuapp.com/api/v1/states/${stateName}/cities`);
   }
   getStateCapital(stateName): Observable<any> {
-    return this.http.get(`http://locationsng-api.herokuapp.com/api/v1/states/${stateName}/capital`);
+    return this.http.get(`https://locationsng-api.herokuapp.com/api/v1/states/${stateName}/capital`);
   }
 
   getBusinessCategories(): Observable<any> {
