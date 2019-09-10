@@ -224,107 +224,15 @@
                 Recommended Stores
             </h4>
             <div class="row gal-Images reco-store ">
-                <div class="col-md-3">
+                <div *ngFor="let business of this.bussinesses" class="col-md-3">
                     <div class="cardi" >
                         <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
                         <div class="cardi-body">
-                            <h4>Tunde Ghadofi Store</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet,
-                                adipiscing elit, sed diam nonummy
-                            </p>
-                            <p>Fashion | Ikeja | Lagos</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="cardi" >
-                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
-                        <div class="cardi-body">
-                            <h4>Tunde Ghadofi Store</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet,
-                                adipiscing elit, sed diam nonummy
-                            </p>
-                            <p>Fashion | Ikeja | Lagos</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="cardi" >
-                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
-                        <div class="cardi-body">
-                            <h4>Tunde Ghadofi Store</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet,
-                                adipiscing elit, sed diam nonummy
-                            </p>
-                            <p>Fashion | Ikeja | Lagos</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="cardi" >
-                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
-                        <div class="cardi-body">
-                            <h4>Tunde Ghadofi Store</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet,
-                                adipiscing elit, sed diam nonummy
-                            </p>
-                            <p>Fashion | Ikeja | Lagos</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="cardi" >
-                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
-                        <div class="cardi-body">
-                            <h4>Tunde Ghadofi Store</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet,
-                                adipiscing elit, sed diam nonummy
-                            </p>
-                            <p>Fashion | Ikeja | Lagos</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="cardi" >
-                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
-                        <div class="cardi-body">
-                            <h4>Tunde Ghadofi Store</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet,
-                                adipiscing elit, sed diam nonummy
-                            </p>
-                            <p>Fashion | Ikeja | Lagos</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="cardi" >
-                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
-                        <div class="cardi-body">
-                            <h4>Tunde Ghadofi Store</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet,
-                                adipiscing elit, sed diam nonummy
-                            </p>
-                            <p>Fashion | Ikeja | Lagos</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="cardi" >
-                        <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
-                        <div class="cardi-body">
-                            <h4>Tunde Ghadofi Store</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet,
-                                adipiscing elit, sed diam nonummy
-                            </p>
-                            <p>Fashion | Ikeja | Lagos</p>
+                            <h4> <a [routerLink]="['/browser/shop-info/', business.businessId]">{{ business.businessName}}</a></h4>
+                            <!-- <p>
+                                {{business.description}}
+                            </p> -->
+                            <p> <span *ngFor="let cat of business.businessTypeNames">{{ cat }} |</span> {{business.state}}</p>
                         </div>
                     </div>
                 </div>
