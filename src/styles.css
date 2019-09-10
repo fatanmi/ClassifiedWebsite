@@ -45,7 +45,8 @@ a:hover {
     height: 100%;
     color: white;
 }
-.Market_BG_2 {
+.cursor-pointer{
+    cursor: pointer;
 }
 .square-width {
     width:50%;

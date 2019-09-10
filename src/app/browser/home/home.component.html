@@ -19,8 +19,8 @@
               <li class="active"><a style="color:#fff" href="#">Home</a></li>
               <li><a style="color:#fff" href="#"><span class="border-left pl-xl-4"></span>About</a></li>
               <li><a style="color:#fff" href="#"><span class="border-left pl-xl-4"></span>Contact</a></li>
-              <li class="ml-xl-3 login"><a style="color:#fff" href="/account/login"><span class="border-left pl-xl-4"></span>Log In</a></li>
-              <li> <a href="/account/register" class="cta"><span class="bg-primary text-white rounded">+ Register</span></a></li>
+              <li *ngIf="!loggedIn" class="ml-xl-3 login"><a style="color:#fff" href="/account/login"><span class="border-left pl-xl-4"></span>Log In</a></li>
+              <li *ngIf="!loggedIn" > <a href="/account/register" class="cta"><span class="bg-primary text-white rounded">+ Register</span></a></li>
             </ul>
           </nav>
         </div>
