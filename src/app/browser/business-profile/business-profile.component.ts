@@ -14,15 +14,18 @@ export class BusinessProfileComponent implements OnInit {
   businessDetails: any = {};
   merchantProfile: any = {};
   loggedIn : any ;
-
+  emptyArray: any = [];
+  bussinesses : any = []
+  fault : string;
+  
   constructor(
     private _Activatedroute: ActivatedRoute,
     private merchantService: MerchantService,
     private router: Router,
     private authService : AuthService
-  ) { }
-  getBusinessDetails() {
-    this.merchantService.getBusinessesById(this.businessId).subscribe(
+    ) { }
+    getBusinessDetails() {
+      this.merchantService.getBusinessesById(this.businessId).subscribe(
         (response: any)=>{
           this.businessDetails = response.data[0];
           console.log(this.businessDetails);
@@ -30,35 +33,51 @@ export class BusinessProfileComponent implements OnInit {
         (error: any)=>{
           console.log(error);
         }
-      )
-  }
-  logOut() {
-    localStorage.removeItem('access_token');
-    this.router.navigate(['/']);
-  }
-  getLoggedInStatus(){
-    this.loggedIn = this.authService.isAuthenticated();
-  }
-  getBusinessInfo() {
-    let phoneNumber =  localStorage.getItem('username');
-    this.merchantService.getBusinessesByPhone(phoneNumber).subscribe(
-      (response:any)=>{
-        this.merchantProfile = response.data;
-        this.merchantProfile.businesses = response.data.businesses[0];
-
-        console.log(response);
-      },
-      (error:any)=>{
-        console.log(error);
+        )
       }
-    );
+      logOut() {
+        localStorage.removeItem('access_token');
+        this.router.navigate(['/']);
+      }
+      getLoggedInStatus(){
+        this.loggedIn = this.authService.isAuthenticated();
+      }
+      getBusinessInfo() {
+        let phoneNumber =  localStorage.getItem('username');
+        this.merchantService.getBusinessesByPhone(phoneNumber).subscribe(
+          (response:any)=>{
+            this.merchantProfile = response.data;
+            this.merchantProfile.businesses = response.data.businesses[0];
+            this.getAllBusinessesByMarket();
+            console.log(response);
+          },
+          (error:any)=>{
+            console.log(error);
+          }
+          );
+        }
+        getAllBusinessesByMarket() {
+          console.log(this.merchantProfile);
+          this.merchantService.getBusinessesInAMarket(this.merchantProfile.businesses.market,1, 8)
+          .subscribe(
+            (response :any) => {
+              console.log(response);
+              this.bussinesses = response ? response.data : this.emptyArray;
+              console.log(this.bussinesses)
+            },
+            (error :any) => {
+              this.fault = error ; // error path
+              console.log(JSON.stringify(this.fault));
+            }
+            );
+          }
+          ngOnInit() {
+            this._Activatedroute.params.subscribe((params) => {
+              this.businessId = params['id'];
+            });
+            this.getBusinessInfo();
+            this.getLoggedInStatus();
+            this.getBusinessDetails();
+          }
   }
-  ngOnInit() {
-    this._Activatedroute.params.subscribe((params) => {
-      this.businessId = params['id'];
-    });
-    this.getBusinessInfo();
-    this.getLoggedInStatus();
-    this.getBusinessDetails();
-  }
-}
+        

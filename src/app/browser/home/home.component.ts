@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
   selectedMarket: any ;
   selectedCategory: string = '';
   isLoading: boolean = false;
-  searchKey:string; 
+  searchKey:string =''; 
   page = 1;
   size = 10;
   emptyArray = []
@@ -151,13 +151,22 @@ export class HomeComponent implements OnInit {
           );
         }
         filterSearchForMarket() {
-          console.log(this.selectedMarket.marketName);
-          this.bussinesses = this.bussinesses.filter(business=> business.market === this.selectedMarket.marketName );
-          console.log(this.bussinesses);
+          if(this.searchKey.length < 1){
+            this.getAllBusinessesByMarket(this.selectedMarket.marketName,1,20);
+          }
+          else {
+            this.bussinesses = this.bussinesses.filter(business=> business.market === this.selectedMarket.marketName );
+            
+          }
+          
         }
         filterSearchForCategories() {
-          this.bussinesses = this.bussinesses.filter(business=> business.businessTypeNames.include(this.selectedCategory) );
-          console.log(this.bussinesses);          
+          if(this.searchKey.length < 1){
+            this.getAllBusinessesByCategory(this.selectedCategory,1,20);
+          }else {
+            this.bussinesses = this.bussinesses.filter(business=> business.businessTypeNames.include(this.selectedCategory) );
+          }
+                  
         }
         ngOnInit() {
           this.getMarkets();
