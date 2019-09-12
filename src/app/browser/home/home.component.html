@@ -87,23 +87,26 @@
         </div>
         <div class="row">
           <div *ngFor="let business of bussinesses" class="col-lg-3">
-            <div class="d-block d-md-flex listing vertical">
-              <a href="listings-single.html" class="img d-block" style="background-image: url('images/img_1.jpg')"></a>
-              <div class="lh-content">
-                <span class="category">{{business.businessTypeName}}</span>
-                <a href="#" class="bookmark"><span class="icon-heart"></span></a>
-                <h3><a  [routerLink]="['/browser/shop-info/', business.businessId]">{{business.businessName}}</a></h3>
-                <address *ngIf="business">{{business.market}}, {{business.state}}</address>
-                <p class="mb-0">
-                  <span class="icon-star text-warning"></span>
-                  <span class="icon-star text-warning"></span>
-                  <span class="icon-star text-warning"></span>
-                  <span class="icon-star text-warning"></span>
-                  <span class="icon-star text-secondary"></span>
-                  <span class="review">(3 Reviews)</span>
-                </p>
+            <a [routerLink]="['/browser/shop-info/', business.businessId]">
+              <div class="d-block d-md-flex listing vertical">
+                <a [routerLink]="['/browser/shop-info/', business.businessId]" class="img d-block" style="background-image: url('images/img_1.jpg')"></a>
+                <div class="lh-content">
+                  <span class="category">{{business.businessTypeName}}</span>
+                  <a href="#" class="bookmark"><span class="icon-heart"></span></a>
+                  <h3><a  [routerLink]="['/browser/shop-info/', business.businessId]">{{business.businessName}}</a></h3>
+                  <address *ngIf="business">{{business.market}}, {{business.state}}</address>
+                  <p class="mb-0">
+                    <span class="icon-star text-warning"></span>
+                    <span class="icon-star text-warning"></span>
+                    <span class="icon-star text-warning"></span>
+                    <span class="icon-star text-warning"></span>
+                    <span class="icon-star text-secondary"></span>
+                    <span class="review">(3 Reviews)</span>
+                  </p>
+                </div>
               </div>
-            </div>
+            </a>
+            
           </div>
         </div>
         <div class="row">
@@ -114,3 +117,4 @@
         <br>
       </div>
     </div>
+    
