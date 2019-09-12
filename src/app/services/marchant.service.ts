@@ -77,6 +77,10 @@ export class MerchantService {
   getBusinessesPayMethod (): Observable<Business[]> {
     return this.http.get<Business[]>(Settings._url +'/payment_methods', this.httpOptions);
   }
+  // Get business by Deep search combo
+  getBusinessesByDeepSearchKey (searchKey,selectedCategory,selectedMarket,page,size): Observable<Business[]> {
+    return this.http.get<Business[]>(Settings._url +`/businesses/search/param?businessTypeId=${selectedCategory}&market=${selectedMarket}&page=${page}&searchTerm=${searchKey}&size=${size}`, this.httpOptions);
+  }
   // Get business payment method
   updateBusiness(businessInfo: any) {
     return this.http.put(Settings._url +`/businesses`, businessInfo, this.httpOptions);

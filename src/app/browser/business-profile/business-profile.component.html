@@ -32,7 +32,7 @@
                 <div class="col-md-12" data-aos="fade-up" data-aos-delay="400">
                     <div class="row justify-content-center mt-5">
                         <div class="col-md-8 col-sm-12 text-center">
-                            <h1 class="text-white">Buy or sell anything you want to.</h1>
+                            <h1 class="text-white">Explore markets a new way</h1>
                         </div>
                     </div>
                     <br><br>
@@ -40,28 +40,30 @@
                         <form method="post">
                             <div class="row align-items-center">
                                 <div class="col-lg-12 mb-4 mb-xl-0 col-xl-4">
-                                    <input type="text" class="form-control rounded" placeholder="What are you looking for?">
+                                <input type="text" name="searchKey" [(ngModel)]="searchKey" (ngModelChange)="getAllBusinessesBySearchKey()" class="form-control rounded" placeholder="What are you looking for?">
                                 </div>
                                 <div class="col-lg-12 mb-4 mb-xl-0 col-xl-3">
-                                    <div class="select-wrap">
-                                        <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
-                                        <select [(ngModel)]="selectedMarket" (ngModelChange)="selectMarketHandler($event,market.marketName)" class="form-control rounded" name="market" #market>
-                                            <option value="" >All Markets</option>
-                                            <option *ngFor="let market of markets" [ngValue]="market"> {{market.marketName}}</option>
-                                        </select>
-                                    </div>
+                                <div class="select-wrap">
+                                    <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
+                                    <select [(ngModel)]="selectedMarket" (ngModelChange)="filterSearchForMarket()" class="form-control rounded" name="market" #market>
+                                    <option value="" >All Markets</option>
+                                    <option *ngFor="let market of markets" [ngValue]="market"> {{market.marketName}}</option>
+                                    </select>
+                                </div>
                                 </div>
                                 <div class="col-lg-12 mb-4 mb-xl-0 col-xl-3">
-                                    <div class="select-wrap">
-                                        <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
-                                        <select [(ngModel)]="selectedCategory" (ngModelChange)="selectCategoryHandler($event)" class="form-control rounded" #category name="category" id="category">
-                                            <option value="">All Categories</option>
-                                            <option *ngFor="let category of categories" [ngValue]="category"> {{category.name}}</option>
-                                        </select>
-                                    </div>
+                                <div class="select-wrap">
+                                    <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
+                                    <select [(ngModel)]="selectedCategory" (ngModelChange)="filterSearchForCategories()" class="form-control rounded" #category name="category" id="category">
+                                    <option value="">All Categories</option>
+                                    <option *ngFor="let category of categories" [ngValue]="category"> {{category.name}}</option>
+                                    </select>
+                                </div>
                                 </div>
                                 <div class="col-lg-12 col-xl-2 ml-auto text-right">
-                                    <input type="submit" class="btn btn-primary btn-block rounded" value="Search">
+                                <button type="submit" (click)="doDeepSearch()" class="btn btn-primary btn-block rounded">
+                                    Search
+                                </button>
                                 </div>
                             </div>
                         </form>

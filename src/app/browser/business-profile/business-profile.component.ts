@@ -17,7 +17,12 @@ export class BusinessProfileComponent implements OnInit {
   emptyArray: any = [];
   bussinesses : any = []
   fault : string;
-  
+  searchKey : string;
+  selectedCategory: any;
+  page = 1;
+  size = 10;
+  selectedMarket: any;
+
   constructor(
     private _Activatedroute: ActivatedRoute,
     private merchantService: MerchantService,
@@ -27,7 +32,8 @@ export class BusinessProfileComponent implements OnInit {
     getBusinessDetails() {
       this.merchantService.getBusinessesById(this.businessId).subscribe(
         (response: any)=>{
-          this.businessDetails = response.data[0];
+          console.log(response);
+          this.businessDetails = response ? response.data[0] : this.businessDetails;
           console.log(this.businessDetails);
         },
         (error: any)=>{
@@ -71,6 +77,19 @@ export class BusinessProfileComponent implements OnInit {
             }
             );
           }
+          doDeepSearch() {
+            this.merchantService.getBusinessesByDeepSearchKey(this.searchKey,this.selectedCategory.id || 0,this.selectedMarket.marketName, this.page, this.size)
+            .subscribe(
+              (response : any) => {
+                console.log(response);
+                this.bussinesses = response ? response.data : this.emptyArray;
+              },
+              (error :any) => {
+                this.fault = error ; // error path
+                console.log(this.fault);
+              }
+              );
+            }
           ngOnInit() {
             this._Activatedroute.params.subscribe((params) => {
               this.businessId = params['id'];

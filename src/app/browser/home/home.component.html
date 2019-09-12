@@ -38,7 +38,7 @@
           <div class="col-md-12" data-aos="fade-up" data-aos-delay="400">
             <div class="row justify-content-center mt-5">
               <div class="col-md-8 col-sm-12 text-center">
-                <h1 class="text-white">Buy or sell anything you want to.</h1>
+                <h1 class="text-white">Explore markets a new way</h1>
               </div>
             </div>
             <br><br>
@@ -62,12 +62,14 @@
                       <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
                       <select [(ngModel)]="selectedCategory" (ngModelChange)="filterSearchForCategories()" class="form-control rounded" #category name="category" id="category">
                         <option value="">All Categories</option>
-                        <option *ngFor="let category of categories" [ngValue]="category.name"> {{category.name}}</option>
+                        <option *ngFor="let category of categories" [ngValue]="category"> {{category.name}}</option>
                       </select>
                     </div>
                   </div>
                   <div class="col-lg-12 col-xl-2 ml-auto text-right">
-                    <input type="submit" class="btn btn-primary btn-block rounded" value="Search">
+                    <button type="submit" (click)="doDeepSearch()" class="btn btn-primary btn-block rounded">
+                      Search
+                    </button>
                   </div>
                 </div>
               </form>
@@ -91,7 +93,7 @@
                 <span class="category">{{business.businessTypeName}}</span>
                 <a href="#" class="bookmark"><span class="icon-heart"></span></a>
                 <h3><a  [routerLink]="['/browser/shop-info/', business.businessId]">{{business.businessName}}</a></h3>
-                <address *ngIf="business.branches">{{business.branches[0].marketCode}}, {{business.branches[0].state}}</address>
+                <address *ngIf="business">{{business.market}}, {{business.state}}</address>
                 <p class="mb-0">
                   <span class="icon-star text-warning"></span>
                   <span class="icon-star text-warning"></span>

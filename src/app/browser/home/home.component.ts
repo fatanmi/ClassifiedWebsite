@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
   categories: BusinessCategory[];
   bussinesses: any;
   selectedMarket: any ;
-  selectedCategory: string = '';
+  selectedCategory: any ;
   isLoading: boolean = false;
   searchKey:string =''; 
   page = 1;
@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
   emptyArray = []
   emptyObject = {};
   loggedIn : Boolean;
-
+  
   constructor(
     private marketService: MerchantService, 
     private spinnerService: Ng4LoadingSpinnerService,
@@ -80,16 +80,16 @@ export class HomeComponent implements OnInit {
     }
     getCategories() {
       this.marketService.getAllBusinessCategories()
-        .subscribe(resp => {
-          console.log(resp);
-          this.resp = resp;
-          this.categories = this.resp.data;
-          console.log(this.categories)
-        },
-        error => {
-          this.fault = error ; // error path
-          console.log(JSON.stringify(this.fault));
-        }
+      .subscribe(resp => {
+        console.log(resp);
+        this.resp = resp;
+        this.categories = this.resp.data;
+        console.log(this.categories)
+      },
+      error => {
+        this.fault = error ; // error path
+        console.log(JSON.stringify(this.fault));
+      }
       );
     }
     getAllBusinesses( page: number, size: number) {
@@ -108,9 +108,9 @@ export class HomeComponent implements OnInit {
       );
     }
     getAllBusinessesByCategory(category: string, page: number, size: number) {
-        this.marketService.getBusinessesByCategory(category,page, size)
-        .subscribe(
-          (response : any) => {
+      this.marketService.getBusinessesByCategory(category,page, size)
+      .subscribe(
+        (response : any) => {
           console.log(response);
           this.bussinesses = response ? response.data : this.emptyArray ;
           console.log(this.bussinesses)
@@ -118,55 +118,68 @@ export class HomeComponent implements OnInit {
         (error:any) => {
           console.log(error);
         }
-      );
-    }
-    getLoggedInStatus(){
-      this.loggedIn = this.authService.isAuthenticated();
-    }
-    getAllBusinessesByMarket(market: string, page: number, size: number) {
-      this.marketService.getBusinessesInAMarket(market,page, size)
-      .subscribe(
+        );
+      }
+      getLoggedInStatus(){
+        this.loggedIn = this.authService.isAuthenticated();
+      }
+      getAllBusinessesByMarket(market: string, page: number, size: number) {
+        this.marketService.getBusinessesInAMarket(market,page, size)
+        .subscribe(
           (response :any) => {
             console.log(response);
             this.bussinesses = response ? response.data : this.emptyArray;
-          console.log(this.bussinesses)
+            console.log(this.bussinesses)
           },
           (error :any) => {
             this.fault = error ; // error path
             console.log(JSON.stringify(this.fault));
           }
+      );
+    }
+    getAllBusinessesBySearchKey() {
+      this.marketService.getBusinessesInAMarketBySearchKey(this.searchKey,this.page, this.size)
+      .subscribe(
+        (response : any) => {
+          console.log(response);
+          this.bussinesses = response ? response.data : this.emptyArray;
+        },
+        (error :any) => {
+          this.fault = error ; // error path
+          console.log(this.fault);
+        }
         );
       }
-      getAllBusinessesBySearchKey() {
-        this.marketService.getBusinessesInAMarketBySearchKey(this.searchKey,this.page, this.size)
-        .subscribe(
-            (response : any) => {
-              console.log(response);
-              this.bussinesses = response ? response.data : this.emptyArray;
-            },
-            (error :any) => {
-              this.fault = error ; // error path
-              console.log(this.fault);
-            }
-          );
+      filterSearchForMarket() {
+        if(this.searchKey.length < 1){
+          this.getAllBusinessesByMarket(this.selectedMarket.marketName,1,20);
         }
-        filterSearchForMarket() {
-          if(this.searchKey.length < 1){
-            this.getAllBusinessesByMarket(this.selectedMarket.marketName,1,20);
-          }
-          else {
-            this.bussinesses = this.bussinesses.filter(business=> business.market === this.selectedMarket.marketName );
-            
-          }
+        else {
+          this.bussinesses = this.bussinesses.filter(business=> business.market === this.selectedMarket.marketName );
           
         }
-        filterSearchForCategories() {
-          if(this.searchKey.length < 1){
-            this.getAllBusinessesByCategory(this.selectedCategory,1,20);
-          }else {
-            this.bussinesses = this.bussinesses.filter(business=> business.businessTypeNames.include(this.selectedCategory) );
+        
+      }
+      filterSearchForCategories() {
+        if(this.searchKey.length < 1){
+          this.getAllBusinessesByCategory(this.selectedCategory.name,1,20);
+        }else {
+          this.bussinesses = this.bussinesses.filter(business=> business.businessTypeNames.include(this.selectedCategory) );
+        }
+        
+      }
+      doDeepSearch() {
+        this.marketService.getBusinessesByDeepSearchKey(this.searchKey,this.selectedCategory.id || 0,this.selectedMarket.marketName, this.page, this.size)
+        .subscribe(
+          (response : any) => {
+            console.log(response);
+            this.bussinesses = response ? response.data : this.emptyArray;
+          },
+          (error :any) => {
+            this.fault = error ; // error path
+            console.log(this.fault);
           }
-                  
+          );
         }
         ngOnInit() {
           this.getMarkets();
@@ -174,6 +187,6 @@ export class HomeComponent implements OnInit {
           this.getAllBusinesses(1,12);
           this.getLoggedInStatus();
         }
-
-}
-      
+            
+     }
+          
