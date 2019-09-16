@@ -424,6 +424,22 @@ img {
         width: 100%;
         margin: 40px 0 60px;
     }
+    .search-params {
+        padding: unset;
+    }  
+    .pageContentx {
+        padding:20px;
+    }
+    .reco-text {
+        font-size: 1.5rem;
+    }
+    .topBg {
+        padding-left: unset;
+    }
+    .foot {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
     .demo-text{
         margin-top: 30px;
     }
@@ -444,6 +460,9 @@ img {
     }
     .infoTextArea {
         width: 100%;
+    }
+    .account-banner {
+        visibility: hidden;
     }
 }
 

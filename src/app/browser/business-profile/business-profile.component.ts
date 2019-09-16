@@ -78,17 +78,19 @@ export class BusinessProfileComponent implements OnInit {
             );
           }
           doDeepSearch() {
-            this.merchantService.getBusinessesByDeepSearchKey(this.searchKey,this.selectedCategory.id || 0,this.selectedMarket.marketName, this.page, this.size)
-            .subscribe(
-              (response : any) => {
-                console.log(response);
-                this.bussinesses = response ? response.data : this.emptyArray;
-              },
-              (error :any) => {
-                this.fault = error ; // error path
-                console.log(this.fault);
-              }
-              );
+
+            this.router.navigate(['/home',{searchK:'',market:'',category:''}]);
+            // this.merchantService.getBusinessesByDeepSearchKey(this.searchKey,this.selectedCategory.id || 0,this.selectedMarket.marketName, this.page, this.size)
+            // .subscribe(
+            //   (response : any) => {
+            //     console.log(response);
+            //     this.bussinesses = response ? response.data : this.emptyArray;
+            //   },
+            //   (error :any) => {
+            //     this.fault = error ; // error path
+            //     console.log(this.fault);
+            //   }
+            //   );
             }
           ngOnInit() {
             this._Activatedroute.params.subscribe((params) => {

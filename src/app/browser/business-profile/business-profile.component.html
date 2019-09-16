@@ -5,16 +5,7 @@
                 <div class="col-md-2 logo">
                     <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
                 </div>
-                <div class="col-md-6 Mlinks">
-                    <ul  class="topGMenu">
-                        <li><a href="#">Tailoring</a> |</li>
-                        <li><a href="#">Fashion</a> |</li>
-                        <li><a href="#">AutoMobile</a> |</li>
-                        <li><a href="#">Computing</a> |</li>
-                        <li><a href="#">Manufacturing</a> |</li>
-                        <li><a href="#">Food</a></li>
-                    </ul>
-                </div>
+                
                 <div class="col-md-2 rightLinks">
                     <h5 *ngIf="loggedIn" class="orangeText boldText">My Business Proflie </h5>
                 </div>
@@ -46,7 +37,7 @@
                                 <div class="select-wrap">
                                     <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
                                     <select [(ngModel)]="selectedMarket" (ngModelChange)="filterSearchForMarket()" class="form-control rounded" name="market" #market>
-                                    <option value="" >All Markets</option>
+                                    <option  value="" >All Markets</option>
                                     <option *ngFor="let market of markets" [ngValue]="market"> {{market.marketName}}</option>
                                     </select>
                                 </div>
@@ -222,7 +213,7 @@
             </div>
         </div>
         <div class="row gallery-sect">
-            <h4 class="pInfoLay pInfoTxt reco-text">
+            <h4 class="col-md-12 pInfoLay pInfoTxt reco-text">
                 Recommended Stores
             </h4>
             <div class="row gal-Images reco-store ">
