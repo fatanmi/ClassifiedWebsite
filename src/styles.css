@@ -326,6 +326,7 @@ agm-map {
 .ver-badge {
     display:flex;
     flex-direction:row;
+    align-items: center;
 }
 .ver-badge img {
     margin-left:40px;
@@ -377,7 +378,7 @@ img {
     color: rgba(255,147,0,1);
     background-color: rgb(14, 98, 150);
     border-color: #185088 #dee2e6 #fff;
-    font-size:30px;
+    font-size:20px;
     padding:70px;
     padding-top:20px;
     padding-bottom:20px;
@@ -417,12 +418,34 @@ img {
          appearance: none;  
     padding:30px;
 }
+.text-primary {
+    color:#f89d13 !important;
+}
+.btn-primary {
+    background-color: #f89d13 !important;
+    border-color: #f89d13;
+}
+#loginform {
+    padding:3rem !important;
+}
+.site-mobile-menu {
+    background: #201f1f;
+}
+#personalProfileForm {
+    padding:1px 60px;
+}
+.icon-menu {
+    color:#fff;
+}
 @media(max-width:767px) {
     .auth-sidebar{
         position: relative;
         max-width: 100%;
         width: 100%;
         margin: 40px 0 60px;
+    }
+    #loginform {
+        padding:0px !important;
     }
     .search-params {
         padding: unset;
@@ -433,8 +456,99 @@ img {
     .reco-text {
         font-size: 1.5rem;
     }
+    .rightBizBox {
+        padding-bottom: 20px;
+    }
+    .leftBizBox {
+        padding-right: 100px;
+        border-right: 1px solid rgba(238,238,238,1);
+        padding:20px;
+    }
+    .pInfoTxt {
+        font-size:1rem;
+    }
+    .prfInfos {
+        padding: 10px 10px;   
+    }
+    .pInfoLay {
+        padding-top: 10px;  
+    }
+    .nav-tabs .nav-link {
+        padding-bottom: 10px; 
+        margin-right: 2px;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size:1rem;
+    }
+    #personalProfileForm {
+        padding:unset;
+    }
+    .auth-box {
+        width: 100%;
+        padding-top: 100px;
+    }
+    .tabLinks .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+        color: rgba(255,147,0,1);
+        background-color: rgb(14, 98, 150);
+        border-color: #185088 #dee2e6 #fff;
+        font-size:1rem;
+        padding-bottom: 10px; 
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 10px;
+    }
+    .site-blocks-coverx.inner-page-cover, .site-blocks-cover.inner-page-cover > .container > .row {
+        min-height: 700px
+    }
+    .agm-vert, .map-location {
+        display:none;
+    }
+    .hide-search-box {
+        display:none;
+    }
+    .hide-on-mobile {
+        display:none;
+    }
+    .small-header {
+        min-height: 100px !important;
+        background-position: center !important;
+    }
+    .bizdetails-text {
+        padding-left: 0px;
+    }
+    .mobile-logo-size {
+        width: 120px;
+    }
+    .mobile-logo-size {
+        width: 120px;
+    }
+    .blue-tab {
+        padding: 20px;  
+    }
+    .mobile-txt-header {
+        font-size: 12pt;
+    }
+    .elevate-50 {
+        margin-top: 20px;
+    }
+    .write-rev {
+        display: none;
+    }
+    .square-width {
+        width: 30px;
+    }
+    .con-icons {
+        flex-wrap: unset;
+    }
+    .mobile-txt-size {
+        font-size: 0.7rem;
+    }
+    .pgTitle {
+        font-size: 30px;
+    }
     .topBg {
         padding-left: unset;
+        background-size: cover;
     }
     .foot {
         padding-left: 50px;
@@ -446,23 +560,40 @@ img {
     .rightBizBox {
         padding-left: unset;
     }
-    .leftBizBox {
+    /*.leftBizBox {
         padding-left: unset;
-    }
+    } */
     .pageContent {
         padding: 20px;
         padding-top: 50px;
     }
     .contentGroup {
-        padding-top: 50px;
+        padding-top: 10px;
         display: flex;
         flex-direction: column;
+    }
+    .m-reco-hd {
+        font-size: 1.1rem;
+    }
+    .m-reco-txt {
+        font-size:.7rem;
     }
     .infoTextArea {
         width: 100%;
     }
     .account-banner {
         visibility: hidden;
+    }
+    .btn-orange {
+
+        font-size: 10px;
+        padding-top: 18px;
+        padding-bottom: 18px;
+        width: 100%;
+    
+    }
+    .inp-50 {
+        width: 50%;
     }
 }
 

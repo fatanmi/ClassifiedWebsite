@@ -1,9 +1,9 @@
 <div class="container-fluid">
-    <div class="row topBg site-blocks-cover site-blocks-coverx inner-page-cover overlay Market_BG" data-aos="fade" data-stellar-background-ratio="0.5">
+    <div class="row topBg small-header site-blocks-cover site-blocks-coverx inner-page-cover overlay Market_BG" data-aos="fade" data-stellar-background-ratio="0.5">
         <div class="col">
             <div class="row topBg-inner">
                 <div class="col-md-2 logo">
-                    <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
+                    <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive mobile-logo-size"></a></h1>
                 </div>
                 
                 <div class="col-md-2 rightLinks">
@@ -23,11 +23,11 @@
                 <div class="col-md-12" data-aos="fade-up" data-aos-delay="400">
                     <div class="row justify-content-center mt-5">
                         <div class="col-md-8 col-sm-12 text-center">
-                            <h1 class="text-white">Explore markets a new way</h1>
+                            <h1 class="text-white hide-on-mobile">Explore markets a new way</h1>
                         </div>
                     </div>
                     <br><br>
-                    <div class="form-search-wrap" data-aos="fade-up" data-aos-delay="200">
+                    <div class="form-search-wrap hide-search-box" data-aos="fade-up" data-aos-delay="200">
                         <form method="post">
                             <div class="row align-items-center">
                                 <div class="col-lg-12 mb-4 mb-xl-0 col-xl-4">
@@ -67,10 +67,10 @@
         <div class="row bizDetails">
             <div class="col-md-8 groupImgDet">
                 <div class="row">
-                    <div class="col-md-4 groupImgeBtn elevate-50">
+                    <div class="col col-md-4 groupImgeBtn elevate-50">
                         <img class="leftBoxImg" src="../assets/classyads/images/Shop_Image_A5_Rectangle_13_pattern.png" />
                     </div> 
-                    <div class="col-md-8 bizdetails-text">
+                    <div class="col col-md-8 bizdetails-text">
                         <div class="ver-badge">
                             <h1 class="pgTitle orangeText">
                                 {{businessDetails.businessName}}
@@ -78,16 +78,16 @@
                             <img src="assets/classyads/images/Verification Icon.png" alt="verification-badge" srcset="">
                         </div>
                         
-                        <h5>
+                        <h5 class="mobile-txt-size">
                             {{businessDetails.address}}
                         </h5>
-                        <h5>
+                        <h5 class="mobile-txt-size">
                             {{businessDetails.market + ', ' + businessDetails.state }}
                         </h5>
-                        <h6>
+                        <h6 class="mobile-txt-size">
                             +234 903 4567 9888
                         </h6>
-                        <div class="row">
+                        <div class="row con-icons">
                             <a href="tel:+23490345679888" class="col-md-2"><img src="assets/classyads/images/call-icon.jpg" class="square-width" alt="call-icon"></a>
                             <a href="" class="col-md-2"><img src="assets/classyads/images/whatsapp.png" class="square-width" alt="call-icon"></a>
                         </div>
@@ -101,7 +101,7 @@
             </div>
         </div>
         <div class="row contentGroup">
-            <div class="col-md-12">
+            <div class="col-xs-12 col-sm-12 col-md-12">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link tab-bg tabLinks active" id="biz-tab" data-toggle="tab" href="#biz" role="tab" aria-controls="home" aria-selected="true">Business Details</a>
@@ -112,7 +112,7 @@
                     <li class="nav-item">
                         <a class="nav-link tab-bg tabLinks" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="contact" aria-selected="false">Review</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item write-rev">
                         <a class="nav-link tabLinks" id="write-review-tab" data-toggle="tab" href="#write-review" role="tab" aria-controls="contact" aria-selected="false">Write a Review</a>
                     </li>
                 </ul>
@@ -121,84 +121,84 @@
                         <div class="row bizdetail-block">
                             <div class="col-md-5 detail-info">
                                 <div>
-                                    <h3>General Info</h3>
-                                    <p>
+                                    <h3 class="mobile-txt-header ">General Info</h3>
+                                    <p class="mobile-txt-size">
                                         {{businessDetails.description}}
                                     </p>
                                 </div>
                                 <div class="work-time">
-                                     <h3>Working Hours</h3>
-                                     <p>{{businessDetails.openingHour}} - {{businessDetails.openingHour}}</p>
+                                     <h3 class="mobile-txt-header ">Working Hours</h3>
+                                     <p class="mobile-txt-size">{{businessDetails.openingHour}} - {{businessDetails.openingHour}}</p>
                                 </div>
                                
                             </div>    
                             <div class="col-md-7 details-list">
                                <div class="ind-details">
                                    <div class="col-md-5">
-                                       <h5>Products</h5>
+                                       <h5 class="mobile-txt-header ">Products</h5>
                                    </div>
                                    <div class="col-md-7">
-                                        <h6 *ngIf="businessDetails.productCategories">
+                                        <h6 class="mobile-txt-size" *ngIf="businessDetails.productCategories">
                                            <span *ngFor="let product of businessDetails.productCategories">{{product}} |</span>
                                         </h6>
                                    </div>
                                </div>
                                <div class="ind-details">
                                    <div class="col-md-5">
-                                       <h5>
+                                       <h5 class="mobile-txt-header ">
                                            Phone Number
                                         </h5>
                                    </div>
                                    <div class="col-md-7">
-                                        <h6>
+                                        <h6  class="mobile-txt-size">
                                             {{businessDetails.phoneNumber}}
                                         </h6>
                                    </div>
                                </div>
                                <div class="ind-details">
                                    <div class="col-md-5">
-                                       <h5>
+                                       <h5 class="mobile-txt-header ">
                                             WhatsApp Number
                                         </h5>
                                    </div>
                                    <div class="col-md-7">
-                                        <h6>
+                                        <h6 class="mobile-txt-size">
                                            {{businessDetails.whatsappNumber}}
                                         </h6>
                                    </div>
                                </div>
                                <div class="ind-details">
                                    <div class="col-md-5">
-                                       <h5>
+                                       <h5 class="mobile-txt-header ">
                                             Categories
                                         </h5>
                                    </div>
                                    <div class="col-md-7">
-                                        <h6>
+                                        <h6 class="mobile-txt-size">
                                            <span *ngFor="let category of businessDetails.businessTypeNames">{{category}} |</span>
                                         </h6>
                                    </div>
                                </div>
                                <div class="ind-details">
                                    <div class="col-md-5">
-                                       <h5>
+                                       <h5 class="mobile-txt-header ">
                                             Payment Method
                                         </h5>
                                    </div>
                                    <div class="col-md-7">
-                                        <h6>
+                                        <h6 class="mobile-txt-size">
                                             {{businessDetails.paymentMethodNames}}
                                         </h6>
                                    </div>
                                </div>
                                <div class="ind-details">
                                    <div class="col-md-5">
-                                       <h5>
+                                       <h5 class="mobile-txt-header ">
                                             Website
                                         </h5>
                                    </div>
                                    <div class="col-md-7">
-                                        <h6>
+                                        <h6 class="mobile-txt-size">
                                            {{businessDetails.website}}
                                         </h6>
                                    </div>
@@ -217,15 +217,15 @@
                 Recommended Stores
             </h4>
             <div class="row gal-Images reco-store ">
-                <div *ngFor="let business of this.bussinesses" class="col-md-3">
+                <div *ngFor="let business of this.bussinesses" class="col-md-3 col-6">
                     <div class="cardi" >
                         <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img-top" alt="store-image">
                         <div class="cardi-body">
-                            <h4> <a [routerLink]="['/browser/shop-info/', business.businessId]">{{ business.businessName}}</a></h4>
+                            <h4 class="m-reco-hd"> <a [routerLink]="['/browser/shop-info/', business.businessId]">{{ business.businessName}}</a></h4>
                             <!-- <p>
                                 {{business.description}}
                             </p> -->
-                            <p> <span *ngFor="let cat of business.businessTypeNames">{{ cat }} |</span> {{business.state}}</p>
+                            <p class="m-reco-txt"> <span *ngFor="let cat of business.businessTypeNames">{{ cat }} |</span> {{business.state}}</p>
                         </div>
                     </div>
                 </div>
