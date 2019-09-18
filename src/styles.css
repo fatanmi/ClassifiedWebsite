@@ -31,7 +31,7 @@ a:hover {
 .Market_BG {
     background-image: url('./assets/classyads/images/Market_BG.png');
     background-repeat: no-repeat;
-    background-size: auto;
+    background-size: cover;background-position: 50% 100% !important;
 }
 .Market_BG_2::before{
     background-image: url('./assets/classyads/images/Market_BG_A1_Rectangle_3_pattern@2x.png');
@@ -44,6 +44,18 @@ a:hover {
     width: 55%;
     height: 100%;
     color: white;
+}
+.hide-web {
+    visibility: hidden;
+}
+.leftBizBox {
+    padding-top: 0px;
+}
+.bixProfTxt {
+    margin-top:10px;
+}
+.pad-10 {
+    padding-top: 50px;
 }
 .cursor-pointer{
     cursor: pointer;
@@ -437,8 +449,38 @@ img {
 .icon-menu {
     color:#fff;
 }
+.show-logo-mobile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    visibility: hidden;
+}
+.mobile-logo-size {
+    max-width: 100px;
+}
+.preview-contacts {
+    cursor: pointer;
+}
 @media(max-width:767px) {
-    .auth-sidebar{
+    .bixProfTxt {
+        margin-top:120px;
+    }
+    .show--mobile {
+       visibility: visible;
+    }
+    .bizDetails {
+        margin-top:120px;
+    }
+    .show-logo-mobile {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        visibility: visible;
+    }
+    .hide-logo-mobile {
+        display: none;
+    }
+    .auth-sidebar {
         position: relative;
         max-width: 100%;
         width: 100%;
@@ -486,6 +528,7 @@ img {
     .auth-box {
         width: 100%;
         padding-top: 100px;
+        margin-top: 100px;
     }
     .tabLinks .nav-item.show .nav-link, .nav-tabs .nav-link.active {
         color: rgba(255,147,0,1);
@@ -499,6 +542,10 @@ img {
     }
     .site-blocks-coverx.inner-page-cover, .site-blocks-cover.inner-page-cover > .container > .row {
         min-height: 700px
+    }
+    .site-blocks-cover.inner-page-cover, .site-blocks-cover.inner-page-cover > .container > .row {
+        min-height: 650px;
+        height: calc(30vh);
     }
     .agm-vert, .map-location {
         display:none;

@@ -11,12 +11,6 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(
-    private merchantService: MerchantService,
-    private toastr: ToastrService,
-    private router : Router
-  ) { }
-
   lat = 3.4241753;
   lng = 6.4255113;
   merchantProfile : any = {
@@ -30,7 +24,13 @@ export class ProfileComponent implements OnInit {
   ProductLists: any;
   paymentMethods: any;
   listOfProducts: any = [];
+  selectedImage: File = null ;
 
+  constructor(
+      private merchantService: MerchantService,
+      private toastr: ToastrService,
+      private router : Router
+    ) { }
   getBusinessInfo() {
     let phoneNumber =  localStorage.getItem('username');
     this.merchantService.getBusinessesByPhone(phoneNumber).subscribe(
@@ -54,6 +54,11 @@ export class ProfileComponent implements OnInit {
   logOut() {
     localStorage.removeItem('access_token');
     this.router.navigate(['/']);
+  }
+  uploadImage(event) {
+    //console.log(event.target.files[0]);
+    this.selectedImage = event.target.files[0] ;
+    console.log(this.selectedImage);
   }
   getAllCategories() {
     this.merchantService.getAllBusinessCategories().subscribe(
@@ -90,21 +95,13 @@ export class ProfileComponent implements OnInit {
   fillProductLists(){ 
   }
   editMerchantProfile (){
-    console.log(this.merchantProfile.businesses.businessTypeNames);
-    console.log(this.merchantProfile.businesses.paymentMethodNames);
-    console.log(this.merchantProfile.businesses);
     this.merchantProfile.businesses.name = this.merchantProfile.businesses.businessName;
-    this.merchantProfile.businesses.businessTypeIdList = this.merchantProfile.businesses.businessTypeNames
-    .map(
+    this.merchantProfile.businesses.businessTypeIdList = this.merchantProfile.businesses.businessTypeNames.map(
       buinessCategories => buinessCategories.id
     ).filter(catNumber => catNumber !== undefined );
-    this.merchantProfile.businesses.paymentMethodIdList = this.merchantProfile.businesses.paymentMethodNames
-    .map(
+    this.merchantProfile.businesses.paymentMethodIdList = this.merchantProfile.businesses.paymentMethodNames.map(
       buinessPayMode => buinessPayMode.id
     ).filter(ModeNumber => ModeNumber !== undefined );
-
-    console.log(this.merchantProfile.businesses.businessTypeIdList);
-    console.log(this.merchantProfile.businesses.paymentMethodIdList);
 
     this.merchantService.updateBusiness(this.merchantProfile.businesses).subscribe(
       (response: any)=>{

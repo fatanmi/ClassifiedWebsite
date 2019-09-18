@@ -1,68 +1,101 @@
 <div class="container-fluid">
-    <div class="row topBg small-header site-blocks-cover site-blocks-coverx inner-page-cover overlay Market_BG" data-aos="fade" data-stellar-background-ratio="0.5">
-        <div class="col">
-            <div class="row topBg-inner">
-                <div class="col-md-2 logo">
-                    <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive mobile-logo-size"></a></h1>
+        <div class="site-mobile-menu">
+                <div class="site-mobile-menu-header">
+                  <div class="site-mobile-menu-close mt-3">
+                    <span class="icon-close2 js-menu-toggle"></span>
+                  </div>
                 </div>
-                
-                <div class="col-md-2 rightLinks">
-                    <h5 *ngIf="loggedIn" class="orangeText boldText">My Business Proflie </h5>
-                </div>
-                <div *ngIf="loggedIn" class="col-md-2 rightProfile">
-                    <div  class="profLeft">
+                <div class="site-mobile-menu-body"></div>
+              </div>
+              <header class="site-navbar container py-0 dark hide-web show--mobile" role="banner">
+                <!-- <div class="container"> -->
+                  <div class="row align-items-center hide-web">
+                    
+                    <div class="col-12 hide-logo-mobile col-xl-2 col-sm-12">
+                      <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
+                    </div>
+                    <div class="col-12 col-md-10 d-none d-xl-block">
+                      <nav class="site-navigation position-relative text-right" role="navigation">
+                        <ul  class="site-menu js-clone-nav mr-auto d-none d-lg-block">
+                          <li class="active"><a class="text-white" href="#">Home</a></li>
+                          <li *ngIf="loggedIn" class="ml-xl-3 login"><a href="/merchant/profile" class="cta"><h5 class="orangeText boldText cursor-pointer">My Business Proflie </h5></a></li>
+                         <li><a class="text-white" href="#">Tailoring</a> </li>
+                          <li><a class="text-white"href="#">Fashion</a> </li>
+                          <li><a class="text-white" href="#">AutoMobile</a> </li>
+                          <li><a class="text-white" href="#">Computing</a> </li>
+                          <li><a class="text-white" href="#">Manufacturing</a> </li>
+                          <li><a class="text-white" href="#">Food</a></li>
+                          <li><a class="text-white" href="#"><span class="pl-xl-4"></span>About</a></li>
+                          <li><a class="text-white" href="#"><span class="pl-xl-4"></span>Contact</a></li>
+                        </ul>
+                      </nav>
+                    </div>
+                    
+                  </div>
+                  <div class="d-inline-block d-xl-none ml-auto py-3 col-12" style="position: relative; top: 3px;">
+                    <a href="#" class="site-menu-toggle js-menu-toggle text-black"><span class="icon-menu h3"></span></a>
+                  </div>
+                  <div class="row show-logo-mobile">
+                    <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded mobile-logo-size img-responsive"></a></h1>
+                  </div>
+                  <div class="row hide-logo-mobile">
+                    <div class="col-md-2 hide-logo-mobile logo">
+                      <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
+                    </div>
+                    <div class="col-md-2 Mlinks">
+                      <ul  class="topGMenu">
+                        <li><a href="#">Tailoring</a> |</li>
+                        <li><a href="#">Fashion</a> |</li>
+                        <li><a href="#">AutoMobile</a> |</li>
+                        <li><a href="#">Computing</a> |</li>
+                        <li><a href="#">Manufacturing</a> |</li>
+                        <li><a href="#">Food</a></li>
+                      </ul>
+                    </div>
+                    <div class="col-md-2 rightLinks">
+                      <h5 class="orangeText boldText ">My Business  Proflie </h5>
+                    </div>
+                    <div class="col-md-2 rightProfile">
+                      <div class="profLeft">
                         <h5 class="orangeText boldText">Hi {{ merchantProfile.firstName }} !</h5>
-                        <h6 (click)="logOut()" class="whiteText text-align-left cursor-pointer">Log Out</h6>
+                        <h6 class="whiteText text-align-left cursor-pointer" (click)="logOut()" >Log Out</h6>
+                      </div>
+                      <div class="profRight">
+                        <img src="assets/classyads/images/Profile_A5_Ellipse_2_pattern.png" alt="" srcset="">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- </div> -->
+                </header>
+                <div class="row topBg dark hide-logo-mobile">
+                  
+                  <div class="col-md-2 hide-logo-mobile logo">
+                    <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
+                  </div>
+                  <div class="col-md-2 Mlinks offset-4">
+                    <!-- <ul  class="topGMenu">
+                      <li><a href="#">Tailoring</a> |</li>
+                      <li><a href="#">Fashion</a> |</li>
+                      <li><a href="#">AutoMobile</a> |</li>
+                      <li><a href="#">Computing</a> |</li>
+                      <li><a href="#">Manufacturing</a> |</li>
+                      <li><a href="#">Food</a></li>
+                    </ul> -->
+                  </div>
+                  <div class="col-md-2 rightLinks">
+                    <h5 class="orangeText boldText">My Business  Proflie </h5>
+                  </div>
+                  <div class="col-md-2 rightProfile">
+                    <div class="profLeft">
+                      <h5 class="orangeText boldText">Hi {{ merchantProfile.firstName }} !</h5>
+                      <h6 class="whiteText text-align-left cursor-pointer" (click)="logOut()" >Log Out</h6>
                     </div>
                     <div class="profRight">
-                        <img src="assets/classyads/images/Profile_A5_Ellipse_2_pattern.png" alt="" srcset="">
+                      <img src="assets/classyads/images/Profile_A5_Ellipse_2_pattern.png" alt="" srcset="">
                     </div>
+                  </div>
+                  
                 </div>
-            </div>
-            <div class="row search-params" >
-                <div class="col-md-12" data-aos="fade-up" data-aos-delay="400">
-                    <div class="row justify-content-center mt-5">
-                        <div class="col-md-8 col-sm-12 text-center">
-                            <h1 class="text-white hide-on-mobile">Explore markets a new way</h1>
-                        </div>
-                    </div>
-                    <br><br>
-                    <div class="form-search-wrap hide-search-box" data-aos="fade-up" data-aos-delay="200">
-                        <form method="post">
-                            <div class="row align-items-center">
-                                <div class="col-lg-12 mb-4 mb-xl-0 col-xl-4">
-                                <input type="text" name="searchKey" [(ngModel)]="searchKey" (ngModelChange)="getAllBusinessesBySearchKey()" class="form-control rounded" placeholder="What are you looking for?">
-                                </div>
-                                <div class="col-lg-12 mb-4 mb-xl-0 col-xl-3">
-                                <div class="select-wrap">
-                                    <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
-                                    <select [(ngModel)]="selectedMarket" (ngModelChange)="filterSearchForMarket()" class="form-control rounded" name="market" #market>
-                                    <option  value="" >All Markets</option>
-                                    <option *ngFor="let market of markets" [ngValue]="market"> {{market.marketName}}</option>
-                                    </select>
-                                </div>
-                                </div>
-                                <div class="col-lg-12 mb-4 mb-xl-0 col-xl-3">
-                                <div class="select-wrap">
-                                    <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
-                                    <select [(ngModel)]="selectedCategory" (ngModelChange)="filterSearchForCategories()" class="form-control rounded" #category name="category" id="category">
-                                    <option value="">All Categories</option>
-                                    <option *ngFor="let category of categories" [ngValue]="category"> {{category.name}}</option>
-                                    </select>
-                                </div>
-                                </div>
-                                <div class="col-lg-12 col-xl-2 ml-auto text-right">
-                                <button type="submit" (click)="doDeepSearch()" class="btn btn-primary btn-block rounded">
-                                    Search
-                                </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="pageContentx">
         <div class="row bizDetails">
             <div class="col-md-8 groupImgDet">
@@ -84,10 +117,13 @@
                         <h5 class="mobile-txt-size">
                             {{businessDetails.market + ', ' + businessDetails.state }}
                         </h5>
-                        <h6 class="mobile-txt-size">
+                        <h6 class="mobile-txt-size" *ngIf="showContact">
                             +234 903 4567 9888
                         </h6>
-                        <div class="row con-icons">
+                        <div class="preview-contacts" (click)="viewContact()">
+                            <p>click to show contact info</p>
+                        </div>
+                        <div class="row con-icons" *ngIf="showContact">
                             <a href="tel:+23490345679888" class="col-md-2"><img src="assets/classyads/images/call-icon.jpg" class="square-width" alt="call-icon"></a>
                             <a href="" class="col-md-2"><img src="assets/classyads/images/whatsapp.png" class="square-width" alt="call-icon"></a>
                         </div>
@@ -145,12 +181,12 @@
                                </div>
                                <div class="ind-details">
                                    <div class="col-md-5">
-                                       <h5 class="mobile-txt-header ">
+                                       <h5 class="mobile-txt-header " >
                                            Phone Number
                                         </h5>
                                    </div>
                                    <div class="col-md-7">
-                                        <h6  class="mobile-txt-size">
+                                        <h6  class="mobile-txt-size" *ngIf="showContact">
                                             {{businessDetails.phoneNumber}}
                                         </h6>
                                    </div>
@@ -162,7 +198,7 @@
                                         </h5>
                                    </div>
                                    <div class="col-md-7">
-                                        <h6 class="mobile-txt-size">
+                                        <h6 class="mobile-txt-size" *ngIf="showContact">
                                            {{businessDetails.whatsappNumber}}
                                         </h6>
                                    </div>

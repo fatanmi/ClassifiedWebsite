@@ -22,6 +22,7 @@ export class BusinessProfileComponent implements OnInit {
   page = 1;
   size = 10;
   selectedMarket: any;
+  showContact: boolean = false ;
 
   constructor(
     private _Activatedroute: ActivatedRoute,
@@ -78,7 +79,7 @@ export class BusinessProfileComponent implements OnInit {
             );
           }
           doDeepSearch() {
-
+            
             this.router.navigate(['/home',{searchK:'',market:'',category:''}]);
             // this.merchantService.getBusinessesByDeepSearchKey(this.searchKey,this.selectedCategory.id || 0,this.selectedMarket.marketName, this.page, this.size)
             // .subscribe(
@@ -91,7 +92,10 @@ export class BusinessProfileComponent implements OnInit {
             //     console.log(this.fault);
             //   }
             //   );
-            }
+          }
+          viewContact() {
+            this.showContact = true ;
+          }
           ngOnInit() {
             this._Activatedroute.params.subscribe((params) => {
               this.businessId = params['id'];
@@ -100,5 +104,5 @@ export class BusinessProfileComponent implements OnInit {
             this.getLoggedInStatus();
             this.getBusinessDetails();
           }
-  }
+        }
         
