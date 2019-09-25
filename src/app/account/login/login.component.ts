@@ -22,7 +22,6 @@ export class LoginComponent implements OnInit {
   }
 
   doLogin(){
-    this.toastr.info('Login', 'Login in progess')
     let data = {
       username:this.username,
       password:this.password
