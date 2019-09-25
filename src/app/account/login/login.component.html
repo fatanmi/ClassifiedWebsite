@@ -1,13 +1,81 @@
 <div class="auth-wrapper Market_BG_2" >
-	<div class="row">
+	<div class="row account-banner">
 		<div class="col-md-6 col-xl-2 col-sm-12">
 			<a href="/"  class="text-black mb-0"><img style="margin-top:70px;padding-left:90px" src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a>
 		</div>
 	</div>
+	<div class="site-mobile-menu">
+			<div class="site-mobile-menu-header">
+			  <div class="site-mobile-menu-close mt-3">
+				<span class="icon-close2 js-menu-toggle"></span>
+			  </div>
+			</div>
+			<div class="site-mobile-menu-body"></div>
+		  </div>
+		  <header class="site-navbar container py-0 dark hide-web show--mobile" role="banner">
+			<!-- <div class="container"> -->
+			  <div class="row align-items-center hide-web">
+				
+				<div class="col-12 hide-logo-mobile col-xl-2 col-sm-12">
+				  <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
+				</div>
+				<div class="col-12 col-md-10 d-none d-xl-block">
+				  <nav class="site-navigation position-relative text-right" role="navigation">
+					<ul  class="site-menu js-clone-nav mr-auto d-none d-lg-block">
+					  <li class="active"><a class="text-white" href="#">Home</a></li>
+					  <li *ngIf="loggedIn" class="ml-xl-3 login"><a href="/merchant/profile" class="cta"><h5 class="orangeText boldText cursor-pointer">My Business Proflie </h5></a></li>
+					 <li><a class="text-white" href="#">Tailoring</a> </li>
+					  <li><a class="text-white"href="#">Fashion</a> </li>
+					  <li><a class="text-white" href="#">AutoMobile</a> </li>
+					  <li><a class="text-white" href="#">Computing</a> </li>
+					  <li><a class="text-white" href="#">Manufacturing</a> </li>
+					  <li><a class="text-white" href="#">Food</a></li>
+					  <li><a class="text-white" href="#"><span class="pl-xl-4"></span>About</a></li>
+					  <li><a class="text-white" href="#"><span class="pl-xl-4"></span>Contact</a></li>
+					</ul>
+				  </nav>
+				</div>
+				
+			  </div>
+			  <div class="d-inline-block d-xl-none ml-auto py-3 col-12" style="position: relative; top: 3px;">
+				<a href="#" class="site-menu-toggle js-menu-toggle text-black"><span class="icon-menu h3"></span></a>
+			  </div>
+			  <div class="row show-logo-mobile">
+				<h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded mobile-logo-size img-responsive"></a></h1>
+			  </div>
+			  <div class="row hide-logo-mobile">
+				<div class="col-md-2 hide-logo-mobile logo">
+				  <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
+				</div>
+				<div class="col-md-2 Mlinks">
+				  <ul  class="topGMenu">
+					<li><a href="#">Tailoring</a> |</li>
+					<li><a href="#">Fashion</a> |</li>
+					<li><a href="#">AutoMobile</a> |</li>
+					<li><a href="#">Computing</a> |</li>
+					<li><a href="#">Manufacturing</a> |</li>
+					<li><a href="#">Food</a></li>
+				  </ul>
+				</div>
+				<div class="col-md-2 rightLinks">
+				  <h5 class="orangeText boldText ">My Business  Proflie </h5>
+				</div>
+				<div class="col-md-2 rightProfile">
+				  <div class="profLeft">
+					<h5 class="orangeText boldText">Hi {{ merchantProfile.firstName }} !</h5>
+					<h6 class="whiteText text-align-left cursor-pointer" (click)="logOut()" >Log Out</h6>
+				  </div>
+				  <div class="profRight">
+					<img src="assets/classyads/images/Profile_A5_Ellipse_2_pattern.png" alt="" srcset="">
+				  </div>
+				</div>
+			  </div>
+			  <!-- </div> -->
+			</header>
 	<div class="auth-box on-sidebar bg-white">
 		<div style="padding:1px 60px" class="row" id="loginform" >
 			<div class="col-md-12" data-aos="fade" data-aos-delay="400">
-				<form action="#" id="loginform" (ngSubmit)="f.form.valid && onSubmit()" class="p-5 form-horizontal bg-white">
+				<form action="#" id="loginform" (ngSubmit)="f.form.valid && onSubmit()" class="form-horizontal bg-white">
 					<div class="row form-group">
 						<div class="col-md-12">
 							<h1 class="text-primary large"><strong>Hello!</strong></h1>

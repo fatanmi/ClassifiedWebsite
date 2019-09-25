@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MerchantService } from 'src/app/services/marchant.service';
 import { Merchant } from 'src/app/models/merchant';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 
@@ -14,9 +15,11 @@ export class ProfileComponent implements OnInit {
   constructor(
     private merchantService: MerchantService,
     private toastr: ToastrService,
-    private router : Router
-  ) { }
+    private router : Router,
+    private fb: FormBuilder
 
+  ) { }
+  
   lat = 3.4241753;
   lng = 6.4255113;
   merchantProfile : any = {
@@ -30,6 +33,11 @@ export class ProfileComponent implements OnInit {
   ProductLists: any;
   paymentMethods: any;
   listOfProducts: any = [];
+  selectedImage: File ;
+  file;
+  form = this.fb.group({
+    file: [null, Validators.required]
+  });
 
   getBusinessInfo() {
     let phoneNumber =  localStorage.getItem('username');
@@ -54,6 +62,23 @@ export class ProfileComponent implements OnInit {
   logOut() {
     localStorage.removeItem('access_token');
     this.router.navigate(['/']);
+  }
+  uploadImage(event) {
+    console.log(event.target.files[0]);
+    this.selectedImage = event.target.files[0] ;
+    //delete this.merchantProfile.businesses;
+    this.merchantProfile.merchantId = this.merchantProfile.id;
+    
+    //delete merchantProfileJsonString.businesses ;
+    
+    this.merchantService.uploadImage(this.selectedImage,this.merchantProfile).subscribe(
+      (Response: any)=>{
+        console.log(Response);
+      },
+      (error : any)=>{
+        console.log(error);
+      }
+    )
   }
   getAllCategories() {
     this.merchantService.getAllBusinessCategories().subscribe(
@@ -90,21 +115,13 @@ export class ProfileComponent implements OnInit {
   fillProductLists(){ 
   }
   editMerchantProfile (){
-    console.log(this.merchantProfile.businesses.businessTypeNames);
-    console.log(this.merchantProfile.businesses.paymentMethodNames);
-    console.log(this.merchantProfile.businesses);
     this.merchantProfile.businesses.name = this.merchantProfile.businesses.businessName;
-    this.merchantProfile.businesses.businessTypeIdList = this.merchantProfile.businesses.businessTypeNames
-    .map(
+    this.merchantProfile.businesses.businessTypeIdList = this.merchantProfile.businesses.businessTypeNames.map(
       buinessCategories => buinessCategories.id
     ).filter(catNumber => catNumber !== undefined );
-    this.merchantProfile.businesses.paymentMethodIdList = this.merchantProfile.businesses.paymentMethodNames
-    .map(
+    this.merchantProfile.businesses.paymentMethodIdList = this.merchantProfile.businesses.paymentMethodNames.map(
       buinessPayMode => buinessPayMode.id
     ).filter(ModeNumber => ModeNumber !== undefined );
-
-    console.log(this.merchantProfile.businesses.businessTypeIdList);
-    console.log(this.merchantProfile.businesses.paymentMethodIdList);
 
     this.merchantService.updateBusiness(this.merchantProfile.businesses).subscribe(
       (response: any)=>{

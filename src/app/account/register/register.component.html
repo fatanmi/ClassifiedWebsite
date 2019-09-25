@@ -1,207 +1,276 @@
 <div class="auth-wrapper Market_BG_2" >
-	<div class="row">
+	<div class="row account-banner">
 		<div class="col-md-6 col-xl-2 col-sm-12">
 			<a href="/"  class="text-black mb-0"><img style="margin-top:70px;padding-left:90px" src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a>
 		</div>
 	</div>
-	<div class="auth-box on-sidebar bg-white">
-		<div [ngClass]="{'d-none': businessProfileForm}" style="padding:1px 60px" class="row" id="personalProfileForm" >
-			<div class="col-md-12" data-aos="fade" data-aos-delay="400">
-				<form [formGroup]="bioDataForm" id="loginform" class="p-5 form-horizontal bg-white" (ngSubmit)="submitBioData()">
-					<div class="row form-group">
-						<div class="col-md-12">
-							<h4 class="float-left"><strong>Personal Details  </strong></h4> <label class="float-right step uk-icon-step-forward">   step 1 of 3</label>
-						</div>
-					</div>
-					<div class="row form-group">
-						<div class="col-md-4">
-							<label class="text-black" for="firstName">Title</label>
-              <select  id="title" class="form-control" formControlName="title">
-                <option value="mr">Mr.</option>
-                <option value="mrs">Mrs.</option>
-                <option value="ms">Ms.</option>
-                <option value="dr">Dr.</option>
-                <option value="chief">Chief</option>
-              </select>
-						</div>
-						<div class="col-md-8">
-							<label class="text-black" for="firstName">First Name</label>
-							<input type="text" id="firstName" class="form-control" formControlName="firstName">
-						</div>
-					</div>
-					<div class="row form-group">
-						<div class="col-md-12">
-							<label class="text-black" for="firstName">Last Name</label>
-							<input type="text" id="lastName" class="form-control" formControlName="lastName">
-						</div>
-					</div>
-          <div class="row form-group">
-            <div class="col-md-12">
-              <label class="text-black" for="email">Email Address</label>
-              <input type="email" id="email" class="form-control" formControlName="email">
-            </div>
-          </div>
-					<div class="row form-group">
-						<div class="col-md-7">
-							<label class="text-black" for="phoneNumber">Phone Number</label>
-							<input type="text" id="phoneNumber" class="form-control" formControlName="phoneNumber">
-						</div>
-						<div class="col-md-5">
-							<label class="text-black" for="phoneNumber">Date of Birth</label>
-							<input type="date" id="dateOfBirth" class="form-control" formControlName="dateOfBirth">
-						</div>
-					</div>
-					<div class="row form-group">
-						<div class="col-lg-6 col-md-12">
-							<label class="text-black" for="password">Password</label>
-							<input type="password" id="password" class="form-control" formControlName="password">
-						</div>
-						<div class="col-lg-6 col-md-12">
-							<label class="text-black" for="confirmPassword">Re-type Password</label>
-							<input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword">
-						</div>
-					</div>
-					<div class="row form-group">
-						<div class="col-md-12">
-							<button type="submit"  class="btn btn-primary py-2 px-4 text-white float-right" [disabled]="bioDataForm.invalid"> Next </button>
-              <button (click)="resetBioDataForm()" class="btn btn-light float-right py-2 px-4">Cancel</button>
-						</div>
-					</div>
-				</form>
+	<div class="site-mobile-menu">
+		<div class="site-mobile-menu-header">
+			<div class="site-mobile-menu-close mt-3">
+				<span class="icon-close2 js-menu-toggle"></span>
 			</div>
 		</div>
-		<div [ngClass]="{'d-block': businessProfileForm}" style="padding:1px 60px ; display:none" class="row" id="businessProfileForm" >
-			<div class="col-md-12" data-aos="fade-right" data-aos-delay="400" >
-				<form class="p-5 form-horizontal bg-white" [formGroup]="businessDataForm">
-					<div class="row form-group">
-						<div class="col-md-12">
-							<h4 class="float-left"><strong>Business Details</strong></h4> <label class="float-right step uk-icon-step-forward">   step 2 of 3</label>
-						</div>
+		<div class="site-mobile-menu-body"></div>
+	</div>
+	<header class="site-navbar container py-0 dark hide-web show--mobile" role="banner">
+		<!-- <div class="container"> -->
+			<div class="row align-items-center hide-web">
+				
+				<div class="col-12 hide-logo-mobile col-xl-2 col-sm-12">
+					<h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
+				</div>
+				<div class="col-12 col-md-10 d-none d-xl-block">
+					<nav class="site-navigation position-relative text-right" role="navigation">
+						<ul  class="site-menu js-clone-nav mr-auto d-none d-lg-block">
+							<li class="active"><a class="text-white" href="#">Home</a></li>
+							<li *ngIf="loggedIn" class="ml-xl-3 login"><a href="/merchant/profile" class="cta"><h5 class="orangeText boldText cursor-pointer">My Business Proflie </h5></a></li>
+							<li><a class="text-white" href="#">Tailoring</a> </li>
+							<li><a class="text-white"href="#">Fashion</a> </li>
+							<li><a class="text-white" href="#">AutoMobile</a> </li>
+							<li><a class="text-white" href="#">Computing</a> </li>
+							<li><a class="text-white" href="#">Manufacturing</a> </li>
+							<li><a class="text-white" href="#">Food</a></li>
+							<li><a class="text-white" href="#"><span class="pl-xl-4"></span>About</a></li>
+							<li><a class="text-white" href="#"><span class="pl-xl-4"></span>Contact</a></li>
+						</ul>
+					</nav>
+				</div>
+				
+			</div>
+			<div class="d-inline-block d-xl-none ml-auto py-3 col-12" style="position: relative; top: 3px;">
+				<a href="#" class="site-menu-toggle js-menu-toggle text-black"><span class="icon-menu h3"></span></a>
+			</div>
+			<div class="row show-logo-mobile">
+				<h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded mobile-logo-size img-responsive"></a></h1>
+			</div>
+			<div class="row hide-logo-mobile">
+				<div class="col-md-2 hide-logo-mobile logo">
+					<h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
+				</div>
+				<div class="col-md-2 Mlinks">
+					<ul  class="topGMenu">
+						<li><a href="#">Tailoring</a> |</li>
+						<li><a href="#">Fashion</a> |</li>
+						<li><a href="#">AutoMobile</a> |</li>
+						<li><a href="#">Computing</a> |</li>
+						<li><a href="#">Manufacturing</a> |</li>
+						<li><a href="#">Food</a></li>
+					</ul>
+				</div>
+				<div class="col-md-2 rightLinks">
+					<h5 class="orangeText boldText ">My Business  Proflie </h5>
+				</div>
+				<div class="col-md-2 rightProfile">
+					<div class="profLeft">
+						<h5 class="orangeText boldText">Hi {{ merchantProfile.firstName }} !</h5>
+						<h6 class="whiteText text-align-left cursor-pointer" (click)="logOut()" >Log Out</h6>
 					</div>
-					<div class="row form-group">
-						<div class="col-md-12">
-							<label class="text-dark" for="businessName">Business Name</label>
-							<input type="text" id="businessName" class="form-control" formControlName="name">
-						</div>
+					<div class="profRight">
+						<img src="assets/classyads/images/Profile_A5_Ellipse_2_pattern.png" alt="" srcset="">
 					</div>
-					<div class="row form-group">
-						<div class="col-md-6">
-							<label class="text-dark" for="businessCategory">Business Category</label>
-							<select id="businessTypeIdList"  class="form-control" (change)="onChangeBusinessCat($event)" formControlName="businessTypeIdList">
-                <option *ngFor="let b of businessCategories" value="{{b.id}}"> {{b.name}}</option>
-              </select>
-              <ng-multiselect-dropdown
-                [placeholder]="'Business Category'"
-                [data]="businessCategories2"
-                [settings]="dropdownSettings"
-                (onSelect)="onItemSelect($event)"
-                (onSelectAll)="onSelectAll($event)"
-              >
-              </ng-multiselect-dropdown>
-
-            </div>
-						<div class="col-md-6">
-							<label class="text-dark" for="phoneNumber">Product Category</label>
-							<select id="businessCategory"  class="form-control" formControlName="productCategories" (change)="onProductCategories($event)" >
-                <option *ngFor="let b of productCategories" value="{{b}}"> {{b}}</option>
-              </select>
+				</div>
+			</div>
+			<!-- </div> -->
+		</header>
+		<div class="auth-box on-sidebar bg-white">
+			<div [ngClass]="{'d-none': businessProfileForm}" class="row" id="personalProfileForm" >
+				<div class="col-md-12" data-aos="fade" data-aos-delay="400">
+					<form [formGroup]="bioDataForm" id="loginform" class="p-5 form-horizontal bg-white" (ngSubmit)="submitBioData()">
+						<div class="row form-group">
+							<div class="col-md-12">
+								<h4 class="float-left"><strong>Personal Details  </strong></h4> <label class="float-right step uk-icon-step-forward">   step 1 of 3</label>
+							</div>
 						</div>
-					</div>
-					<div class="row form-group">
-						<div class="col-md-12">
-							<label class="text-black" for="address">Business Address</label>
-							<input type="text" class="form-control" name="businessAddress" id="address"  formControlName="address"/>
+						<div class="row form-group">
+							<div class="col-md-4">
+								<label class="text-black" for="firstName">Title</label>
+								<select  id="title" class="form-control" formControlName="title">
+									<option value="mr">Mr.</option>
+									<option value="mrs">Mrs.</option>
+									<option value="ms">Ms.</option>
+									<option value="dr">Dr.</option>
+									<option value="chief">Chief</option>
+								</select>
+							</div>
+							<div class="col-md-8">
+								<label class="text-black" for="firstName">First Name</label>
+								<input type="text" id="firstName" class="form-control" formControlName="firstName">
+							</div>
 						</div>
-					</div>
-					<div class="row form-group">
-						<div class="col-md-12">
-							<label class="text-black" for="description">Business Description</label>
-							<textarea class="form-control" name="businessAddress" id="description" rows="3" formControlName="description"></textarea>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<label class="text-black" for="firstName">Last Name</label>
+								<input type="text" id="lastName" class="form-control" formControlName="lastName">
+							</div>
 						</div>
-					</div>
-					<div class="row form-group">
-            <div class="col-md-6">
-              <label class="text-dark" for="state">State</label>
-              <select id="state"  class="form-control" (change)="getCitiesInState($event)" formControlName="state">
-                <option *ngFor="let s of allState" value="{{s.name}}"> {{s.name}}</option>
-              </select>
-            </div>
-						<div class="col-md-6">
-							<label class="text-dark" for="city">City</label>
-							<select id="city"  class="form-control" formControlName="city">
-                <option *ngFor="let c of stateCities" value="{{c}}"> {{c}}</option>
-              </select>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<label class="text-black" for="email">Email Address</label>
+								<input type="email" id="email" class="form-control" formControlName="email">
+							</div>
 						</div>
-
-					</div>
-					<div class="row form-group">
-						<div class="col-md-8">
-							<label class="text-dark" for="marketName">Market Name</label>
-							<input type="text" id="marketName" class="form-control" formControlName="market">
+						<div class="row form-group">
+							<div class="col-md-7">
+								<label class="text-black" for="phoneNumber">Phone Number</label>
+								<input type="text" id="phoneNumber" class="form-control" formControlName="phoneNumber">
+							</div>
+							<div class="col-md-5">
+								<label class="text-black" for="phoneNumber">Date of Birth</label>
+								<input type="date" id="dateOfBirth" class="form-control" formControlName="dateOfBirth">
+							</div>
 						</div>
-						<div class="col-md-4">
-							<label class="text-dark" for="shopNumber">Shop Number</label>
-							<input type="text" id="shopNumber" class="form-control" formControlName="shopNumber">
+						<div class="row form-group">
+							<div class="col-lg-6 col-md-12">
+								<label class="text-black" for="password">Password</label>
+								<input type="password" id="password" class="form-control" formControlName="password">
+							</div>
+							<div class="col-lg-6 col-md-12">
+								<label class="text-black" for="confirmPassword">Re-type Password</label>
+								<input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword">
+							</div>
 						</div>
-					</div>
-					<div class="row form-group">
-						<div class="col-lg-6 col-md-12">
-							<label class="text-black" for="password">Phone Number</label>
-							<input type="text" id="password2" class="form-control" formControlName="phoneNumber">
+						<div class="row form-group">
+							<div class="col-md-12">
+								<button type="submit"  class="btn btn-primary py-2 px-4 text-white float-right" [disabled]="bioDataForm.invalid"> Next </button>
+								<button (click)="resetBioDataForm()" class="btn btn-light float-right py-2 px-4">Cancel</button>
+							</div>
 						</div>
-						<div class="col-lg-6 col-md-12">
-							<label class="text-black" for="confirmPassword">Select Payment methods</label>
-              <select id="paymentMethodIdList"  class="form-control" formControlName="paymentMethodIdList" (change)="onPaymentMethod($event)">
-                <option *ngFor="let s of paymentMethods" value="{{s.id}}"> {{s.paymentMode}}</option>
-              </select>
+					</form>
+				</div>
+			</div>
+			<div [ngClass]="{'d-block': businessProfileForm}" style="display:none" class="row" id="businessProfileForm" >
+				<div class="col-md-12" data-aos="fade-right" data-aos-delay="400" >
+					<form class="p-5 form-horizontal bg-white" [formGroup]="businessDataForm">
+						<div class="row form-group">
+							<div class="col-md-12">
+								<h4 class="float-left"><strong>Business Details</strong></h4> <label class="float-right step uk-icon-step-forward">   step 2 of 3</label>
+							</div>
 						</div>
-					</div>
-          <div class="row form-group">
-            <div class="col-md-12">
-              <label class="text-dark" for="marketName">Business Email</label>
-              <input type="email" id="businessemail" class="form-control" formControlName="email">
-            </div>
-          </div>
-          <div class="row form-group">
-            <div class="col-md-4">
-              <label class="text-dark" for="marketName">Active Days</label>
-              <select id="activeDays" class="form-control" formControlName="activeDays">
-                <option value="monday">Monday</option>
-                <option value="tuesday">Tuesday</option>
-                <option value="wednesday">Wednesday</option>
-                <option value="thursday">Thursday</option>
-                <option value="friday">Friday</option>
-                <option value="saturday">Saturday</option>
-                <option value="sunday">Sunday</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="text-dark" for="marketName">Opening Hours</label>
-              <input type="time" id="openingHour" class="form-control" formControlName="openingHour">
-            </div>
-            <div class="col-md-4">
-              <label class="text-dark" for="marketName">Closing Hours</label>
-              <input type="time" id="closingHours" class="form-control" formControlName="closingHours">
-            </div>
-          </div>
-          <div class="row form-group">
-            <div class="col-md-6">
-              <label class="text-dark" for="website">Website</label>
-              <input type="text" id="website" class="form-control" formControlName="website">
-            </div>
-            <div class="col-md-6">
-              <label class="text-dark" for="whatsappNumber">WhatsApp Number</label>
-              <input type="text" id="whatsappNumber" class="form-control" formControlName="whatsappNumber">
-            </div>
-          </div>
-					<div class="row form-group">
-						<div class="col-md-12">
-              <button class="btn btn-primary py-2 px-4 text-white float-right" (click)="createMerchant()" >Finish</button>
-							<a (click)="toggleFormView()" href="javascript:void(0)" class="btn btn-info py-2 px-4 btn-light float-right">Back</a>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<label class="text-dark" for="businessName">Business Name</label>
+								<input type="text" id="businessName" class="form-control" formControlName="name">
+							</div>
 						</div>
-					</div>
-				</form>
+						<div class="row form-group">
+							<div class="col-md-6">
+								<label class="text-dark" for="businessCategory">Business Category</label>
+								<select id="businessTypeIdList"  class="form-control" (change)="onChangeBusinessCat($event)" formControlName="businessTypeIdList">
+									<option *ngFor="let b of businessCategories" value="{{b.id}}"> {{b.name}}</option>
+								</select>
+								<!-- <ng-multiselect-dropdown
+									[placeholder]="'Business Category'"
+									[data]="businessCategories2"
+									[settings]="dropdownSettings"
+									(onSelect)="onItemSelect($event)"
+									(onSelectAll)="onSelectAll($event)"
+									>
+								</ng-multiselect-dropdown> -->
+								
+							</div>
+							<div class="col-md-6">
+								<label class="text-dark" for="phoneNumber">Product Category</label>
+								<select id="businessCategory"  class="form-control" formControlName="productCategories" (change)="onProductCategories($event)" >
+									<option *ngFor="let b of productCategories" value="{{b}}"> {{b}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<label class="text-black" for="address">Business Address</label>
+								<input type="text" class="form-control" name="businessAddress" id="address"  formControlName="address"/>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<label class="text-black" for="description">Business Description</label>
+								<textarea class="form-control" name="businessAddress" id="description" rows="3" formControlName="description"></textarea>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-6">
+								<label class="text-dark" for="state">State</label>
+								<select id="state"  class="form-control" (change)="getCitiesInState($event)" formControlName="state">
+									<option *ngFor="let s of allState" value="{{s.name}}"> {{s.name}}</option>
+								</select>
+							</div>
+							<div class="col-md-6">
+								<label class="text-dark" for="city">City</label>
+								<select id="city"  class="form-control" formControlName="city">
+									<option *ngFor="let c of stateCities" value="{{c}}"> {{c}}</option>
+								</select>
+							</div>
+							
+						</div>
+						<div class="row form-group">
+							<div class="col-md-8">
+								<label class="text-dark" for="marketName">Market Name</label>
+								<input type="text" id="marketName" class="form-control" formControlName="market">
+							</div>
+							<div class="col-md-4">
+								<label class="text-dark" for="shopNumber">Shop Number</label>
+								<input type="text" id="shopNumber" class="form-control" formControlName="shopNumber">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-lg-6 col-md-12">
+								<label class="text-black" for="password">Phone Number</label>
+								<input type="text" id="password2" class="form-control" formControlName="phoneNumber">
+							</div>
+							<div class="col-lg-6 col-md-12">
+								<label class="text-black" for="confirmPassword">Select Payment methods</label>
+								<select id="paymentMethodIdList"  class="form-control" formControlName="paymentMethodIdList" (change)="onPaymentMethod($event)">
+									<option *ngFor="let s of paymentMethods" value="{{s.id}}"> {{s.paymentMode}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<label class="text-dark" for="marketName">Business Email</label>
+								<input type="email" id="businessemail" class="form-control" formControlName="email">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-4">
+								<label class="text-dark" for="marketName">Active Days</label>
+								<select id="activeDays" class="form-control" formControlName="activeDays">
+									<option value="monday">Monday</option>
+									<option value="tuesday">Tuesday</option>
+									<option value="wednesday">Wednesday</option>
+									<option value="thursday">Thursday</option>
+									<option value="friday">Friday</option>
+									<option value="saturday">Saturday</option>
+									<option value="sunday">Sunday</option>
+								</select>
+							</div>
+							<div class="col-md-4">
+								<label class="text-dark" for="marketName">Opening Hours</label>
+								<input type="time" id="openingHour" class="form-control" formControlName="openingHour">
+							</div>
+							<div class="col-md-4">
+								<label class="text-dark" for="marketName">Closing Hours</label>
+								<input type="time" id="closingHours" class="form-control" formControlName="closingHours">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-6">
+								<label class="text-dark" for="website">Website</label>
+								<input type="text" id="website" class="form-control" formControlName="website">
+							</div>
+							<div class="col-md-6">
+								<label class="text-dark" for="whatsappNumber">WhatsApp Number</label>
+								<input type="text" id="whatsappNumber" class="form-control" formControlName="whatsappNumber">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<button class="btn btn-primary py-2 px-4 text-white float-right" (click)="createMerchant()" >Finish</button>
+								<a (click)="toggleFormView()" href="javascript:void(0)" class="btn btn-info py-2 px-4 btn-light float-right">Back</a>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+	

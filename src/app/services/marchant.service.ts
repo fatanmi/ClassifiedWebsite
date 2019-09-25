@@ -16,13 +16,22 @@ export class MerchantService {
   httpOptions = {
 
     headers: new HttpHeaders({
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json;boundary:3534545werew234',
       'Authorization': `Bearer ${this.token}`
     })
 
   };
 
-  constructor(private http: HttpClient) { }
+  httpOptionsFile = {
+
+    headers: new HttpHeaders({
+      'Content-Type': 'multipart/form-data',      
+      'Accept': 'application/json'
+    })
+  };
+  constructor(
+    private http: HttpClient,
+    ) { }
 
   // Get all market locatiins
   getAllMarkets (): Observable<Market[]> {
@@ -104,7 +113,18 @@ export class MerchantService {
   getBusinessCategories(): Observable<any> {
     return this.http.get(Settings._url + '/businesses/categories/all');
   }
+  
   getPaymentMethods(): Observable<any> {
     return this.http.get(Settings._url + '/payment_methods');
+  }
+  uploadImage(fileIm : File, merchantProfileJsonString): Observable<any> {
+    console.log(fileIm);
+    const file = new FormData();
+    file.append('file',fileIm);
+
+    console.log();
+    const res = this.http.put(Settings._url + '/merchants/profile-with-pics', {file, merchantProfileJsonString},this.httpOptionsFile);
+    console.log(res);
+    return res ;
   }
 }

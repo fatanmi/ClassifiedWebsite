@@ -1,266 +1,337 @@
 <div class="container-fluid">
-  <div class="row topBg dark">
-    <div class="col-md-2 logo">
-      <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
-    </div>
-    <div class="col-md-6 Mlinks">
-      <ul  class="topGMenu">
-        <li><a href="#">Tailoring</a> |</li>
-        <li><a href="#">Fashion</a> |</li>
-        <li><a href="#">AutoMobile</a> |</li>
-        <li><a href="#">Computing</a> |</li>
-        <li><a href="#">Manufacturing</a> |</li>
-        <li><a href="#">Food</a></li>
-      </ul>
-    </div>
-    <div class="col-md-2 rightLinks">
-      <h5 class="orangeText boldText">My Business  Proflie </h5>
-    </div>
-    <div class="col-md-2 rightProfile">
-      <div class="profLeft">
-        <h5 class="orangeText boldText">Hi {{ merchantProfile.firstName }} !</h5>
-        <h6 class="whiteText text-align-left cursor-pointer" (click)="logOut()" >Log Out</h6>
-      </div>
-      <div class="profRight">
-        <img src="assets/classyads/images/Profile_A5_Ellipse_2_pattern.png" alt="" srcset="">
+  <div class="site-mobile-menu">
+    <div class="site-mobile-menu-header">
+      <div class="site-mobile-menu-close mt-3">
+        <span class="icon-close2 js-menu-toggle"></span>
       </div>
     </div>
+    <div class="site-mobile-menu-body"></div>
   </div>
-  <div class="pageContent">
-    <h1 class="pgTitle orangeText">
-      Business Profile
-    </h1>
-    <div class="row contentGroup">
-      <div class="col-md-4 leftBizBox">
-        <h4 class="storeName">
-          {{merchantProfile.businesses.businessName}}
-        </h4>
-        <div class="groupImgeBtn">
-          <img class="leftBoxImg" src="../assets/classyads/images/Shop_Image_A5_Rectangle_13_pattern.png" />
-          <div>
-            <button type="button" class="btn btn-orange btn-lg btn-full orangeBackg">
-              Upload Image
-            </button>
+  <header class="site-navbar container py-0 dark hide-web show--mobile" role="banner">
+    <!-- <div class="container"> -->
+      <div class="row align-items-center hide-web">
+        
+        <div class="col-12 hide-logo-mobile col-xl-2 col-sm-12">
+          <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
+        </div>
+        <div class="col-12 col-md-10 d-none d-xl-block">
+          <nav class="site-navigation position-relative text-right" role="navigation">
+            <ul  class="site-menu js-clone-nav mr-auto d-none d-lg-block">
+              <li class="active"><a class="text-white" href="#">Home</a></li>
+              <li *ngIf="loggedIn" class="ml-xl-3 login"><a href="/merchant/profile" class="cta"><h5 class="orangeText boldText cursor-pointer">My Business Proflie </h5></a></li>
+             <li><a class="text-white" href="#">Tailoring</a> </li>
+              <li><a class="text-white"href="#">Fashion</a> </li>
+              <li><a class="text-white" href="#">AutoMobile</a> </li>
+              <li><a class="text-white" href="#">Computing</a> </li>
+              <li><a class="text-white" href="#">Manufacturing</a> </li>
+              <li><a class="text-white" href="#">Food</a></li>
+              <li><a class="text-white" href="#"><span class="pl-xl-4"></span>About</a></li>
+              <li><a class="text-white" href="#"><span class="pl-xl-4"></span>Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+        
+      </div>
+      <div class="d-inline-block d-xl-none ml-auto py-3 col-12" style="position: relative; top: 3px;">
+        <a href="#" class="site-menu-toggle js-menu-toggle text-black"><span class="icon-menu h3"></span></a>
+      </div>
+      <div class="row show-logo-mobile">
+        <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded mobile-logo-size img-responsive"></a></h1>
+      </div>
+      <div class="row hide-logo-mobile">
+        <div class="col-md-2 hide-logo-mobile logo">
+          <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
+        </div>
+        <div class="col-md-2 Mlinks">
+          <ul  class="topGMenu">
+            <li><a href="#">Tailoring</a> |</li>
+            <li><a href="#">Fashion</a> |</li>
+            <li><a href="#">AutoMobile</a> |</li>
+            <li><a href="#">Computing</a> |</li>
+            <li><a href="#">Manufacturing</a> |</li>
+            <li><a href="#">Food</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2 rightLinks">
+          <h5 class="orangeText boldText ">My Business  Proflie </h5>
+        </div>
+        <div class="col-md-2 rightProfile">
+          <div class="profLeft">
+            <h5 class="orangeText boldText">Hi {{ merchantProfile.firstName }} !</h5>
+            <h6 class="whiteText text-align-left cursor-pointer" (click)="logOut()" >Log Out</h6>
           </div>
-        </div>  
-        <div class="map-location">
+          <div class="profRight">
+            <img src="assets/classyads/images/Profile_A5_Ellipse_2_pattern.png" alt="" srcset="">
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+    </header>
+    <div class="row topBg dark hide-logo-mobile">
+      
+      <div class="col-md-2 hide-logo-mobile logo">
+        <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0"><img src="assets/classyads/images/Merch Logo.png"  class="img-fluid rounded img-responsive"></a></h1>
+      </div>
+      <div class="col-md-2 Mlinks offset-4">
+        <!-- <ul  class="topGMenu">
+          <li><a href="#">Tailoring</a> |</li>
+          <li><a href="#">Fashion</a> |</li>
+          <li><a href="#">AutoMobile</a> |</li>
+          <li><a href="#">Computing</a> |</li>
+          <li><a href="#">Manufacturing</a> |</li>
+          <li><a href="#">Food</a></li>
+        </ul> -->
+      </div>
+      <div class="col-md-2 rightLinks">
+        <h5 class="orangeText boldText">My Business  Proflie </h5>
+      </div>
+      <div class="col-md-2 rightProfile">
+        <div class="profLeft">
+          <h5 class="orangeText boldText">Hi {{ merchantProfile.firstName }} !</h5>
+          <h6 class="whiteText text-align-left cursor-pointer" (click)="logOut()" >Log Out</h6>
+        </div>
+        <div class="profRight">
+          <img src="assets/classyads/images/Profile_A5_Ellipse_2_pattern.png" alt="" srcset="">
+        </div>
+      </div>
+      
+    </div>
+    <div class="pageContent">
+      <h1 class="pgTitle orangeText bixProfTxt">
+        Business Profile
+      </h1>
+      <div class="row contentGroup">
+        <div class="col-md-4 leftBizBox">
+          <h4 class="storeName">
+            {{merchantProfile.businesses.businessName}}
+          </h4>
+          <div class="groupImgeBtn">
+            <img class="leftBoxImg" src="../assets/classyads/images/Shop_Image_A5_Rectangle_13_pattern.png" />
+            <div>
+              <form [formGroup]="form" >
+                  <input style="display: none" type="file" formControlName="file" (change)="uploadImage($event)" value="Upload Image" #fileInput>
+                  <button (click)="fileInput.click()" class="btn btn-orange btn-lg btn-full orangeBackg">Select File</button>
+              </form>
+            </div>
+          </div>  
+          <div class="map-location">
             <agm-map [latitude]="lat" [longitude]="lng">
               <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
             </agm-map>
+          </div>
         </div>
-      </div>
-      <div class="col-md-8 rightBizBox">  
-        <div>
-          <h4 class="pInfoLay pInfoTxt">
-            Business Details
-          </h4>
-          <textarea name="businessDetails" [(ngModel)]="merchantProfile.businesses.description" class="infoTextArea form-control" id="businessDetails" cols="100" rows="5">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse 
-          </textarea>
-        </div>
-        <div class="row">
-          <div class="col-md-8">
+        <div class="col-md-8 rightBizBox">  
+          <div class="prfInfos">
             <h4 class="pInfoLay pInfoTxt">
-              Working Hours
+              Business Details
             </h4>
+            <textarea name="businessDetails" [(ngModel)]="merchantProfile.businesses.description" class="infoTextArea form-control" id="businessDetails" cols="100" rows="5">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse 
+            </textarea>
           </div>
-        </div>
-        <div class="row prfInfos">
-          <div class="col-md-4">
-            <input type="time" [(ngModel)]="merchantProfile.businesses.openingHour" class="infoInput form-control"/>
+          <div class="row prfInfos">
+            <div class="col-md-8">
+              <h4 class="pInfoLay pInfoTxt">
+                Working Hours
+              </h4>
+            </div>
           </div>
-          <div class="col-md-4 ">
-            <input type="time" [(ngModel)]="merchantProfile.businesses.closingHour" class="infoInput form-control"/>
+          <div class="row prfInfos">
+            <div class="col-6 col-md-4">
+              <input type="time" [(ngModel)]="merchantProfile.businesses.openingHour" class="infoInput form-control"/>
+            </div>
+            <div class="col-6 col-md-4 ">
+              <input type="time" [(ngModel)]="merchantProfile.businesses.closingHour" class="infoInput form-control"/>
+            </div>
           </div>
-        </div>
-        <div class="row prfInfos">
+          <div class="row prfInfos">
             <div class="col-md-4">
               <h5 class="pInfoTxt">Categories</h5>
             </div>
             <div class="col-md-6">
-                <ng-multiselect-dropdown 
-                [placeholder]="'Product Categories'"
-                [data]="businessCategories"
-                [(ngModel)]="merchantProfile.businesses.businessTypeNames"
-                [settings]="dropdownSettings"
-                (onSelect)="onCategoryItemSelect($event)"
-                (onSelectAll)="onSelectAll($event)"
+              <ng-multiselect-dropdown 
+              [placeholder]="'Product Categories'"
+              [data]="businessCategories"
+              [(ngModel)]="merchantProfile.businesses.businessTypeNames"
+              [settings]="dropdownSettings"
+              (onSelect)="onCategoryItemSelect($event)"
+              (onSelectAll)="onSelectAll($event)"
               >
-              </ng-multiselect-dropdown>
-            </div>
+            </ng-multiselect-dropdown>
           </div>
+        </div>
         <div class="row prfInfos">
           <div class="col-md-4">
             <h5 class="pInfoTxt">Products</h5>
           </div>
           <div class="col-md-6">
-              <ng-multiselect-dropdown 
-              [placeholder]="'Products'"
-              [data]="listOfProducts"
-              [(ngModel)]="merchantProfile.businesses.productCategories"
-              [settings]="dropdownSettingsProduct"
-              (onSelect)="onItemSelect($event)"
-              (onSelectAll)="onSelectAll($event)"
+            <ng-multiselect-dropdown 
+            [placeholder]="'Products'"
+            [data]="listOfProducts"
+            [(ngModel)]="merchantProfile.businesses.productCategories"
+            [settings]="dropdownSettingsProduct"
+            (onSelect)="onItemSelect($event)"
+            (onSelectAll)="onSelectAll($event)"
             >
-            </ng-multiselect-dropdown>
-          </div>
-        </div>
-        <div class="row prfInfos">
-          <div class="col-md-4">
-            <h5 class="pInfoTxt">Phone Number</h5>
-          </div>
-          <div class="col-md-6">
-            <input type="text" [(ngModel)]="merchantProfile.businesses.phoneNumber" class="infoInput form-control"/>
-          </div>
-        </div>
-        <div class="row prfInfos">
-          <div class="col-md-4">
-            <h5 class="pInfoTxt">WhatsApp Number</h5>
-          </div>
-          <div class="col-md-6">
-            <input type="text" [(ngModel)]="merchantProfile.businesses.whatsappNumber" class="infoInput form-control"/>
-          </div>
-        </div>
-        
-        <div class="row prfInfos">
-          <div class="col-md-4">
-            <h5 class="pInfoTxt">Payment Method</h5>
-          </div>
-          <div class="col-md-6">
-              <ng-multiselect-dropdown 
-              [placeholder]="'Payment Methods'"
-              [data]="payMode"
-              [(ngModel)]="merchantProfile.businesses.paymentMethodNames"
-              [settings]="dropdownSettings"
-              (onSelect)="onItemSelect($event)"
-              (onSelectAll)="onSelectAll($event)"
-            >
-            </ng-multiselect-dropdown>
-           
-          </div>
-        </div>
-        <div class="row prfInfos">
-          <div class="col-md-4">
-            <h5 class="pInfoTxt">Address</h5>
-          </div>
-          <div class="col-md-6">
-            <input type="text" [(ngModel)]="merchantProfile.businesses.address" class="infoInput form-control"/>
-          </div>
-        </div>
-        <div class="row prfInfos">
-          <div class="col-md-4">
-            <h5 class="pInfoTxt">Website</h5>
-          </div>
-          <div class="col-md-6">
-            <input type="text" [(ngModel)]="merchantProfile.businesses.website" class="infoInput form-control"/>
-          </div>
+          </ng-multiselect-dropdown>
         </div>
       </div>
-    </div>
-    <div class="row gallery-sect">
-      <h4 class="pInfoLay pInfoTxt">
-        Gallery
-      </h4>
-      <div class="row gal-Images">
-        <div class="card col-md-3 cs-card card-borderless text-white">
-          <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
-          <div class="card-img-overlay">
-            <h5 class="card-title">X</h5>
-          </div>
+      <div class="row prfInfos">
+        <div class="col-md-4">
+          <h5 class="pInfoTxt">Phone Number</h5>
         </div>
-        <div class="card col-md-3 cs-card card-borderless text-white">
-          <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
-          <div class="card-img-overlay">
-            <h5 class="card-title">X</h5>
-          </div>
-        </div>
-        <div class="card col-md-3 cs-card card-borderless text-white">
-          <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
-          <div class="card-img-overlay">
-            <h5 class="card-title">X</h5>
-          </div>
-        </div>
-        <div class="card col-md-3 cs-card card-borderless text-white">
-          <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
-          <div class="card-img-overlay">
-            <h5 class="card-title">X</h5>
-          </div>
-        </div>
-        <div class="card col-md-3 cs-card card-borderless text-white">
-          <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
-          <div class="card-img-overlay">
-            <h5 class="card-title">X</h5>
-          </div>
-        </div>
-        <div class="card col-md-3 cs-card card-borderless text-white">
-          <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
-          <div class="card-img-overlay">
-            <h5 class="card-title">X</h5>
-          </div>
-        </div>
-        <div class="card col-md-3 cs-card card-borderless text-white">
-          <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
-          <div class="card-img-overlay">
-            <h5 class="card-title">X</h5>
-          </div>
-        </div>
-        <div class="card col-md-3 cs-card card-borderless text-white">
-          <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
-          <div class="card-img-overlay">
-            <h5 class="card-title">X</h5>
-          </div>
+        <div class="col-md-6">
+          <input type="text" [(ngModel)]="merchantProfile.businesses.phoneNumber" class="infoInput form-control"/>
         </div>
       </div>
-        
-      <div class="btnBox">
-        <button type="button" (click)="editMerchantProfile()" class="padBtn btn btn-orange btn-sm orangeBackg">
-          Save & UPLOAD
-        </button>
+      <div class="row prfInfos">
+        <div class="col-md-4">
+          <h5 class="pInfoTxt">WhatsApp Number</h5>
+        </div>
+        <div class="col-md-6">
+          <input type="text" [(ngModel)]="merchantProfile.businesses.whatsappNumber" class="infoInput form-control"/>
+        </div>
       </div>
       
+      <div class="row prfInfos">
+        <div class="col-md-4">
+          <h5 class="pInfoTxt">Payment Method</h5>
+        </div>
+        <div class="col-md-6">
+          <ng-multiselect-dropdown 
+          [placeholder]="'Payment Methods'"
+          [data]="payMode"
+          [(ngModel)]="merchantProfile.businesses.paymentMethodNames"
+          [settings]="dropdownSettings"
+          (onSelect)="onItemSelect($event)"
+          (onSelectAll)="onSelectAll($event)"
+          >
+        </ng-multiselect-dropdown>
+        
+      </div>
+    </div>
+    <div class="row prfInfos">
+      <div class="col-md-4">
+        <h5 class="pInfoTxt">Address</h5>
+      </div>
+      <div class="col-md-6">
+        <input type="text" [(ngModel)]="merchantProfile.businesses.address" class="infoInput form-control"/>
+      </div>
+    </div>
+    <div class="row prfInfos">
+      <div class="col-md-4">
+        <h5 class="pInfoTxt">Website</h5>
+      </div>
+      <div class="col-md-6">
+        <input type="text" [(ngModel)]="merchantProfile.businesses.website" class="infoInput form-control"/>
+      </div>
     </div>
   </div>
-  <footer class="row foot dark">
-    <div class="col footBox">
-      <h5>About us </h5>
-      <h6> Company </h6>
-      <h6>Vision</h6>
-      <h6>Team </h6>
-      <h6>Our Blog </h6>
-      <h6>Contact us </h6>
-    </div>
-    <div class="col footBox">
-      <h5>How it works </h5>
-      <h6> Registration </h6>
-      <h6>Upload files</h6>
-      <h6>Boast Ads </h6>
-    </div>
-    <div class="col footBox">
-      <h5>Legal </h5>
-      <h6>Content Policy</h6>
-      <h6>Privacy Policy</h6>
-      <h6>Indemity & Abiration </h6>
-    </div>
-    <div class="col footBox">
-      <h5>Payment</h5>
-      <div class="pay-badge-parent">
-        <div class="pay-badges give-way-50">
-          <img src="assets/classyads/images/Mastercard_Logo_A5_Rectangle_5_pattern.png" alt="mastercard-logo" srcset="">
-          <img src="assets/classyads/images/Visa_Logo_A5_Rectangle_7_pattern.png" alt="mastercard-logo" srcset="">
-        </div>
-        <div class="pay-badges">
-          <img src="assets/classyads/images/Verver_Logo_A5_Rectangle_9_pattern.png" alt="mastercard-logo" srcset="">
-          <img src="assets/classyads/images/Bank Transfer.png" alt="mastercard-logo" srcset="">
-        </div>
+</div>
+<div class="row gallery-sect">
+  <h4 class="pInfoLay pInfoTxt">
+    Gallery
+  </h4>
+  <div class="row gal-Images">
+    <div class="card col-6 col-md-3 cs-card card-borderless text-white">
+      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
+      <div class="card-img-overlay">
+        <h5 class="card-title">X</h5>
       </div>
-      
     </div>
-    <div class="col footBox">
-      <h5>Support</h5>
-      <h6>support@spaces.com </h6>
-      <h6>Accessibility</h6>
-      <h6>Safety tips </h6>
-      <h6>FAQs </h6>
-      <h6>Site Map</h6>
+    <div class="card col-6 col-md-3 cs-card card-borderless text-white">
+      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
+      <div class="card-img-overlay">
+        <h5 class="card-title">X</h5>
+      </div>
     </div>
-  </footer>
+    <div class="card col-6 col-md-3 cs-card card-borderless text-white">
+      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
+      <div class="card-img-overlay">
+        <h5 class="card-title">X</h5>
+      </div>
+    </div>
+    <div class="card col-6 col-md-3 cs-card card-borderless text-white">
+      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
+      <div class="card-img-overlay">
+        <h5 class="card-title">X</h5>
+      </div>
+    </div>
+    <div class="card col-6 col-md-3 cs-card card-borderless text-white">
+      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
+      <div class="card-img-overlay">
+        <h5 class="card-title">X</h5>
+      </div>
+    </div>
+    <div class="card col-6 col-md-3 cs-card card-borderless text-white">
+      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
+      <div class="card-img-overlay">
+        <h5 class="card-title">X</h5>
+      </div>
+    </div>
+    <div class="card col-6 col-md-3 cs-card card-borderless text-white">
+      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
+      <div class="card-img-overlay">
+        <h5 class="card-title">X</h5>
+      </div>
+    </div>
+    <div class="card col-6 col-md-3 cs-card card-borderless text-white">
+      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
+      <div class="card-img-overlay">
+        <h5 class="card-title">X</h5>
+      </div>
+    </div>
+  </div>
+  
+  <div class="btnBox">
+    <button type="button" (click)="editMerchantProfile()" class="padBtn btn btn-orange btn-sm orangeBackg">
+      Save & UPLOAD
+    </button>
+  </div>
+  
+</div>
+</div>
+<footer class="row foot dark">
+  <div class="col footBox">
+    <h5>About us </h5>
+    <h6> Company </h6>
+    <h6>Vision</h6>
+    <h6>Team </h6>
+    <h6>Our Blog </h6>
+    <h6>Contact us </h6>
+  </div>
+  <div class="col footBox">
+    <h5>How it works </h5>
+    <h6> Registration </h6>
+    <h6>Upload files</h6>
+    <h6>Boast Ads </h6>
+  </div>
+  <div class="col footBox">
+    <h5>Legal </h5>
+    <h6>Content Policy</h6>
+    <h6>Privacy Policy</h6>
+    <h6>Indemity & Abiration </h6>
+  </div>
+  <div class="col footBox">
+    <h5>Payment</h5>
+    <div class="pay-badge-parent">
+      <div class="pay-badges give-way-50">
+        <img src="assets/classyads/images/Mastercard_Logo_A5_Rectangle_5_pattern.png" alt="mastercard-logo" srcset="">
+        <img src="assets/classyads/images/Visa_Logo_A5_Rectangle_7_pattern.png" alt="mastercard-logo" srcset="">
+      </div>
+      <div class="pay-badges">
+        <img src="assets/classyads/images/Verver_Logo_A5_Rectangle_9_pattern.png" alt="mastercard-logo" srcset="">
+        <img src="assets/classyads/images/Bank Transfer.png" alt="mastercard-logo" srcset="">
+      </div>
+    </div>
+    
+  </div>
+  <div class="col footBox">
+    <h5>Support</h5>
+    <h6>support@spaces.com </h6>
+    <h6>Accessibility</h6>
+    <h6>Safety tips </h6>
+    <h6>FAQs </h6>
+    <h6>Site Map</h6>
+  </div>
+</footer>
 </div>
