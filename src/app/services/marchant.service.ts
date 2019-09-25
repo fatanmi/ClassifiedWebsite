@@ -126,13 +126,14 @@ export class MerchantService {
         reportProgress: true,
     };
 
-
     console.log(fileIm);
     const file = new FormData();
     file.append('file', fileIm);
+    const merchJson = JSON.stringify(merchantProfileJsonString);
+    file.append('merchantProfileJsonString', merchJson);
 
     console.log();
-    const res = this.http.put(Settings._url + '/merchants/profile-with-pics', {file, merchantProfileJsonString},this.httpOptionsFile);
+    const res = this.http.put(Settings._url + '/merchants/profile-with-pics', file,options);
     console.log(res);
     return res ;
   }

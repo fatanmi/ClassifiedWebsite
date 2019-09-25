@@ -38,6 +38,11 @@ export class ProfileComponent implements OnInit {
   form = this.fb.group({
     file: [null, Validators.required]
   });
+  inProgress : boolean = false;
+  galleryImage1 : boolean = false ;
+  galleryImage2 : boolean = false;
+  galleryImage3 : boolean = false;
+  galleryImage4 : boolean = false;
 
   getBusinessInfo() {
     let phoneNumber =  localStorage.getItem('username');
@@ -64,15 +69,15 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/']);
   }
   uploadImage(event) {
-    console.log(event.target.files[0]);
+    this.inProgress = true;
     this.selectedImage = event.target.files[0] ;
-    //delete this.merchantProfile.businesses;
     this.merchantProfile.merchantId = this.merchantProfile.id;
-    
-    //delete merchantProfileJsonString.businesses ;
     
     this.merchantService.uploadImage(this.selectedImage,this.merchantProfile).subscribe(
       (Response: any)=>{
+        this.inProgress = false;
+        this.toastr.success('Success', 'Profile Image updated successfully');
+        this.merchantProfile.profilePictureUrl = Response.data.profilePictureUrl;
         console.log(Response);
       },
       (error : any)=>{

@@ -461,6 +461,27 @@ img {
 .preview-contacts {
     cursor: pointer;
 }
+.upText {
+    font-size:10pt;
+}
+.menuImage {
+    width: 100px;
+    border-radius: 100px;
+}
+.card-img-overlay-cus {
+    padding: unset;
+    padding-right: 5rem;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+.plus-big {
+    font-size: 300pt;
+    font-size: 180pt;
+    font-weight: bold;
+    opacity: 0.7;
+    cursor: pointer;
+}
 @media(max-width:767px) {
     .bixProfTxt {
         margin-top:120px;

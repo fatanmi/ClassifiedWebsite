@@ -19,7 +19,7 @@
             <ul  class="site-menu js-clone-nav mr-auto d-none d-lg-block">
               <li class="active"><a class="text-white" href="#">Home</a></li>
               <li *ngIf="loggedIn" class="ml-xl-3 login"><a href="/merchant/profile" class="cta"><h5 class="orangeText boldText cursor-pointer">My Business Proflie </h5></a></li>
-             <li><a class="text-white" href="#">Tailoring</a> </li>
+              <li><a class="text-white" href="#">Tailoring</a> </li>
               <li><a class="text-white"href="#">Fashion</a> </li>
               <li><a class="text-white" href="#">AutoMobile</a> </li>
               <li><a class="text-white" href="#">Computing</a> </li>
@@ -91,7 +91,7 @@
           <h6 class="whiteText text-align-left cursor-pointer" (click)="logOut()" >Log Out</h6>
         </div>
         <div class="profRight">
-          <img src="assets/classyads/images/Profile_A5_Ellipse_2_pattern.png" alt="" srcset="">
+          <img src="{{merchantProfile.profilePictureUrl}}" alt="" class="menuImage" srcset="">
         </div>
       </div>
       
@@ -106,11 +106,11 @@
             {{merchantProfile.businesses.businessName}}
           </h4>
           <div class="groupImgeBtn">
-            <img class="leftBoxImg" src="../assets/classyads/images/Shop_Image_A5_Rectangle_13_pattern.png" />
+            <img class="leftBoxImg" src="{{merchantProfile.profilePictureUrl}}" />
             <div>
               <form [formGroup]="form" >
-                  <input style="display: none" type="file" formControlName="file" (change)="uploadImage($event)" value="Upload Image" #fileInput>
-                  <button (click)="fileInput.click()" class="btn btn-orange btn-lg btn-full orangeBackg">Select File</button>
+                <input style="display: none" type="file" formControlName="file" (change)="uploadImage($event)" value="Upload Image" #fileInput>
+                <button (click)="fileInput.click()" class="btn btn-orange btn-lg btn-full orangeBackg">Upload store Image<span class="upText" *ngIf="inProgress">uploading...</span> </button>
               </form>
             </div>
           </div>  
@@ -233,53 +233,44 @@
   </h4>
   <div class="row gal-Images">
     <div class="card col-6 col-md-3 cs-card card-borderless text-white">
-      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
+      <img src="assets/classyads/images/Default_Image_Thumbnail.png" class="card-img" alt="gallery-image">
       <div class="card-img-overlay">
-        <h5 class="card-title">X</h5>
+        <h5 *ngIf="galleryImage1" class="card-title">X</h5>
+      </div>
+      <div class="card-img-overlay card-img-overlay-cus">
+        <h5 class="card-title plus-big">+</h5>
       </div>
     </div>
     <div class="card col-6 col-md-3 cs-card card-borderless text-white">
-      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
+      <img src="assets/classyads/images/Default_Image_Thumbnail.png" class="card-img" alt="gallery-image">
       <div class="card-img-overlay">
-        <h5 class="card-title">X</h5>
+        <h5 *ngIf="galleryImage2" class="card-title">X</h5>
+      </div>
+      <div class="card-img-overlay card-img-overlay-cus">
+        <h5 class="card-title plus-big">+</h5>
       </div>
     </div>
     <div class="card col-6 col-md-3 cs-card card-borderless text-white">
-      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
+      <img src="assets/classyads/images/Default_Image_Thumbnail.png" class="card-img" alt="gallery-image">
       <div class="card-img-overlay">
-        <h5 class="card-title">X</h5>
+        <h5 *ngIf="galleryImage3" class="card-title">X</h5>
+      </div>
+      <div class="card-img-overlay card-img-overlay-cus">
+          <input style="display: none" type="file"  (change)="uploadImage($event)" value="Upload Image" #gallInput3>
+          <h5 (click)="gallInput3.click()" class="card-title plus-big">+</h5>
       </div>
     </div>
     <div class="card col-6 col-md-3 cs-card card-borderless text-white">
-      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
+      <img src="assets/classyads/images/Default_Image_Thumbnail.png" class="card-img" alt="gallery-image">
       <div class="card-img-overlay">
-        <h5 class="card-title">X</h5>
+        <h5 *ngIf="galleryImage4" class="card-title">X</h5>
+      </div>
+      <div class="card-img-overlay card-img-overlay-cus">
+        <input style="display: none" type="file" (change)="uploadImage($event)" value="Upload Image" #gallInput4>
+        <h5 (click)="gallInput4.click()" class="card-title plus-big">+</h5>
       </div>
     </div>
-    <div class="card col-6 col-md-3 cs-card card-borderless text-white">
-      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
-      <div class="card-img-overlay">
-        <h5 class="card-title">X</h5>
-      </div>
-    </div>
-    <div class="card col-6 col-md-3 cs-card card-borderless text-white">
-      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
-      <div class="card-img-overlay">
-        <h5 class="card-title">X</h5>
-      </div>
-    </div>
-    <div class="card col-6 col-md-3 cs-card card-borderless text-white">
-      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
-      <div class="card-img-overlay">
-        <h5 class="card-title">X</h5>
-      </div>
-    </div>
-    <div class="card col-6 col-md-3 cs-card card-borderless text-white">
-      <img src="assets/classyads/images/Shop_Image_A5_Rectangle_31_pattern.png" class="card-img" alt="gallery-image">
-      <div class="card-img-overlay">
-        <h5 class="card-title">X</h5>
-      </div>
-    </div>
+    
   </div>
   
   <div class="btnBox">
