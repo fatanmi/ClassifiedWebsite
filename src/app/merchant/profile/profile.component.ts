@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MerchantService } from 'src/app/services/marchant.service';
 import { Merchant } from 'src/app/models/merchant';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 
@@ -11,6 +12,14 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
 
+  constructor(
+    private merchantService: MerchantService,
+    private toastr: ToastrService,
+    private router : Router,
+    private fb: FormBuilder
+
+  ) { }
+  
   lat = 3.4241753;
   lng = 6.4255113;
   merchantProfile : any = {
@@ -24,13 +33,12 @@ export class ProfileComponent implements OnInit {
   ProductLists: any;
   paymentMethods: any;
   listOfProducts: any = [];
-  selectedImage: File = null ;
+  selectedImage: File ;
+  file;
+  form = this.fb.group({
+    file: [null, Validators.required]
+  });
 
-  constructor(
-      private merchantService: MerchantService,
-      private toastr: ToastrService,
-      private router : Router
-    ) { }
   getBusinessInfo() {
     let phoneNumber =  localStorage.getItem('username');
     this.merchantService.getBusinessesByPhone(phoneNumber).subscribe(
@@ -56,9 +64,21 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/']);
   }
   uploadImage(event) {
-    //console.log(event.target.files[0]);
+    console.log(event.target.files[0]);
     this.selectedImage = event.target.files[0] ;
-    console.log(this.selectedImage);
+    //delete this.merchantProfile.businesses;
+    this.merchantProfile.merchantId = this.merchantProfile.id;
+    
+    //delete merchantProfileJsonString.businesses ;
+    
+    this.merchantService.uploadImage(this.selectedImage,this.merchantProfile).subscribe(
+      (Response: any)=>{
+        console.log(Response);
+      },
+      (error : any)=>{
+        console.log(error);
+      }
+    )
   }
   getAllCategories() {
     this.merchantService.getAllBusinessCategories().subscribe(

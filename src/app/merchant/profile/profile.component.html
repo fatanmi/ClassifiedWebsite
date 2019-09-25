@@ -108,7 +108,10 @@
           <div class="groupImgeBtn">
             <img class="leftBoxImg" src="../assets/classyads/images/Shop_Image_A5_Rectangle_13_pattern.png" />
             <div>
-                <input type="file" (change)="uploadImage($event)" value="Upload Image" class="btn btn-orange btn-lg btn-full orangeBackg">
+              <form [formGroup]="form" >
+                  <input style="display: none" type="file" formControlName="file" (change)="uploadImage($event)" value="Upload Image" #fileInput>
+                  <button (click)="fileInput.click()" class="btn btn-orange btn-lg btn-full orangeBackg">Select File</button>
+              </form>
             </div>
           </div>  
           <div class="map-location">
