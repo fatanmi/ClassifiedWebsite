@@ -16,7 +16,7 @@ export class MerchantService {
   httpOptions = {
 
     headers: new HttpHeaders({
-      'Content-Type': 'application/json;boundary:3534545werew234',
+      'Content-Type': 'application/json;',
       'Authorization': `Bearer ${this.token}`
     })
 
@@ -26,7 +26,7 @@ export class MerchantService {
 
     headers: new HttpHeaders({
       'Content-Type': 'multipart/form-data',      
-      'Accept': 'application/json'
+      'Accept': 'application/json;boundary:3534545werew234'
     })
   };
   constructor(
@@ -118,9 +118,18 @@ export class MerchantService {
     return this.http.get(Settings._url + '/payment_methods');
   }
   uploadImage(fileIm : File, merchantProfileJsonString): Observable<any> {
+
+    const params = new HttpParams();
+
+    const options = {
+        params,
+        reportProgress: true,
+    };
+
+
     console.log(fileIm);
     const file = new FormData();
-    file.append('file',fileIm);
+    file.append('file', fileIm);
 
     console.log();
     const res = this.http.put(Settings._url + '/merchants/profile-with-pics', {file, merchantProfileJsonString},this.httpOptionsFile);
